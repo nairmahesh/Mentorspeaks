@@ -27,14 +27,8 @@ export function PublicLayout({ children }: PublicLayoutProps) {
             </Link>
 
             <div className="flex items-center space-x-6">
-              <Link to="/questions" className="text-slate-700 hover:text-slate-900 font-medium transition">
-                Browse Questions
-              </Link>
-              <Link to="/industries" className="text-slate-700 hover:text-slate-900 font-medium transition">
-                Industries
-              </Link>
-              <Link to="/chapters" className="text-slate-700 hover:text-slate-900 font-medium transition">
-                Chapters
+              <Link to="/about" className="text-slate-700 hover:text-slate-900 font-medium transition">
+                About
               </Link>
               <Link to="/mentors" className="text-slate-700 hover:text-slate-900 font-medium transition">
                 Become a Mentor
@@ -96,8 +90,16 @@ export function PublicLayout({ children }: PublicLayoutProps) {
               <ul className="space-y-3 text-sm text-slate-400">
                 <li><Link to="/questions" className="hover:text-white transition">Browse Questions</Link></li>
                 <li><Link to="/questions/ask" className="hover:text-white transition">Ask a Question</Link></li>
-                <li><Link to="/industries" className="hover:text-white transition">Explore Industries</Link></li>
+                <li><Link to="/podcasts" className="hover:text-white transition">Listen to Podcasts</Link></li>
+              </ul>
+            </div>
+
+            <div>
+              <h3 className="font-semibold mb-4">Explore</h3>
+              <ul className="space-y-3 text-sm text-slate-400">
+                <li><Link to="/industries" className="hover:text-white transition">Industry Corners</Link></li>
                 <li><Link to="/chapters" className="hover:text-white transition">Regional Chapters</Link></li>
+                <li><Link to="/browse-mentors" className="hover:text-white transition">Browse Mentors</Link></li>
               </ul>
             </div>
 
@@ -105,7 +107,6 @@ export function PublicLayout({ children }: PublicLayoutProps) {
               <h3 className="font-semibold mb-4">For Mentors</h3>
               <ul className="space-y-3 text-sm text-slate-400">
                 <li><Link to="/mentors" className="hover:text-white transition">Why Be a Mentor</Link></li>
-                <li><Link to="/browse-mentors" className="hover:text-white transition">Browse Mentors</Link></li>
                 <li><Link to="/register" className="hover:text-white transition">Sign Up as Mentor</Link></li>
                 <li><Link to="/questions" className="hover:text-white transition">Answer Questions</Link></li>
               </ul>
