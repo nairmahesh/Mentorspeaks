@@ -38,20 +38,20 @@ export function Layout({ children }: LayoutProps) {
             </Link>
 
             {user && (
-              <div className="hidden md:flex items-center space-x-4 lg:space-x-6">
+              <div className="hidden sm:flex items-center space-x-2 md:space-x-4 lg:space-x-6">
                 <Link to="/feed" className="flex items-center space-x-1 text-blue-600 hover:text-blue-700 transition">
                   <Sparkles className="w-4 h-4 md:w-5 md:h-5" />
-                  <span className="font-medium text-sm lg:text-base">My Feed</span>
+                  <span className="font-medium text-sm lg:text-base hidden md:inline">My Feed</span>
                 </Link>
 
                 <Link to="/podcasts" className="flex items-center space-x-1 text-blue-600 hover:text-blue-700 transition">
                   <Radio className="w-4 h-4 md:w-5 md:h-5" />
-                  <span className="font-medium text-sm lg:text-base">Podcasts</span>
+                  <span className="font-medium text-sm lg:text-base hidden md:inline">Podcasts</span>
                 </Link>
 
                 <Link to="/questions" className="flex items-center space-x-1 text-slate-600 hover:text-slate-900 transition">
                   <MessageCircle className="w-4 h-4 md:w-5 md:h-5" />
-                  <span className="font-medium text-sm lg:text-base">Questions</span>
+                  <span className="font-medium text-sm lg:text-base hidden md:inline">Questions</span>
                 </Link>
 
                 <Link to="/home" className="flex items-center space-x-1 text-slate-600 hover:text-slate-900 transition">
@@ -95,7 +95,7 @@ export function Layout({ children }: LayoutProps) {
             )}
 
             {user && (
-              <div className="md:hidden flex items-center space-x-4">
+              <div className="sm:hidden flex items-center space-x-4">
                 <Link to="/feed" className="text-blue-600 hover:text-blue-700 transition">
                   <Sparkles className="w-6 h-6" />
                 </Link>

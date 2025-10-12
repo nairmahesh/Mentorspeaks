@@ -37,31 +37,31 @@ export function PublicLayout({ children }: PublicLayoutProps) {
               </div>
             </Link>
 
-            <div className="hidden md:flex items-center space-x-3 lg:space-x-6">
+            <div className="hidden sm:flex items-center space-x-2 md:space-x-3 lg:space-x-6">
               {user ? (
                 <>
-                  <Link to="/feed" className="flex items-center space-x-1 text-blue-600 hover:text-blue-700 font-medium transition">
+                  <Link to="/feed" className="flex items-center space-x-1 text-blue-600 hover:text-blue-700 font-medium transition text-sm">
                     <Home className="w-4 h-4" />
-                    <span>Feed</span>
+                    <span className="hidden md:inline">Feed</span>
                   </Link>
-                  <Link to="/podcasts" className="flex items-center space-x-1 text-slate-700 hover:text-slate-900 font-medium transition">
+                  <Link to="/podcasts" className="flex items-center space-x-1 text-slate-700 hover:text-slate-900 font-medium transition text-sm">
                     <Radio className="w-4 h-4" />
-                    <span>Podcasts</span>
+                    <span className="hidden md:inline">Podcasts</span>
                   </Link>
-                  <Link to="/questions" className="flex items-center space-x-1 text-slate-700 hover:text-slate-900 font-medium transition">
+                  <Link to="/questions" className="flex items-center space-x-1 text-slate-700 hover:text-slate-900 font-medium transition text-sm">
                     <MessageCircle className="w-4 h-4" />
-                    <span>Questions</span>
+                    <span className="hidden md:inline">Questions</span>
                   </Link>
-                  <Link to="/profile" className="flex items-center space-x-1 text-slate-700 hover:text-slate-900 font-medium transition">
+                  <Link to="/profile" className="flex items-center space-x-1 text-slate-700 hover:text-slate-900 font-medium transition text-sm">
                     <User className="w-4 h-4" />
-                    <span>Profile</span>
+                    <span className="hidden md:inline">Profile</span>
                   </Link>
                   <button
                     onClick={handleSignOut}
-                    className="flex items-center space-x-1 text-slate-700 hover:text-red-600 font-medium transition"
+                    className="flex items-center space-x-1 text-slate-700 hover:text-red-600 font-medium transition text-sm"
                   >
                     <LogOut className="w-4 h-4" />
-                    <span>Sign Out</span>
+                    <span className="hidden md:inline">Sign Out</span>
                   </button>
                 </>
               ) : (
@@ -100,7 +100,7 @@ export function PublicLayout({ children }: PublicLayoutProps) {
 
             {/* Mobile Menu for logged-in users */}
             {user && (
-              <div className="md:hidden flex items-center space-x-4">
+              <div className="sm:hidden flex items-center space-x-4">
                 <Link to="/feed" className="text-blue-600 hover:text-blue-700 transition">
                   <Home className="w-5 h-5" />
                 </Link>
@@ -121,7 +121,7 @@ export function PublicLayout({ children }: PublicLayoutProps) {
 
             {/* Mobile Menu for non-logged-in users */}
             {!user && (
-              <div className="md:hidden flex items-center space-x-3">
+              <div className="sm:hidden flex items-center space-x-3">
                 <Link
                   to="/login"
                   className="text-slate-700 hover:text-slate-900 font-medium transition text-sm"
