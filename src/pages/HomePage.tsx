@@ -107,14 +107,14 @@ export function HomePage() {
               <span className="text-sm font-medium">{stats.totalMentors}+ Expert Podcasters Live</span>
             </div>
 
-            <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
+            <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold mb-6 leading-tight">
               <span className="block">Conversations That Build</span>
               <span className="block text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-orange-300 to-pink-300">
                 Future Leaders
               </span>
             </h1>
 
-            <p className="text-xl md:text-2xl text-blue-100 mb-10 leading-relaxed">
+            <p className="text-lg sm:text-xl md:text-2xl text-blue-100 mb-10 leading-relaxed px-4">
               Ask, listen, and learn from experts across industries and geographies.
             </p>
 
@@ -173,58 +173,58 @@ export function HomePage() {
           </div>
 
           {allMentors.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 mb-12">
               {allMentors.map((mentor) => (
                 <Link
                   key={mentor.id}
                   to={`/mentor/${mentor.id}`}
-                  className="group bg-white rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all border-2 border-slate-200 hover:border-orange-400 relative"
+                  className="group bg-white rounded-2xl p-3 sm:p-6 shadow-lg hover:shadow-2xl transition-all border-2 border-slate-200 hover:border-orange-400 relative"
                 >
                   {mentor.is_stalwart && (
-                    <div className="absolute top-3 right-3 z-10">
-                      <div className="bg-gradient-to-r from-amber-400 to-orange-500 text-white px-2 py-1 rounded-lg text-xs font-bold flex items-center space-x-1 shadow-lg">
-                        <Star className="w-3 h-3 fill-white" />
-                        <span>TOP VOICE</span>
+                    <div className="absolute top-2 right-2 sm:top-3 sm:right-3 z-10">
+                      <div className="bg-gradient-to-r from-amber-400 to-orange-500 text-white px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-lg text-[10px] sm:text-xs font-bold flex items-center space-x-0.5 sm:space-x-1 shadow-lg">
+                        <Star className="w-2.5 h-2.5 sm:w-3 sm:h-3 fill-white" />
+                        <span className="hidden sm:inline">TOP VOICE</span>
                       </div>
                     </div>
                   )}
-                  <div className="relative mb-4">
+                  <div className="relative mb-3 sm:mb-4">
                     {mentor.avatar_url ? (
                       <img
                         src={mentor.avatar_url}
                         alt={mentor.full_name}
-                        className={`w-24 h-24 rounded-full mx-auto ring-4 ${mentor.is_stalwart ? 'ring-amber-300 group-hover:ring-amber-400' : 'ring-orange-100 group-hover:ring-orange-300'} transition`}
+                        className={`w-16 h-16 sm:w-24 sm:h-24 rounded-full mx-auto ring-2 sm:ring-4 ${mentor.is_stalwart ? 'ring-amber-300 group-hover:ring-amber-400' : 'ring-orange-100 group-hover:ring-orange-300'} transition`}
                       />
                     ) : (
-                      <div className={`w-24 h-24 rounded-full bg-gradient-to-br ${mentor.is_stalwart ? 'from-amber-400 to-orange-500' : 'from-orange-400 to-red-600'} flex items-center justify-center mx-auto ring-4 ${mentor.is_stalwart ? 'ring-amber-300 group-hover:ring-amber-400' : 'ring-orange-100 group-hover:ring-orange-300'} transition`}>
-                        <span className="text-3xl font-bold text-white">{mentor.full_name.charAt(0)}</span>
+                      <div className={`w-16 h-16 sm:w-24 sm:h-24 rounded-full bg-gradient-to-br ${mentor.is_stalwart ? 'from-amber-400 to-orange-500' : 'from-orange-400 to-red-600'} flex items-center justify-center mx-auto ring-2 sm:ring-4 ${mentor.is_stalwart ? 'ring-amber-300 group-hover:ring-amber-400' : 'ring-orange-100 group-hover:ring-orange-300'} transition`}>
+                        <span className="text-xl sm:text-3xl font-bold text-white">{mentor.full_name.charAt(0)}</span>
                       </div>
                     )}
-                    <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-orange-500 to-red-600 text-white px-3 py-1 rounded-full text-xs font-bold flex items-center space-x-1 shadow-lg">
-                      <Mic className="w-3 h-3" />
+                    <div className="absolute -bottom-1 sm:-bottom-2 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-orange-500 to-red-600 text-white px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-bold flex items-center space-x-0.5 sm:space-x-1 shadow-lg">
+                      <Mic className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
                       <span>LIVE</span>
                     </div>
                   </div>
-                  <h3 className="font-bold text-slate-900 text-center mb-1 group-hover:text-orange-600 transition text-lg">
+                  <h3 className="font-bold text-slate-900 text-center mb-1 group-hover:text-orange-600 transition text-sm sm:text-lg line-clamp-2">
                     {mentor.full_name}
                   </h3>
                   {mentor.stalwart_designation && (
                     <div className="text-center mb-2">
-                      <span className="inline-block bg-gradient-to-r from-amber-100 to-orange-100 text-amber-900 px-3 py-0.5 rounded-full text-xs font-bold border border-amber-300">
+                      <span className="inline-block bg-gradient-to-r from-amber-100 to-orange-100 text-amber-900 px-2 sm:px-3 py-0.5 rounded-full text-[10px] sm:text-xs font-bold border border-amber-300 line-clamp-1">
                         {mentor.stalwart_designation}
                       </span>
                     </div>
                   )}
                   {mentor.professional_title && (
-                    <p className="text-sm text-slate-600 text-center mb-3 line-clamp-1 font-medium">{mentor.professional_title}</p>
+                    <p className="text-xs sm:text-sm text-slate-600 text-center mb-2 sm:mb-3 line-clamp-1 font-medium hidden sm:block">{mentor.professional_title}</p>
                   )}
-                  <div className={`bg-gradient-to-r ${mentor.is_stalwart ? 'from-amber-50 to-orange-50 border-l-4 border-amber-400' : 'from-orange-50 to-red-50 border-l-4 border-orange-500'} rounded-xl p-3 mb-4`}>
+                  <div className={`bg-gradient-to-r ${mentor.is_stalwart ? 'from-amber-50 to-orange-50 border-l-4 border-amber-400' : 'from-orange-50 to-red-50 border-l-4 border-orange-500'} rounded-xl p-2 sm:p-3 mb-2 sm:mb-4 hidden sm:block`}>
                     <p className="text-xs text-slate-700 italic leading-relaxed line-clamp-3">
                       "{mentor.bio || 'Sharing insights and expertise through engaging podcast discussions'}"
                     </p>
                   </div>
-                  <div className="flex items-center justify-center space-x-2 text-orange-600 group-hover:text-orange-700 font-bold text-sm">
-                    <Headphones className="w-4 h-4" />
+                  <div className="flex items-center justify-center space-x-1 sm:space-x-2 text-orange-600 group-hover:text-orange-700 font-bold text-xs sm:text-sm">
+                    <Headphones className="w-3 h-3 sm:w-4 sm:h-4" />
                     <span>Listen Now</span>
                   </div>
                 </Link>
