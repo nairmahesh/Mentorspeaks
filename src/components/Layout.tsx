@@ -17,6 +17,7 @@ export function Layout({ children }: LayoutProps) {
       navigate('/login');
     } catch (error) {
       console.error('Error signing out:', error);
+      alert('Failed to sign out. Please try again.');
     }
   };
 
