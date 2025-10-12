@@ -30,7 +30,7 @@ export function PublicLayout({ children }: PublicLayoutProps) {
               <Link to="/industries" className="text-slate-700 hover:text-slate-900 font-medium transition">
                 Industries
               </Link>
-              <Link to="/mentors" className="text-slate-700 hover:text-slate-900 font-medium transition">
+              <Link to="/register" className="text-slate-700 hover:text-slate-900 font-medium transition">
                 Become a Mentor
               </Link>
               <Link to="/corporate" className="text-slate-700 hover:text-slate-900 font-medium transition">
@@ -99,7 +99,7 @@ export function PublicLayout({ children }: PublicLayoutProps) {
               <h3 className="font-semibold mb-4">For Mentors</h3>
               <ul className="space-y-3 text-sm text-slate-400">
                 <li><Link to="/register" className="hover:text-white transition">Become a Mentor</Link></li>
-                <li><Link to="/mentor/benefits" className="hover:text-white transition">Benefits</Link></li>
+                <li><Link to="/mentors" className="hover:text-white transition">Benefits</Link></li>
                 <li><Link to="/mentor/pricing" className="hover:text-white transition">Pricing Plans</Link></li>
                 <li><Link to="/mentor/success-stories" className="hover:text-white transition">Success Stories</Link></li>
               </ul>
