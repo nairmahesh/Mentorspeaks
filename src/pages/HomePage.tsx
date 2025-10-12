@@ -28,9 +28,22 @@ type AnswerWithDetails = Answer & {
   mentor: Profile;
 };
 
+type PodcastEpisode = {
+  id: string;
+  title: string;
+  description: string;
+  guest: Profile;
+  moderator: Profile;
+  series: { title: string };
+  status: string;
+  view_count: number;
+  thumbnail_url: string | null;
+  published_at: string;
+};
+
 export function HomePage() {
   const [featuredAnswers, setFeaturedAnswers] = useState<AnswerWithDetails[]>([]);
-  const [allMentors, setAllMentors] = useState<Profile[]>([]);
+  const [featuredPodcasts, setFeaturedPodcasts] = useState<PodcastEpisode[]>([]);
   const [stats, setStats] = useState({
     totalQuestions: 0,
     totalAnswers: 0,
@@ -47,7 +60,7 @@ export function HomePage() {
     try {
       const [
         answersRes,
-        mentorsRes,
+        podcastsRes,
         questionsCount,
         answersCount,
         mentorsCount
@@ -59,19 +72,23 @@ export function HomePage() {
           .order('upvote_count', { ascending: false })
           .limit(9),
         supabase
-          .from('profiles')
-          .select('*')
-          .eq('role', 'mentor')
-          .order('is_stalwart', { ascending: false })
-          .order('stalwart_order', { ascending: true })
-          .limit(12),
+          .from('podcast_episodes')
+          .select(`
+            *,
+            guest:profiles!podcast_episodes_guest_id_fkey(*),
+            moderator:profiles!podcast_episodes_moderator_id_fkey(*),
+            series:podcast_series(*)
+          `)
+          .eq('status', 'published')
+          .order('published_at', { ascending: false })
+          .limit(8),
         supabase.from('questions').select('*', { count: 'exact', head: true }),
         supabase.from('answers').select('*', { count: 'exact', head: true }),
         supabase.from('profiles').select('*', { count: 'exact', head: true }).eq('role', 'mentor')
       ]);
 
       if (answersRes.data) setFeaturedAnswers(answersRes.data as AnswerWithDetails[]);
-      if (mentorsRes.data) setAllMentors(mentorsRes.data);
+      if (podcastsRes.data) setFeaturedPodcasts(podcastsRes.data as PodcastEpisode[]);
 
       setStats({
         totalQuestions: questionsCount.count || 0,
@@ -172,68 +189,89 @@ export function HomePage() {
             </p>
           </div>
 
-          {allMentors.length > 0 ? (
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 mb-12">
-              {allMentors.map((mentor) => (
+          {featuredPodcasts.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6 mb-12">
+              {featuredPodcasts.map((episode) => (
                 <Link
-                  key={mentor.id}
-                  to={`/mentor/${mentor.id}`}
-                  className="group bg-white rounded-2xl p-3 sm:p-6 shadow-lg hover:shadow-2xl transition-all border-2 border-slate-200 hover:border-cyan-400 relative"
+                  key={episode.id}
+                  to={`/episode/${episode.id}`}
+                  className="group bg-white rounded-2xl p-4 sm:p-5 shadow-lg hover:shadow-2xl transition-all border-2 border-slate-200 hover:border-cyan-400 relative flex flex-col"
                 >
-                  {mentor.is_stalwart && (
-                    <div className="absolute top-2 right-2 sm:top-3 sm:right-3 z-10">
-                      <div className="bg-gradient-to-r from-amber-400 to-cyan-500 text-white px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-lg text-[10px] sm:text-xs font-bold flex items-center space-x-0.5 sm:space-x-1 shadow-lg">
-                        <Star className="w-2.5 h-2.5 sm:w-3 sm:h-3 fill-white" />
-                        <span className="hidden sm:inline">TOP VOICE</span>
-                      </div>
-                    </div>
-                  )}
-                  <div className="relative mb-3 sm:mb-4">
-                    {mentor.avatar_url ? (
-                      <img
-                        src={mentor.avatar_url}
-                        alt={mentor.full_name}
-                        className={`w-16 h-16 sm:w-24 sm:h-24 rounded-full mx-auto ring-2 sm:ring-4 ${mentor.is_stalwart ? 'ring-amber-300 group-hover:ring-amber-400' : 'ring-blue-100 group-hover:ring-blue-300'} transition`}
-                      />
-                    ) : (
-                      <div className={`w-16 h-16 sm:w-24 sm:h-24 rounded-full bg-gradient-to-br ${mentor.is_stalwart ? 'from-amber-400 to-cyan-500' : 'from-cyan-400 to-blue-600'} flex items-center justify-center mx-auto ring-2 sm:ring-4 ${mentor.is_stalwart ? 'ring-amber-300 group-hover:ring-amber-400' : 'ring-cyan-200 group-hover:ring-cyan-300'} transition`}>
-                        <span className="text-xl sm:text-3xl font-bold text-white">{mentor.full_name.charAt(0)}</span>
-                      </div>
-                    )}
-                    <div className="absolute -bottom-1 sm:-bottom-2 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-cyan-400 to-blue-600 text-white px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-bold flex items-center space-x-0.5 sm:space-x-1 shadow-lg">
-                      <Mic className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
-                      <span>LIVE</span>
+                  <div className="absolute top-3 right-3 z-10">
+                    <div className="bg-gradient-to-r from-cyan-400 to-blue-600 text-white px-2 py-1 rounded-lg text-xs font-bold flex items-center space-x-1 shadow-lg">
+                      <Radio className="w-3 h-3" />
+                      <span>PODCAST</span>
                     </div>
                   </div>
-                  <h3 className="font-bold text-slate-900 text-center mb-1 group-hover:text-blue-600 transition text-sm sm:text-lg line-clamp-2">
-                    {mentor.full_name}
-                  </h3>
-                  {mentor.stalwart_designation && (
-                    <div className="text-center mb-2">
-                      <span className="inline-block bg-gradient-to-r from-amber-100 to-blue-100 text-amber-900 px-2 sm:px-3 py-0.5 rounded-full text-[10px] sm:text-xs font-bold border border-amber-300 line-clamp-1">
-                        {mentor.stalwart_designation}
-                      </span>
+
+                  <div className="mb-4">
+                    <h3 className="font-bold text-slate-900 mb-2 group-hover:text-blue-600 transition text-base sm:text-lg line-clamp-2">
+                      {episode.title}
+                    </h3>
+                    <p className="text-xs text-blue-600 font-semibold mb-3">{episode.series?.title}</p>
+                  </div>
+
+                  <div className="space-y-2 mb-4">
+                    <div className="flex items-center space-x-2">
+                      {episode.guest?.avatar_url ? (
+                        <img
+                          src={episode.guest.avatar_url}
+                          alt={episode.guest.full_name}
+                          className="w-8 h-8 rounded-full ring-2 ring-blue-200"
+                        />
+                      ) : (
+                        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center ring-2 ring-blue-200">
+                          <span className="text-xs font-bold text-white">{episode.guest?.full_name?.charAt(0)}</span>
+                        </div>
+                      )}
+                      <div className="flex-1 min-w-0">
+                        <p className="text-xs text-slate-500 font-medium">Guest Speaker</p>
+                        <p className="text-sm font-semibold text-slate-900 truncate">{episode.guest?.full_name}</p>
+                      </div>
                     </div>
-                  )}
-                  {mentor.professional_title && (
-                    <p className="text-xs sm:text-sm text-slate-600 text-center mb-2 sm:mb-3 line-clamp-1 font-medium hidden sm:block">{mentor.professional_title}</p>
-                  )}
-                  <div className={`bg-gradient-to-r ${mentor.is_stalwart ? 'from-amber-50 to-blue-50 border-l-4 border-amber-400' : 'from-blue-50 to-cyan-50 border-l-4 border-cyan-500'} rounded-xl p-2 sm:p-3 mb-2 sm:mb-4 hidden sm:block`}>
-                    <p className="text-xs text-slate-700 italic leading-relaxed line-clamp-3">
-                      "{mentor.bio || 'Sharing insights and expertise through engaging podcast discussions'}"
+
+                    <div className="flex items-center space-x-2">
+                      {episode.moderator?.avatar_url ? (
+                        <img
+                          src={episode.moderator.avatar_url}
+                          alt={episode.moderator.full_name}
+                          className="w-8 h-8 rounded-full ring-2 ring-slate-200"
+                        />
+                      ) : (
+                        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-slate-400 to-slate-600 flex items-center justify-center ring-2 ring-slate-200">
+                          <span className="text-xs font-bold text-white">{episode.moderator?.full_name?.charAt(0)}</span>
+                        </div>
+                      )}
+                      <div className="flex-1 min-w-0">
+                        <p className="text-xs text-slate-500 font-medium">Moderator</p>
+                        <p className="text-sm font-semibold text-slate-900 truncate">{episode.moderator?.full_name}</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="bg-gradient-to-r from-blue-50 to-cyan-50 rounded-xl p-3 mb-3 flex-1">
+                    <p className="text-xs text-slate-700 line-clamp-3">
+                      {episode.description || 'An engaging conversation exploring industry insights and expertise.'}
                     </p>
                   </div>
-                  <div className="flex items-center justify-center space-x-1 sm:space-x-2 text-blue-600 group-hover:text-blue-700 font-bold text-xs sm:text-sm">
-                    <Headphones className="w-3 h-3 sm:w-4 sm:h-4" />
-                    <span>Listen Now</span>
+
+                  <div className="flex items-center justify-between pt-2 border-t border-slate-100">
+                    <div className="flex items-center space-x-1 text-slate-500 text-xs">
+                      <Eye className="w-3 h-3" />
+                      <span>{episode.view_count.toLocaleString()} views</span>
+                    </div>
+                    <div className="flex items-center space-x-1 text-blue-600 group-hover:text-blue-700 font-bold text-sm">
+                      <Play className="w-4 h-4" />
+                      <span>Watch</span>
+                    </div>
                   </div>
                 </Link>
               ))}
             </div>
           ) : (
             <div className="text-center py-12 bg-white rounded-2xl border border-slate-200 mb-12">
-              <Users className="w-12 h-12 text-slate-400 mx-auto mb-3" />
-              <p className="text-slate-600">No podcasters yet. Be the first!</p>
+              <Radio className="w-12 h-12 text-slate-400 mx-auto mb-3" />
+              <p className="text-slate-600">No podcast episodes published yet.</p>
             </div>
           )}
         </div>
