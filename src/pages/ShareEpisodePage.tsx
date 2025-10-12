@@ -44,7 +44,7 @@ export function ShareEpisodePage() {
     setLoading(false);
   };
 
-  const recordingLink = `${window.location.origin}/podcasts/record/${episodeId}`;
+  const recordingLink = `https://effymentor.com/podcasts/record/${episodeId}`;
 
   const handleCopyLink = () => {
     navigator.clipboard.writeText(recordingLink);

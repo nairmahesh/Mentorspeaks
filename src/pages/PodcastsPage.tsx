@@ -117,13 +117,13 @@ export function PodcastsPage() {
   };
 
   const copyLink = (episode: PodcastEpisode) => {
-    const episodeUrl = `${window.location.origin}/podcasts/episode/${episode.id}`;
+    const episodeUrl = `https://effymentor.com/podcasts/episode/${episode.id}`;
     navigator.clipboard.writeText(episodeUrl);
     alert('Link copied to clipboard!');
   };
 
   const shareViaEmail = (episode: PodcastEpisode) => {
-    const episodeUrl = `${window.location.origin}/podcasts/episode/${episode.id}`;
+    const episodeUrl = `https://effymentor.com/podcasts/episode/${episode.id}`;
     const subject = encodeURIComponent(`Check out this podcast: ${episode.title}`);
     const body = encodeURIComponent(
       `I thought you might enjoy this podcast episode!\n\n` +
@@ -136,7 +136,7 @@ export function PodcastsPage() {
   };
 
   const shareViaWhatsApp = (episode: PodcastEpisode) => {
-    const episodeUrl = `${window.location.origin}/podcasts/episode/${episode.id}`;
+    const episodeUrl = `https://effymentor.com/podcasts/episode/${episode.id}`;
     const message = encodeURIComponent(
       `🎙️ Check out this podcast episode!\n\n` +
       `*${episode.title}*\n` +
