@@ -136,7 +136,7 @@ export function Layout({ children }: LayoutProps) {
             <div>
               <h3 className="font-semibold text-slate-900 mb-4">Company</h3>
               <ul className="space-y-2 text-sm text-slate-600">
-                <li><a href="#" className="hover:text-slate-900">About Us</a></li>
+                <li><Link to="/about" className="hover:text-slate-900">About Us</Link></li>
                 <li><a href="#" className="hover:text-slate-900">Contact</a></li>
                 <li><a href="#" className="hover:text-slate-900">Privacy Policy</a></li>
               </ul>

@@ -29,6 +29,7 @@ import { CorporateSignupPage } from './pages/CorporateSignupPage';
 import { CommunityManagePage } from './pages/CommunityManagePage';
 import { ChaptersPage } from './pages/ChaptersPage';
 import { ChapterDetailPage } from './pages/ChapterDetailPage';
+import { AboutPage } from './pages/AboutPage';
 
 function AppRoutes() {
   const { user, loading } = useAuth();
@@ -57,6 +58,7 @@ function AppRoutes() {
       <Route path="/guest/respond/:token" element={<GuestResponsePage />} />
       <Route path="/chapters" element={<ChaptersPage />} />
       <Route path="/chapters/:slug" element={<ChapterDetailPage />} />
+      <Route path="/about" element={<AboutPage />} />
       <Route
         path="/community/manage"
         element={
