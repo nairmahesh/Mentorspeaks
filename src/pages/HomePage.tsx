@@ -175,7 +175,7 @@ export function HomePage() {
               {allMentors.map((mentor) => (
                 <Link
                   key={mentor.id}
-                  to="/podcasts"
+                  to={`/mentor/${mentor.id}`}
                   className="group bg-white rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all border-2 border-slate-200 hover:border-orange-400 relative"
                 >
                   {mentor.is_stalwart && (

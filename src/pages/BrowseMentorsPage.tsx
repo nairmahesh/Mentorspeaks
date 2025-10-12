@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { supabase, Profile } from '../lib/supabase';
 import { PublicLayout } from '../components/PublicLayout';
-import { Star, Users, Video, MessageCircle, TrendingUp, Search, Filter, Linkedin } from 'lucide-react';
+import { Star, Users, Video, MessageCircle, TrendingUp, Search, Filter, Linkedin, Award, Sparkles } from 'lucide-react';
 
 type SortOption = 'rating' | 'answers' | 'videos' | 'recent';
 
@@ -23,15 +23,17 @@ export function BrowseMentorsPage() {
         .select('*')
         .eq('role', 'mentor');
 
+      query = query.order('is_stalwart', { ascending: false });
+
       switch (sortBy) {
         case 'rating':
-          query = query.order('rating', { ascending: false });
+          query = query.order('rating', { ascending: false, nullsLast: true });
           break;
         case 'answers':
-          query = query.order('total_answers', { ascending: false });
+          query = query.order('total_answers', { ascending: false, nullsLast: true });
           break;
         case 'videos':
-          query = query.order('total_videos', { ascending: false });
+          query = query.order('total_videos', { ascending: false, nullsLast: true });
           break;
         case 'recent':
           query = query.order('created_at', { ascending: false });
@@ -120,8 +122,16 @@ export function BrowseMentorsPage() {
             {filteredMentors.map((mentor) => (
               <div
                 key={mentor.id}
-                className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 hover:border-blue-400 hover:shadow-xl transition-all group"
+                className={`bg-white rounded-2xl p-6 shadow-sm border-2 ${mentor.is_stalwart ? 'border-amber-300 hover:border-amber-400' : 'border-slate-200 hover:border-blue-400'} hover:shadow-xl transition-all group relative`}
               >
+                {mentor.is_stalwart && (
+                  <div className="absolute top-4 right-4">
+                    <div className="bg-gradient-to-r from-amber-400 to-orange-500 text-white px-2.5 py-1 rounded-lg text-xs font-bold flex items-center space-x-1 shadow-lg">
+                      <Award className="w-3 h-3" />
+                      <span>TOP VOICE</span>
+                    </div>
+                  </div>
+                )}
                 <div className="flex items-start space-x-4 mb-4">
                   {mentor.avatar_url ? (
                     <img
@@ -135,9 +145,16 @@ export function BrowseMentorsPage() {
                     </div>
                   )}
                   <div className="flex-1 min-w-0">
-                    <h3 className="text-lg font-bold text-slate-900 mb-1 group-hover:text-blue-600 transition truncate">
+                    <h3 className={`text-lg font-bold text-slate-900 mb-1 transition truncate ${mentor.is_stalwart ? 'group-hover:text-amber-600' : 'group-hover:text-blue-600'}`}>
                       {mentor.full_name}
                     </h3>
+                    {mentor.stalwart_designation && (
+                      <div className="mb-1">
+                        <span className="inline-block bg-gradient-to-r from-amber-100 to-orange-100 text-amber-900 px-2 py-0.5 rounded-full text-xs font-bold border border-amber-300">
+                          {mentor.stalwart_designation}
+                        </span>
+                      </div>
+                    )}
                     {mentor.professional_title && (
                       <p className="text-sm text-slate-600 truncate">{mentor.professional_title}</p>
                     )}
