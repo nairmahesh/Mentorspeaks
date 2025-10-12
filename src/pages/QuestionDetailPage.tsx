@@ -379,73 +379,47 @@ export function QuestionDetailPage() {
 
             <div className="lg:col-span-1">
               <div className="sticky top-20 space-y-6">
-                <div className="bg-white rounded-2xl shadow-lg border-2 border-slate-200 overflow-hidden">
-                  <div className="bg-gradient-to-r from-slate-800 to-slate-900 px-5 py-4">
-                    <h3 className="text-lg font-bold text-white">Available Experts</h3>
-                  </div>
-                  <div className="p-5">
-                    {answers.length > 0 ? (
-                      <div className="space-y-4">
-                        {answers
-                          .filter(answer => answer.mentor.is_available_for_consulting)
-                          .map((answer) => (
-                            <div
-                              key={answer.id}
-                              className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl p-4 border border-green-200 hover:border-green-300 transition"
-                            >
-                              <div className="flex items-center space-x-3 mb-3">
-                                {answer.mentor.avatar_url ? (
-                                  <img
-                                    src={answer.mentor.avatar_url}
-                                    alt={answer.mentor.full_name}
-                                    className="w-12 h-12 rounded-full ring-2 ring-green-300"
-                                  />
-                                ) : (
-                                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-green-400 to-emerald-600 flex items-center justify-center ring-2 ring-green-300">
-                                    <span className="text-white font-bold">
-                                      {answer.mentor.full_name?.charAt(0)}
-                                    </span>
-                                  </div>
-                                )}
-                                <div className="flex-1 min-w-0">
-                                  <h4 className="font-bold text-slate-900 text-sm truncate">
-                                    {answer.mentor.full_name}
-                                  </h4>
-                                  {answer.mentor.professional_title && (
-                                    <p className="text-xs text-slate-600 truncate">
-                                      {answer.mentor.professional_title}
-                                    </p>
-                                  )}
-                                </div>
-                              </div>
-                              <button
-                                onClick={() => handleCallClick(answer.mentor)}
-                                className="w-full flex items-center justify-center space-x-2 px-4 py-2 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-lg hover:from-green-700 hover:to-emerald-700 transition font-semibold text-sm shadow-md"
-                              >
-                                <Phone className="w-4 h-4" />
-                                <span>Book Call</span>
-                              </button>
+                {answers
+                  .filter(answer => answer.mentor.is_available_for_consulting)
+                  .map((answer) => (
+                    <div
+                      key={answer.id}
+                      className="bg-white rounded-2xl shadow-lg border-2 border-green-200 overflow-hidden"
+                    >
+                      <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-6">
+                        <div className="flex items-start space-x-4">
+                          {answer.mentor.avatar_url ? (
+                            <img
+                              src={answer.mentor.avatar_url}
+                              alt={answer.mentor.full_name}
+                              className="w-16 h-16 rounded-full ring-4 ring-green-300"
+                            />
+                          ) : (
+                            <div className="w-16 h-16 rounded-full bg-gradient-to-br from-green-400 to-emerald-600 flex items-center justify-center ring-4 ring-green-300">
+                              <span className="text-white text-xl font-bold">
+                                {answer.mentor.full_name?.charAt(0)}
+                              </span>
                             </div>
-                          ))}
-                        {answers.filter(a => a.mentor.is_available_for_consulting).length === 0 && (
-                          <div className="text-center py-8">
-                            <Phone className="w-12 h-12 text-slate-300 mx-auto mb-3" />
-                            <p className="text-sm text-slate-600">
-                              No experts available for consultation yet
+                          )}
+                          <div className="flex-1">
+                            <h3 className="text-xl font-bold text-slate-900 mb-1">
+                              Want Personalized Advice?
+                            </h3>
+                            <p className="text-slate-700 mb-4">
+                              Book a one-on-one consultation with {answer.mentor.full_name}
                             </p>
+                            <button
+                              onClick={() => handleCallClick(answer.mentor)}
+                              className="w-full sm:w-auto flex items-center justify-center space-x-2 px-6 py-3 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-xl hover:from-green-700 hover:to-emerald-700 transition font-semibold shadow-md"
+                            >
+                              <Phone className="w-5 h-5" />
+                              <span>Consult {answer.mentor.full_name.split(' ')[0]}</span>
+                            </button>
                           </div>
-                        )}
+                        </div>
                       </div>
-                    ) : (
-                      <div className="text-center py-8">
-                        <Phone className="w-12 h-12 text-slate-300 mx-auto mb-3" />
-                        <p className="text-sm text-slate-600">
-                          Experts will appear here once they answer
-                        </p>
-                      </div>
-                    )}
-                  </div>
-                </div>
+                    </div>
+                  ))}
 
                 <div className="bg-gradient-to-br from-blue-600 to-cyan-600 rounded-2xl shadow-lg p-6 text-white">
                   <h3 className="text-lg font-bold mb-2">Have a Question?</h3>
