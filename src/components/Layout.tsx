@@ -37,8 +37,9 @@ export function Layout({ children }: LayoutProps) {
               </div>
             </Link>
 
-            {user && (
-              <div className="hidden sm:flex items-center space-x-2 md:space-x-4 lg:space-x-6">
+            <div className="hidden sm:flex items-center space-x-2 md:space-x-4 lg:space-x-6">
+              {user ? (
+                <>
                 <Link to="/feed" className="flex items-center space-x-1 text-blue-600 hover:text-blue-700 transition">
                   <Sparkles className="w-4 h-4 md:w-5 md:h-5" />
                   <span className="font-medium text-sm lg:text-base hidden md:inline">My Feed</span>
@@ -91,8 +92,24 @@ export function Layout({ children }: LayoutProps) {
                   <LogOut className="w-4 h-4 md:w-5 md:h-5" />
                   <span className="font-medium text-sm lg:text-base hidden lg:inline">Sign Out</span>
                 </button>
-              </div>
-            )}
+                </>
+              ) : (
+                <>
+                  <Link
+                    to="/login"
+                    className="text-slate-700 hover:text-slate-900 font-medium transition text-sm"
+                  >
+                    Sign In
+                  </Link>
+                  <Link
+                    to="/register"
+                    className="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition text-sm"
+                  >
+                    Get Started
+                  </Link>
+                </>
+              )}
+            </div>
 
             {user && (
               <div className="sm:hidden flex items-center space-x-4">
@@ -104,6 +121,23 @@ export function Layout({ children }: LayoutProps) {
                 </Link>
                 <Link to="/profile" className="text-slate-600 hover:text-slate-900 transition">
                   <User className="w-6 h-6" />
+                </Link>
+              </div>
+            )}
+
+            {!user && (
+              <div className="flex items-center space-x-3">
+                <Link
+                  to="/login"
+                  className="text-slate-700 hover:text-slate-900 font-medium transition text-sm"
+                >
+                  Sign In
+                </Link>
+                <Link
+                  to="/register"
+                  className="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition text-sm"
+                >
+                  Get Started
                 </Link>
               </div>
             )}
