@@ -6,6 +6,7 @@ type AuthContextType = {
   user: User | null;
   session: Session | null;
   profile: Profile | null;
+  isModerator: boolean;
   loading: boolean;
   signIn: (email: string, password: string) => Promise<void>;
   signUp: (email: string, password: string, fullName: string, role: 'seeker' | 'mentor') => Promise<void>;
@@ -18,6 +19,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
+  const [isModerator, setIsModerator] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -57,6 +59,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       if (error) throw error;
       setProfile(data);
+
+      // Check if user is a moderator
+      const { data: modData } = await supabase
+        .from('podcast_moderators')
+        .select('id')
+        .eq('user_id', userId)
+        .maybeSingle();
+
+      setIsModerator(!!modData);
     } catch (error) {
       console.error('Error loading profile:', error);
     } finally {
@@ -90,7 +101,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, session, profile, loading, signIn, signUp, signOut }}>
+    <AuthContext.Provider value={{ user, session, profile, isModerator, loading, signIn, signUp, signOut }}>
       {children}
     </AuthContext.Provider>
   );

@@ -1,14 +1,14 @@
 import { ReactNode } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { Video, LogOut, User, Home, MessageCircle, BarChart3, Radio } from 'lucide-react';
+import { Video, LogOut, User, Home, MessageCircle, BarChart3, Radio, Settings } from 'lucide-react';
 
 type LayoutProps = {
   children: ReactNode;
 };
 
 export function Layout({ children }: LayoutProps) {
-  const { user, profile, signOut } = useAuth();
+  const { user, profile, isModerator, signOut } = useAuth();
   const navigate = useNavigate();
 
   const handleSignOut = async () => {
@@ -54,6 +54,13 @@ export function Layout({ children }: LayoutProps) {
                   <Link to="/mentor/dashboard" className="flex items-center space-x-1 text-slate-600 hover:text-slate-900 transition">
                     <BarChart3 className="w-5 h-5" />
                     <span className="font-medium">Dashboard</span>
+                  </Link>
+                )}
+
+                {isModerator && (
+                  <Link to="/podcasts/manage" className="flex items-center space-x-1 text-blue-600 hover:text-blue-700 transition">
+                    <Settings className="w-5 h-5" />
+                    <span className="font-medium">Manage Podcasts</span>
                   </Link>
                 )}
 

@@ -3,14 +3,14 @@ import { Link } from 'react-router-dom';
 import { supabase, Answer, Question } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
 import { Layout } from '../components/Layout';
-import { BarChart3, Video, TrendingUp, DollarSign, Eye, MessageCircle } from 'lucide-react';
+import { BarChart3, Video, TrendingUp, DollarSign, Eye, MessageCircle, Radio } from 'lucide-react';
 
 type AnswerWithQuestion = Answer & {
   question: Question;
 };
 
 export function MentorDashboardPage() {
-  const { user } = useAuth();
+  const { user, isModerator } = useAuth();
   const [answers, setAnswers] = useState<AnswerWithQuestion[]>([]);
   const [stats, setStats] = useState({
     totalAnswers: 0,
@@ -184,6 +184,19 @@ export function MentorDashboardPage() {
                 <h3 className="font-semibold text-blue-900 mb-1">Browse Questions</h3>
                 <p className="text-sm text-blue-700">Find questions to answer in your expertise areas</p>
               </Link>
+
+              {isModerator && (
+                <Link
+                  to="/podcasts/manage"
+                  className="block bg-gradient-to-r from-blue-50 to-slate-50 border-2 border-blue-300 rounded-lg p-4 hover:from-blue-100 hover:to-slate-100 transition"
+                >
+                  <div className="flex items-center space-x-2 mb-1">
+                    <Radio className="w-5 h-5 text-blue-600" />
+                    <h3 className="font-semibold text-blue-900">Manage Podcasts</h3>
+                  </div>
+                  <p className="text-sm text-blue-700">Create and manage podcast episodes as a moderator</p>
+                </Link>
+              )}
 
               <Link
                 to="/mentor/profile"
