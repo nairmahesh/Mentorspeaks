@@ -14,6 +14,7 @@ import { SeekOpinionPage } from './pages/SeekOpinionPage';
 import { IndustriesPage } from './pages/IndustriesPage';
 import { IndustryDetailPage } from './pages/IndustryDetailPage';
 import { MentorsPage } from './pages/MentorsPage';
+import { BrowseMentorsPage } from './pages/BrowseMentorsPage';
 import { PodcastsPage } from './pages/PodcastsPage';
 import { CorporateFeaturesPage } from './pages/CorporateFeaturesPage';
 import { CorporateSignupPage } from './pages/CorporateSignupPage';
@@ -70,6 +71,7 @@ function AppRoutes() {
       <Route path="/industries" element={<IndustriesPage />} />
       <Route path="/industries/:slug" element={<IndustryDetailPage />} />
       <Route path="/mentors" element={<MentorsPage />} />
+      <Route path="/browse-mentors" element={<BrowseMentorsPage />} />
       <Route path="/corporate" element={<CorporateFeaturesPage />} />
       <Route path="/corporate/signup" element={<CorporateSignupPage />} />
       <Route
