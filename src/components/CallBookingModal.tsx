@@ -53,8 +53,14 @@ export function CallBookingModal({ mentor, isOpen, onClose }: CallBookingModalPr
 
   if (!consultingInfo.available) {
     return (
-      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-        <div className="bg-white rounded-xl max-w-md w-full p-6">
+      <div
+        className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
+        onClick={onClose}
+      >
+        <div
+          className="bg-white rounded-xl max-w-md w-full p-6"
+          onClick={(e) => e.stopPropagation()}
+        >
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-xl font-bold text-slate-900">Book a Call</h3>
             <button onClick={onClose} className="text-slate-400 hover:text-slate-600">
@@ -92,8 +98,14 @@ export function CallBookingModal({ mentor, isOpen, onClose }: CallBookingModalPr
   }
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 overflow-y-auto">
-      <div className="bg-white rounded-xl max-w-lg w-full my-8">
+    <div
+      className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 overflow-y-auto"
+      onClick={onClose}
+    >
+      <div
+        className="bg-white rounded-xl max-w-lg w-full my-8"
+        onClick={(e) => e.stopPropagation()}
+      >
         <div className="p-6 border-b border-slate-200">
           <div className="flex items-center justify-between mb-2">
             <h3 className="text-2xl font-bold text-slate-900">Book a Call</h3>
