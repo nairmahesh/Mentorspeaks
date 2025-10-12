@@ -79,8 +79,8 @@ export function HomePage() {
             moderator:profiles!podcast_episodes_moderator_id_fkey(*),
             series:podcast_series(*)
           `)
-          .eq('status', 'published')
-          .order('published_at', { ascending: false })
+          .in('status', ['completed', 'published'])
+          .order('created_at', { ascending: false })
           .limit(8),
         supabase.from('questions').select('*', { count: 'exact', head: true }),
         supabase.from('answers').select('*', { count: 'exact', head: true }),
