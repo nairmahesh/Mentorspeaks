@@ -330,7 +330,7 @@ export function PodcastManagePage() {
                       </Link>
                       {ep.status === 'scheduled' || ep.status === 'draft' ? (
                         <Link
-                          to={`/podcasts/episode/${ep.id}/record`}
+                          to={`/podcasts/record/${ep.id}`}
                           className="text-green-600 hover:text-green-700 p-2"
                           title="Record Episode"
                         >
