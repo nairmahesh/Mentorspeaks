@@ -23,30 +23,25 @@ export function AboutPage() {
           </div>
           <div className="prose prose-lg max-w-none text-slate-700 space-y-6">
             <p>
-              In 2023, three professionals from different corners of the world shared a common frustration: finding genuine,
-              accessible career guidance was nearly impossible. LinkedIn was flooded with superficial advice, mentorship
-              platforms were expensive and impersonal, and traditional career counseling felt disconnected from the realities
-              of modern work.
+              When Russell moved into a new industry after years in sales, he realized that books and webinars could only
+              take him so far. What he really needed was perspective — from someone who had already faced the kind of
+              challenges he was about to step into.
             </p>
             <p>
-              Priya, a software engineer in Bangalore, remembered the informal chai sessions with her senior colleague that
-              shaped her career more than any formal training. Amit, a product manager in Mumbai, wished he'd had someone to
-              talk to before making a costly career pivot. And Sarah, a marketing director in Dubai, saw talented professionals
-              around her struggling with decisions she'd navigated years ago.
+              At the same time, Sarita, with over 25 years in technology-driven businesses, found herself wanting to share
+              the lessons she had gathered — the real ones, shaped by trial, failure, and persistence. But there wasn't a
+              space built for such meaningful exchanges.
             </p>
             <p>
-              They realized something fundamental: the most valuable career insights don't come from polished TED talks or
-              expensive courses. They come from real conversations with people who've been there—the mistakes they made,
-              the choices they regret, the strategies that actually worked.
+              That's where effyMentor steps in — a platform where questions meet experience.
             </p>
             <p>
-              That's how effyMentor was born. Not as another networking platform or course marketplace, but as a space for
-              authentic, accessible knowledge sharing. A place where a college student in Dhaka can get career advice from a
-              CTO in Singapore, where a mid-career professional can ask honest questions about work-life balance, and where
-              experienced professionals can give back to the next generation.
+              A space where mentors and professionals across industries come together to share insights, answer real questions,
+              and learn from one another's journeys.
             </p>
             <p>
-              Today, we're building a global community where experience speaks—unfiltered, practical, and human.
+              Built by mentors, for mentors and learners alike, effyMentor is more than a platform — it's a growing community
+              that believes the best way to learn… is from those who've lived it.
             </p>
           </div>
         </section>
