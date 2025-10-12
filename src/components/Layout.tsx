@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { Video, LogOut, User, Home, MessageCircle, BarChart3, Radio, Settings } from 'lucide-react';
+import { Video, LogOut, User, Home, MessageCircle, BarChart3, Radio, Settings, MapPin, Shield } from 'lucide-react';
 
 type LayoutProps = {
   children: ReactNode;
@@ -51,6 +51,11 @@ export function Layout({ children }: LayoutProps) {
                   <span className="font-medium">Questions</span>
                 </Link>
 
+                <Link to="/chapters" className="flex items-center space-x-1 text-slate-600 hover:text-slate-900 transition">
+                  <MapPin className="w-5 h-5" />
+                  <span className="font-medium">Chapters</span>
+                </Link>
+
                 {profile?.role === 'mentor' && (
                   <Link to="/mentor/dashboard" className="flex items-center space-x-1 text-slate-600 hover:text-slate-900 transition">
                     <BarChart3 className="w-5 h-5" />
@@ -59,10 +64,16 @@ export function Layout({ children }: LayoutProps) {
                 )}
 
                 {isModerator && (
-                  <Link to="/podcasts/manage" className="flex items-center space-x-1 text-blue-600 hover:text-blue-700 transition">
-                    <Settings className="w-5 h-5" />
-                    <span className="font-medium">Manage Podcasts</span>
-                  </Link>
+                  <>
+                    <Link to="/podcasts/manage" className="flex items-center space-x-1 text-blue-600 hover:text-blue-700 transition">
+                      <Settings className="w-5 h-5" />
+                      <span className="font-medium">Podcasts</span>
+                    </Link>
+                    <Link to="/community/manage" className="flex items-center space-x-1 text-green-600 hover:text-green-700 transition">
+                      <Shield className="w-5 h-5" />
+                      <span className="font-medium">Community</span>
+                    </Link>
+                  </>
                 )}
 
                 <Link to="/profile" className="flex items-center space-x-2 text-slate-600 hover:text-slate-900 transition">

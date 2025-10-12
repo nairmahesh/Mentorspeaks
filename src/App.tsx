@@ -26,6 +26,8 @@ import { GuestResponsePage } from './pages/GuestResponsePage';
 import { EpisodeViewPage } from './pages/EpisodeViewPage';
 import { CorporateFeaturesPage } from './pages/CorporateFeaturesPage';
 import { CorporateSignupPage } from './pages/CorporateSignupPage';
+import { CommunityManagePage } from './pages/CommunityManagePage';
+import { ChaptersPage } from './pages/ChaptersPage';
 
 function AppRoutes() {
   const { user, loading } = useAuth();
@@ -52,6 +54,15 @@ function AppRoutes() {
       <Route path="/podcasts" element={<PodcastsPage />} />
       <Route path="/podcasts/episode/:episodeId/view" element={<EpisodeViewPage />} />
       <Route path="/guest/respond/:token" element={<GuestResponsePage />} />
+      <Route path="/chapters" element={<ChaptersPage />} />
+      <Route
+        path="/community/manage"
+        element={
+          <ProtectedRoute>
+            <CommunityManagePage />
+          </ProtectedRoute>
+        }
+      />
       <Route
         path="/podcasts/manage"
         element={
