@@ -37,6 +37,7 @@ interface PodcastEpisode {
   view_count: number;
   published_at: string;
   guest: { full_name: string; professional_title: string; avatar_url: string };
+  moderator?: { full_name: string; professional_title: string };
 }
 
 export function PodcastsPage() {
@@ -62,7 +63,13 @@ export function PodcastsPage() {
           .order('created_at', { ascending: false }),
         supabase
           .from('podcast_episodes')
-          .select('*, guest:guest_id(full_name, professional_title, avatar_url)')
+          .select(`
+            *,
+            guest:guest_id(full_name, professional_title, avatar_url),
+            moderator:podcast_moderators!podcast_episodes_moderator_id_fkey(
+              moderator:moderator_id(full_name, professional_title)
+            )
+          `)
           .eq('status', 'published')
           .order('published_at', { ascending: false })
       ]);
@@ -239,6 +246,15 @@ export function PodcastsPage() {
                                 {episode.description}
                               </p>
                             )}
+                            {episode.moderator && (
+                              <div className="flex items-center text-xs text-slate-500 mt-2 bg-slate-50 rounded-lg px-3 py-2">
+                                <Mic className="w-3.5 h-3.5 mr-1.5 flex-shrink-0" />
+                                <span className="truncate">
+                                  Moderated by <span className="font-semibold text-slate-700">{episode.moderator.full_name}</span>
+                                  {episode.moderator.professional_title && ` • ${episode.moderator.professional_title}`}
+                                </span>
+                              </div>
+                            )}
                           </div>
 
                           <div className="flex items-center justify-between text-xs text-slate-500 mb-4 pt-4 border-t border-slate-100">
@@ -349,6 +365,15 @@ export function PodcastsPage() {
                               <p className="text-sm text-slate-600 line-clamp-2 leading-relaxed mb-4">
                                 {episode.description}
                               </p>
+                            )}
+                            {episode.moderator && (
+                              <div className="flex items-center text-xs text-slate-500 mt-2 bg-slate-50 rounded-lg px-3 py-2">
+                                <Mic className="w-3.5 h-3.5 mr-1.5 flex-shrink-0" />
+                                <span className="truncate">
+                                  Moderated by <span className="font-semibold text-slate-700">{episode.moderator.full_name}</span>
+                                  {episode.moderator.professional_title && ` • ${episode.moderator.professional_title}`}
+                                </span>
+                              </div>
                             )}
                           </div>
 

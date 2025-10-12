@@ -156,7 +156,7 @@ export function CreateEpisodePage() {
         if (questionsError) throw questionsError;
       }
 
-      navigate(`/podcasts/episode/${episode.id}/edit`);
+      navigate(`/podcasts/episode/${episode.id}/share`);
     } catch (err: any) {
       setError(err.message || 'Failed to create episode');
     } finally {
@@ -337,7 +337,7 @@ export function CreateEpisodePage() {
 
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-2">
-                  Scheduled Date
+                  Scheduled Date (Optional)
                 </label>
                 <input
                   type="datetime-local"
@@ -345,6 +345,7 @@ export function CreateEpisodePage() {
                   onChange={(e) => setScheduledAt(e.target.value)}
                   className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
+                <p className="text-xs text-slate-500 mt-1">Leave empty if not going live</p>
               </div>
             </div>
           </div>

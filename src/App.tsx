@@ -21,6 +21,7 @@ import { PodcastManagePage } from './pages/PodcastManagePage';
 import { CreateEpisodePage } from './pages/CreateEpisodePage';
 import { CreateSeriesPage } from './pages/CreateSeriesPage';
 import { PodcastRecordingPage } from './pages/PodcastRecordingPage';
+import { ShareEpisodePage } from './pages/ShareEpisodePage';
 import { ModeratorManagePage } from './pages/ModeratorManagePage';
 import { GuestResponsePage } from './pages/GuestResponsePage';
 import { EpisodeViewPage } from './pages/EpisodeViewPage';
@@ -92,13 +93,14 @@ function AppRoutes() {
         }
       />
       <Route
-        path="/podcasts/episode/:episodeId/record"
+        path="/podcasts/episode/:episodeId/share"
         element={
           <ProtectedRoute>
-            <PodcastRecordingPage />
+            <ShareEpisodePage />
           </ProtectedRoute>
         }
       />
+      <Route path="/podcasts/record/:episodeId" element={<PodcastRecordingPage />} />
       <Route
         path="/moderators/manage"
         element={
