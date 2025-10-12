@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { PublicLayout } from '../components/PublicLayout';
-import { ArrowRight, Users, Award, DollarSign, Sparkles, Globe, CheckCircle, Heart, Users2 } from 'lucide-react';
+import { ArrowRight, Users, Award, DollarSign, Sparkles, Globe, CheckCircle, Heart, Users2, Star, Video } from 'lucide-react';
 
 export function MentorsPage() {
   return (
@@ -11,11 +11,14 @@ export function MentorsPage() {
             <div>
               <div className="inline-flex items-center space-x-2 bg-white bg-opacity-20 backdrop-blur-sm px-4 py-2 rounded-full mb-6">
                 <Star className="w-4 h-4 text-yellow-300" />
-                <span className="text-sm font-medium">Become a Mentor</span>
+                <span className="text-sm font-medium">Join Our Community</span>
               </div>
               <h1 className="text-5xl lg:text-6xl font-bold mb-6 leading-tight">
-                Share Your Expertise, Shape Careers
+                Be a Mentor
               </h1>
+              <p className="text-2xl font-semibold text-yellow-300 mb-4">
+                Share Your Expertise, Shape Careers
+              </p>
               <p className="text-xl text-blue-100 mb-8 leading-relaxed">
                 Join our community of industry leaders and help professionals navigate their career journey through personalized video answers
               </p>

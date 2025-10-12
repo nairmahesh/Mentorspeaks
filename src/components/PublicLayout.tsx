@@ -98,10 +98,10 @@ export function PublicLayout({ children }: PublicLayoutProps) {
             <div>
               <h3 className="font-semibold mb-4">For Mentors</h3>
               <ul className="space-y-3 text-sm text-slate-400">
-                <li><Link to="/register" className="hover:text-white transition">Become a Mentor</Link></li>
-                <li><Link to="/mentors" className="hover:text-white transition">Benefits</Link></li>
-                <li><Link to="/mentor/pricing" className="hover:text-white transition">Pricing Plans</Link></li>
-                <li><Link to="/mentor/success-stories" className="hover:text-white transition">Success Stories</Link></li>
+                <li><Link to="/mentors" className="hover:text-white transition">Why Be a Mentor</Link></li>
+                <li><Link to="/browse-mentors" className="hover:text-white transition">Browse Mentors</Link></li>
+                <li><Link to="/register" className="hover:text-white transition">Sign Up as Mentor</Link></li>
+                <li><Link to="/questions" className="hover:text-white transition">Answer Questions</Link></li>
               </ul>
             </div>
 
