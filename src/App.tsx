@@ -20,6 +20,7 @@ import { PodcastsPage } from './pages/PodcastsPage';
 import { PodcastManagePage } from './pages/PodcastManagePage';
 import { CreateEpisodePage } from './pages/CreateEpisodePage';
 import { PodcastRecordingPage } from './pages/PodcastRecordingPage';
+import { ModeratorManagePage } from './pages/ModeratorManagePage';
 import { CorporateFeaturesPage } from './pages/CorporateFeaturesPage';
 import { CorporateSignupPage } from './pages/CorporateSignupPage';
 
@@ -67,6 +68,14 @@ function AppRoutes() {
         element={
           <ProtectedRoute>
             <PodcastRecordingPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/moderators/manage"
+        element={
+          <ProtectedRoute>
+            <ModeratorManagePage />
           </ProtectedRoute>
         }
       />

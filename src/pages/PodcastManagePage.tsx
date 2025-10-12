@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Layout } from '../components/Layout';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../lib/supabase';
-import { Plus, Video, Edit, Trash2, Calendar, Eye } from 'lucide-react';
+import { Plus, Video, Edit, Trash2, Calendar, Eye, Shield } from 'lucide-react';
 
 interface PodcastSeries {
   id: string;
@@ -33,6 +33,7 @@ export function PodcastManagePage() {
   const [episodes, setEpisodes] = useState<PodcastEpisode[]>([]);
   const [loading, setLoading] = useState(true);
   const [isModerator, setIsModerator] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     checkModeratorStatus();
@@ -49,6 +50,7 @@ export function PodcastManagePage() {
 
     if (data) {
       setIsModerator(true);
+      setIsAdmin(data.is_admin || false);
       loadData();
     } else {
       setLoading(false);
@@ -110,6 +112,15 @@ export function PodcastManagePage() {
         <div className="flex items-center justify-between mb-8">
           <h1 className="text-3xl font-bold text-slate-900">Podcast Management</h1>
           <div className="flex space-x-3">
+            {isAdmin && (
+              <Link
+                to="/moderators/manage"
+                className="flex items-center space-x-2 bg-gradient-to-r from-orange-500 to-orange-600 text-white px-4 py-2 rounded-lg hover:from-orange-600 hover:to-orange-700 transition"
+              >
+                <Shield className="w-5 h-5" />
+                <span>Manage Moderators</span>
+              </Link>
+            )}
             <Link
               to="/podcasts/series/new"
               className="flex items-center space-x-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
