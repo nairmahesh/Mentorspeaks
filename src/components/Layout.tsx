@@ -124,23 +124,6 @@ export function Layout({ children }: LayoutProps) {
                 </Link>
               </div>
             )}
-
-            {!user && (
-              <div className="flex items-center space-x-3">
-                <Link
-                  to="/login"
-                  className="text-slate-700 hover:text-slate-900 font-medium transition text-sm"
-                >
-                  Sign In
-                </Link>
-                <Link
-                  to="/register"
-                  className="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition text-sm"
-                >
-                  Get Started
-                </Link>
-              </div>
-            )}
           </div>
         </div>
       </nav>
