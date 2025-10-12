@@ -18,7 +18,9 @@ import {
   TrendingUp,
   Radio,
   Headphones,
-  Send
+  Send,
+  MapPin,
+  Globe
 } from 'lucide-react';
 
 type AnswerWithDetails = Answer & {
@@ -394,6 +396,90 @@ export function HomePage() {
                 Listen to responses, upvote the best answers, and book paid consulting calls with experts who helped you most.
               </p>
             </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="bg-slate-50 py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center space-x-2 bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-sm font-medium mb-4">
+              <Globe className="w-4 h-4" />
+              <span>Join Your Regional Community</span>
+            </div>
+            <h2 className="text-4xl font-bold text-slate-900 mb-4">Regional Chapters</h2>
+            <p className="text-xl text-slate-600 max-w-3xl mx-auto">
+              Connect with mentors and professionals in your region. Join chapter-exclusive events, discussions, and networking opportunities.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+            <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-lg transition group">
+              <div className="h-32 bg-gradient-to-br from-orange-500 to-red-600 relative">
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <MapPin className="w-16 h-16 text-white opacity-50" />
+                </div>
+              </div>
+              <div className="p-6">
+                <h3 className="text-xl font-bold text-slate-900 mb-2">India MentorSpeak</h3>
+                <p className="text-slate-600 mb-4">Connect with mentors across India, Bangladesh, Sri Lanka, and South Asia</p>
+                <Link
+                  to="/chapters/india-mentorspeak"
+                  className="inline-flex items-center space-x-2 text-blue-600 font-medium hover:text-blue-700"
+                >
+                  <span>Explore Chapter</span>
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-lg transition group">
+              <div className="h-32 bg-gradient-to-br from-blue-500 to-blue-700 relative">
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <MapPin className="w-16 h-16 text-white opacity-50" />
+                </div>
+              </div>
+              <div className="p-6">
+                <h3 className="text-xl font-bold text-slate-900 mb-2">Middle East MentorSpeak</h3>
+                <p className="text-slate-600 mb-4">Network with professionals across UAE, Saudi Arabia, and the Middle East</p>
+                <Link
+                  to="/chapters/middle-east-mentorspeak"
+                  className="inline-flex items-center space-x-2 text-blue-600 font-medium hover:text-blue-700"
+                >
+                  <span>Explore Chapter</span>
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-lg transition group">
+              <div className="h-32 bg-gradient-to-br from-purple-500 to-pink-600 relative">
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <MapPin className="w-16 h-16 text-white opacity-50" />
+                </div>
+              </div>
+              <div className="p-6">
+                <h3 className="text-xl font-bold text-slate-900 mb-2">Women in Leadership - SEA</h3>
+                <p className="text-slate-600 mb-4">Empowering women leaders across Singapore, Malaysia, and Southeast Asia</p>
+                <Link
+                  to="/chapters/women-leadership-sea"
+                  className="inline-flex items-center space-x-2 text-blue-600 font-medium hover:text-blue-700"
+                >
+                  <span>Explore Chapter</span>
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+              </div>
+            </div>
+          </div>
+
+          <div className="text-center">
+            <Link
+              to="/chapters"
+              className="inline-flex items-center space-x-2 bg-blue-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-blue-700 transition"
+            >
+              <span>View All Chapters</span>
+              <ArrowRight className="w-5 h-5" />
+            </Link>
           </div>
         </div>
       </div>

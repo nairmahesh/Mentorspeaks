@@ -30,6 +30,9 @@ export function PublicLayout({ children }: PublicLayoutProps) {
               <Link to="/industries" className="text-slate-700 hover:text-slate-900 font-medium transition">
                 Industries
               </Link>
+              <Link to="/chapters" className="text-slate-700 hover:text-slate-900 font-medium transition">
+                Chapters
+              </Link>
               <Link to="/mentors" className="text-slate-700 hover:text-slate-900 font-medium transition">
                 Become a Mentor
               </Link>
@@ -91,7 +94,7 @@ export function PublicLayout({ children }: PublicLayoutProps) {
                 <li><Link to="/questions" className="hover:text-white transition">Browse Questions</Link></li>
                 <li><Link to="/questions/ask" className="hover:text-white transition">Ask a Question</Link></li>
                 <li><Link to="/industries" className="hover:text-white transition">Explore Industries</Link></li>
-                <li><Link to="/how-it-works" className="hover:text-white transition">How It Works</Link></li>
+                <li><Link to="/chapters" className="hover:text-white transition">Regional Chapters</Link></li>
               </ul>
             </div>
 
