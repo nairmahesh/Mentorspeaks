@@ -4,7 +4,7 @@ import { supabase, Question, Answer, Profile } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
 import { PublicLayout } from '../components/PublicLayout';
 import { CallBookingModal } from '../components/CallBookingModal';
-import { Eye, Share2, Video, Play, UserCircle, Calendar, ArrowBigUp, Phone } from 'lucide-react';
+import { Eye, Share2, Video, Play, UserCircle, Calendar, ArrowBigUp, Phone, Mic, Clock, MessageCircle } from 'lucide-react';
 
 type AnswerWithMentor = Answer & {
   mentor: Profile;
@@ -113,6 +113,13 @@ export function QuestionDetailPage() {
     setIsCallModalOpen(true);
   };
 
+  const formatDuration = (seconds: number | null) => {
+    if (!seconds) return '0:00';
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${String(secs).padStart(2, '0')}`;
+  };
+
   if (loading) {
     return (
       <PublicLayout>
@@ -135,174 +142,238 @@ export function QuestionDetailPage() {
 
   return (
     <PublicLayout>
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="bg-white rounded-lg shadow-sm border border-slate-200 p-8 mb-8">
-          <div className="flex items-start justify-between mb-6">
-            <div className="flex-1">
-              <h1 className="text-3xl font-bold text-slate-900 mb-4">
+      <div className="bg-gradient-to-br from-blue-50 via-white to-slate-50 min-h-screen">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="bg-white rounded-2xl shadow-lg border border-slate-200 overflow-hidden mb-8">
+            <div className="bg-gradient-to-r from-blue-600 to-cyan-600 px-8 py-6">
+              <h1 className="text-3xl md:text-4xl font-bold text-white mb-3">
                 {question.title}
               </h1>
               {question.description && (
-                <p className="text-lg text-slate-600 leading-relaxed">
+                <p className="text-lg text-blue-50 leading-relaxed">
                   {question.description}
                 </p>
               )}
             </div>
-          </div>
 
-          <div className="flex flex-wrap gap-2 mb-6">
-            {question.tags.map((tag) => (
-              <span
-                key={tag}
-                className="px-3 py-1 bg-blue-50 text-blue-600 rounded-full text-sm font-medium"
-              >
-                {tag}
-              </span>
-            ))}
-          </div>
+            <div className="px-8 py-6">
+              <div className="flex flex-wrap gap-2 mb-6">
+                {question.tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="px-4 py-1.5 bg-gradient-to-r from-blue-50 to-cyan-50 text-blue-700 rounded-full text-sm font-semibold border border-blue-200"
+                  >
+                    #{tag}
+                  </span>
+                ))}
+              </div>
 
-          <div className="flex items-center justify-between pt-6 border-t border-slate-200">
-            <div className="flex items-center space-x-6 text-sm text-slate-600">
-              <div className="flex items-center space-x-2">
-                <Eye className="w-4 h-4" />
-                <span>{question.view_count} views</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Calendar className="w-4 h-4" />
-                <span>{new Date(question.created_at).toLocaleDateString()}</span>
-              </div>
-              <div
-                className={`px-3 py-1 rounded-full text-sm font-medium ${
-                  question.status === 'open'
-                    ? 'bg-green-100 text-green-700'
-                    : question.status === 'answered'
-                    ? 'bg-blue-100 text-blue-700'
-                    : 'bg-slate-100 text-slate-700'
-                }`}
-              >
-                {question.status}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-4 border-t border-slate-200">
+                <div className="flex flex-wrap items-center gap-4 text-sm text-slate-600">
+                  <div className="flex items-center space-x-2">
+                    <Eye className="w-5 h-5 text-slate-500" />
+                    <span className="font-medium">{question.view_count} views</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Calendar className="w-5 h-5 text-slate-500" />
+                    <span className="font-medium">{new Date(question.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <MessageCircle className="w-5 h-5 text-slate-500" />
+                    <span className="font-medium">{answers.length} {answers.length === 1 ? 'answer' : 'answers'}</span>
+                  </div>
+                  <div
+                    className={`px-3 py-1 rounded-full text-xs font-bold uppercase ${
+                      question.status === 'open'
+                        ? 'bg-green-100 text-green-700'
+                        : question.status === 'answered'
+                        ? 'bg-blue-100 text-blue-700'
+                        : 'bg-slate-100 text-slate-700'
+                    }`}
+                  >
+                    {question.status}
+                  </div>
+                </div>
+
+                <div className="flex space-x-3">
+                  <button
+                    onClick={handleShare}
+                    className="flex items-center space-x-2 px-5 py-2.5 border-2 border-slate-300 rounded-lg hover:bg-slate-50 transition font-medium text-slate-700"
+                  >
+                    <Share2 className="w-4 h-4" />
+                    <span>Share</span>
+                  </button>
+
+                  {profile?.role === 'mentor' && (
+                    <button
+                      onClick={handleAnswer}
+                      className="flex items-center space-x-2 px-5 py-2.5 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-lg hover:from-blue-700 hover:to-cyan-700 transition font-semibold shadow-md"
+                    >
+                      <Video className="w-4 h-4" />
+                      <span>Record Answer</span>
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
+          </div>
 
-            <div className="flex space-x-3">
-              <button
-                onClick={handleShare}
-                className="flex items-center space-x-2 px-4 py-2 border border-slate-300 rounded-lg hover:bg-slate-50 transition"
-              >
-                <Share2 className="w-4 h-4" />
-                <span>Share</span>
-              </button>
-
-              {profile?.role === 'mentor' && (
-                <button
-                  onClick={handleAnswer}
-                  className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
-                >
-                  <Video className="w-4 h-4" />
-                  <span>Answer</span>
-                </button>
+          <div>
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-3xl font-bold text-slate-900">
+                Expert Responses
+              </h2>
+              {answers.length > 0 && (
+                <div className="text-sm text-slate-600 font-medium">
+                  {answers.length} expert{answers.length === 1 ? '' : 's'} answered
+                </div>
               )}
             </div>
-          </div>
-        </div>
 
-        <div>
-          <h2 className="text-2xl font-bold text-slate-900 mb-6">
-            Answers ({answers.length})
-          </h2>
-
-          <div className="space-y-6">
-            {answers.map((answer) => (
-              <div
-                key={answer.id}
-                className="bg-white rounded-lg shadow-sm border border-slate-200 p-6"
-              >
-                <div className="flex items-start space-x-4 mb-4">
-                  {answer.mentor.avatar_url ? (
-                    <img
-                      src={answer.mentor.avatar_url}
-                      alt={answer.mentor.full_name}
-                      className="w-12 h-12 rounded-full"
-                    />
-                  ) : (
-                    <UserCircle className="w-12 h-12 text-slate-400" />
-                  )}
-                  <div className="flex-1">
-                    <h3 className="font-semibold text-slate-900">
-                      {answer.mentor.full_name}
-                    </h3>
-                    {answer.mentor.professional_title && (
-                      <p className="text-sm text-slate-600">
-                        {answer.mentor.professional_title}
-                      </p>
+            <div className="space-y-6">
+              {answers.map((answer) => (
+                <div
+                  key={answer.id}
+                  className="bg-white rounded-2xl shadow-lg border-2 border-slate-200 hover:border-cyan-400 transition-all overflow-hidden"
+                >
+                  <div className="flex items-start space-x-4 p-6 border-b border-slate-200 bg-slate-50">
+                    {answer.mentor.avatar_url ? (
+                      <img
+                        src={answer.mentor.avatar_url}
+                        alt={answer.mentor.full_name}
+                        className="w-16 h-16 rounded-full ring-4 ring-blue-100"
+                      />
+                    ) : (
+                      <div className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-400 to-cyan-600 flex items-center justify-center ring-4 ring-blue-100">
+                        <span className="text-white text-2xl font-bold">
+                          {answer.mentor.full_name?.charAt(0)}
+                        </span>
+                      </div>
                     )}
-                  </div>
-                  <span className="text-sm text-slate-500">
-                    {new Date(answer.created_at).toLocaleDateString()}
-                  </span>
-                </div>
-
-                {answer.content_type === 'video' && answer.content_url && (
-                  <div className="bg-slate-900 rounded-lg overflow-hidden mb-4 aspect-video flex items-center justify-center">
-                    <div className="text-center text-white">
-                      <Play className="w-16 h-16 mx-auto mb-2 opacity-75" />
-                      <p className="text-sm">Video player placeholder</p>
-                      <p className="text-xs text-slate-400 mt-1">{answer.duration_seconds}s</p>
+                    <div className="flex-1">
+                      <h3 className="text-xl font-bold text-slate-900">
+                        {answer.mentor.full_name}
+                      </h3>
+                      {answer.mentor.professional_title && (
+                        <p className="text-sm text-slate-600 font-medium mt-1">
+                          {answer.mentor.professional_title}
+                        </p>
+                      )}
+                      <div className="flex items-center space-x-4 mt-2 text-xs text-slate-500">
+                        <div className="flex items-center space-x-1">
+                          <Calendar className="w-3.5 h-3.5" />
+                          <span>{new Date(answer.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+                        </div>
+                        {answer.duration_seconds && (
+                          <div className="flex items-center space-x-1">
+                            <Clock className="w-3.5 h-3.5" />
+                            <span>{formatDuration(answer.duration_seconds)}</span>
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
-                )}
 
-                {answer.transcript && (
-                  <div className="bg-slate-50 rounded-lg p-4 mb-4">
-                    <h4 className="font-medium text-slate-900 mb-2">Transcript</h4>
-                    <p className="text-slate-700 leading-relaxed">{answer.transcript}</p>
-                  </div>
-                )}
+                  <div className="p-6">
+                    {answer.content_type === 'video' && answer.content_url && (
+                      <div className="relative bg-slate-900 rounded-xl overflow-hidden mb-6 aspect-video flex items-center justify-center group cursor-pointer hover:bg-slate-800 transition">
+                        <div className="absolute inset-0 bg-gradient-to-br from-blue-600/20 to-cyan-600/20"></div>
+                        <div className="relative text-center text-white">
+                          <div className="w-20 h-20 rounded-full bg-white bg-opacity-90 flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition shadow-2xl">
+                            <Play className="w-10 h-10 text-blue-600 ml-1" />
+                          </div>
+                          <p className="text-sm font-semibold">Click to play video response</p>
+                          {answer.duration_seconds && (
+                            <p className="text-xs text-slate-300 mt-2">{formatDuration(answer.duration_seconds)}</p>
+                          )}
+                        </div>
+                      </div>
+                    )}
 
-                {answer.summary && (
-                  <div className="mb-4">
-                    <h4 className="font-medium text-slate-900 mb-2">Summary</h4>
-                    <p className="text-slate-700 leading-relaxed">{answer.summary}</p>
-                  </div>
-                )}
+                    {answer.summary && (
+                      <div className="mb-6">
+                        <div className="flex items-center space-x-2 mb-3">
+                          <div className="w-1 h-6 bg-gradient-to-b from-blue-600 to-cyan-600 rounded-full"></div>
+                          <h4 className="text-lg font-bold text-slate-900">Summary</h4>
+                        </div>
+                        <div className="bg-gradient-to-r from-blue-50 to-cyan-50 rounded-xl p-5 border border-blue-100">
+                          <p className="text-slate-700 leading-relaxed">{answer.summary}</p>
+                        </div>
+                      </div>
+                    )}
 
-                <div className="flex items-center justify-between pt-4 border-t border-slate-200">
-                  <div className="flex items-center space-x-6">
-                    <button
-                      onClick={() => handleUpvote(answer.id)}
-                      className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition ${
-                        answer.user_has_upvoted
-                          ? 'bg-blue-600 text-white'
-                          : 'border border-slate-300 text-slate-700 hover:bg-slate-50'
-                      }`}
-                    >
-                      <ArrowBigUp className="w-5 h-5" />
-                      <span className="font-medium">{answer.upvote_count || 0}</span>
-                      <span className="hidden sm:inline">Upvote</span>
-                    </button>
+                    {answer.transcript && (
+                      <div className="mb-6">
+                        <div className="flex items-center space-x-2 mb-3">
+                          <div className="w-1 h-6 bg-gradient-to-b from-slate-600 to-slate-800 rounded-full"></div>
+                          <h4 className="text-lg font-bold text-slate-900">Full Transcript</h4>
+                        </div>
+                        <div className="bg-slate-50 rounded-xl p-5 border border-slate-200">
+                          <p className="text-slate-700 leading-relaxed whitespace-pre-wrap">{answer.transcript}</p>
+                        </div>
+                      </div>
+                    )}
 
-                    <button
-                      onClick={() => handleCallClick(answer.mentor)}
-                      className="flex items-center space-x-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition"
-                    >
-                      <Phone className="w-4 h-4" />
-                      <span>Call with {answer.mentor.full_name?.split(' ')[0]}</span>
-                    </button>
-                  </div>
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-6 border-t border-slate-200">
+                      <div className="flex flex-wrap items-center gap-3">
+                        <button
+                          onClick={() => handleUpvote(answer.id)}
+                          className={`flex items-center space-x-2 px-5 py-2.5 rounded-xl transition font-semibold ${
+                            answer.user_has_upvoted
+                              ? 'bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-md'
+                              : 'border-2 border-slate-300 text-slate-700 hover:bg-slate-50'
+                          }`}
+                        >
+                          <ArrowBigUp className={`w-5 h-5 ${answer.user_has_upvoted ? 'fill-current' : ''}`} />
+                          <span>{answer.upvote_count || 0}</span>
+                          <span className="hidden sm:inline">Upvote</span>
+                        </button>
 
-                  <div className="flex items-center space-x-4 text-sm text-slate-600">
-                    <span>{answer.view_count} views</span>
-                    <span>{answer.share_count} shares</span>
+                        {answer.mentor.is_available_for_consulting && (
+                          <button
+                            onClick={() => handleCallClick(answer.mentor)}
+                            className="flex items-center space-x-2 px-5 py-2.5 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-xl hover:from-green-700 hover:to-emerald-700 transition font-semibold shadow-md"
+                          >
+                            <Phone className="w-4 h-4" />
+                            <span>Call with {answer.mentor.full_name?.split(' ')[0]}</span>
+                          </button>
+                        )}
+                      </div>
+
+                      <div className="flex items-center space-x-4 text-sm text-slate-600">
+                        <div className="flex items-center space-x-1">
+                          <Eye className="w-4 h-4" />
+                          <span className="font-medium">{answer.view_count} views</span>
+                        </div>
+                        <div className="flex items-center space-x-1">
+                          <Share2 className="w-4 h-4" />
+                          <span className="font-medium">{answer.share_count} shares</span>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
 
-            {answers.length === 0 && (
-              <div className="text-center py-12 bg-white rounded-lg border border-slate-200">
-                <p className="text-slate-600">No answers yet. Be the first to answer!</p>
-              </div>
-            )}
+              {answers.length === 0 && (
+                <div className="text-center py-20 bg-white rounded-2xl border-2 border-dashed border-slate-300">
+                  <div className="w-20 h-20 rounded-full bg-slate-100 flex items-center justify-center mx-auto mb-4">
+                    <Mic className="w-10 h-10 text-slate-400" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-slate-900 mb-2">No answers yet</h3>
+                  <p className="text-slate-600 mb-6">Be the first expert to share your knowledge!</p>
+                  {profile?.role === 'mentor' && (
+                    <button
+                      onClick={handleAnswer}
+                      className="inline-flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-xl hover:from-blue-700 hover:to-cyan-700 transition font-semibold shadow-md"
+                    >
+                      <Video className="w-5 h-5" />
+                      <span>Answer This Question</span>
+                    </button>
+                  )}
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
