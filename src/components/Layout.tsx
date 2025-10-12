@@ -39,11 +39,6 @@ export function Layout({ children }: LayoutProps) {
 
             {user && (
               <div className="flex items-center space-x-6">
-                <Link to="/" className="flex items-center space-x-1 text-slate-600 hover:text-slate-900 transition">
-                  <Home className="w-5 h-5" />
-                  <span className="font-medium">Home</span>
-                </Link>
-
                 <Link to="/podcasts" className="flex items-center space-x-1 text-orange-600 hover:text-orange-700 transition">
                   <Radio className="w-5 h-5" />
                   <span className="font-medium">Podcasts</span>
@@ -54,9 +49,9 @@ export function Layout({ children }: LayoutProps) {
                   <span className="font-medium">Questions</span>
                 </Link>
 
-                <Link to="/chapters" className="flex items-center space-x-1 text-slate-600 hover:text-slate-900 transition">
-                  <MapPin className="w-5 h-5" />
-                  <span className="font-medium">Chapters</span>
+                <Link to="/" className="flex items-center space-x-1 text-slate-600 hover:text-slate-900 transition">
+                  <Home className="w-5 h-5" />
+                  <span className="font-medium">Home</span>
                 </Link>
 
                 {profile?.role === 'mentor' && (
@@ -101,7 +96,7 @@ export function Layout({ children }: LayoutProps) {
 
       <footer className="bg-white border-t border-slate-200 mt-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
             <div>
               <div className="flex items-center space-x-2 text-xl font-bold mb-4">
                 <MessageSquareText className="w-6 h-6 text-blue-600" />
@@ -117,7 +112,6 @@ export function Layout({ children }: LayoutProps) {
               <ul className="space-y-2 text-sm text-slate-600">
                 <li><Link to="/podcasts" className="hover:text-slate-900">Listen to Podcasts</Link></li>
                 <li><Link to="/questions" className="hover:text-slate-900">Browse Questions</Link></li>
-                <li><Link to="/industries" className="hover:text-slate-900">Industry Corners</Link></li>
                 <li><Link to="/mentors" className="hover:text-slate-900">Find Mentors</Link></li>
               </ul>
             </div>
@@ -128,6 +122,14 @@ export function Layout({ children }: LayoutProps) {
                 <li><Link to="/mentor/dashboard" className="hover:text-slate-900">Dashboard</Link></li>
                 <li><Link to="/mentor/earnings" className="hover:text-slate-900">Earnings</Link></li>
                 <li><Link to="/mentor/subscription" className="hover:text-slate-900">Subscription</Link></li>
+              </ul>
+            </div>
+
+            <div>
+              <h3 className="font-semibold text-slate-900 mb-4">Explore</h3>
+              <ul className="space-y-2 text-sm text-slate-600">
+                <li><Link to="/industries" className="hover:text-slate-900">Industry Corners</Link></li>
+                <li><Link to="/chapters" className="hover:text-slate-900">Regional Chapters</Link></li>
               </ul>
             </div>
 
