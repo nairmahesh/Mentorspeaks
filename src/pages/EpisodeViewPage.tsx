@@ -3,7 +3,8 @@ import { useParams, Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { PublicLayout } from '../components/PublicLayout';
 import { CallBookingModal } from '../components/CallBookingModal';
-import { Share2, Linkedin, Facebook, Copy, CheckCircle, Code, Heart, Calendar, Play, Phone, MessageCircle } from 'lucide-react';
+import { Share2, Linkedin, Facebook, Copy, CheckCircle, Code, Heart, Calendar, Play, Phone, MessageCircle, Send, ThumbsUp } from 'lucide-react';
+import { useAuth } from '../contexts/AuthContext';
 
 interface Episode {
   id: string;
@@ -33,18 +34,26 @@ interface Episode {
   } | null;
 }
 
-interface Question {
+interface CommunityQuestion {
   id: string;
   question_text: string;
-  answer_text: string;
-  question_order: number;
+  answer_text: string | null;
+  answered_at: string | null;
+  upvotes: number;
+  created_at: string;
+  user: {
+    full_name: string;
+    avatar_url: string | null;
+  };
+  user_has_upvoted?: boolean;
 }
 
 export function EpisodeViewPage() {
   const { episodeId } = useParams();
+  const { user } = useAuth();
 
   const [episode, setEpisode] = useState<Episode | null>(null);
-  const [questions, setQuestions] = useState<Question[]>([]);
+  const [questions, setQuestions] = useState<CommunityQuestion[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [showShareMenu, setShowShareMenu] = useState(false);
@@ -53,6 +62,8 @@ export function EpisodeViewPage() {
   const [liked, setLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
   const [isCallModalOpen, setIsCallModalOpen] = useState(false);
+  const [newQuestion, setNewQuestion] = useState('');
+  const [submittingQuestion, setSubmittingQuestion] = useState(false);
 
   useEffect(() => {
     loadEpisode();
@@ -77,19 +88,101 @@ export function EpisodeViewPage() {
 
       setEpisode(episodeData as any);
 
-      const { data: questionsData, error: qError } = await supabase
-        .from('podcast_questions')
-        .select('*')
-        .eq('episode_id', episodeId)
-        .order('question_order');
-
-      if (qError) throw qError;
-
-      setQuestions(questionsData || []);
+      await loadQuestions();
     } catch (err: any) {
       setError(err.message || 'Failed to load episode');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const loadQuestions = async () => {
+    if (!episodeId) return;
+
+    try {
+      const { data: questionsData, error: qError } = await supabase
+        .from('episode_questions')
+        .select(`
+          *,
+          user:profiles!episode_questions_user_id_fkey(full_name, avatar_url)
+        `)
+        .eq('episode_id', episodeId)
+        .order('upvotes', { ascending: false });
+
+      if (qError) throw qError;
+
+      // Check if user has upvoted each question
+      if (user) {
+        const { data: upvotes } = await supabase
+          .from('episode_question_upvotes')
+          .select('question_id')
+          .eq('user_id', user.id);
+
+        const upvotedIds = new Set(upvotes?.map(u => u.question_id));
+
+        const questionsWithUpvotes = (questionsData || []).map(q => ({
+          ...q,
+          user_has_upvoted: upvotedIds.has(q.id)
+        }));
+
+        setQuestions(questionsWithUpvotes as any);
+      } else {
+        setQuestions(questionsData as any || []);
+      }
+    } catch (err: any) {
+      console.error('Failed to load questions:', err);
+    }
+  };
+
+  const handleAskQuestion = async () => {
+    if (!user || !newQuestion.trim() || !episodeId) return;
+
+    setSubmittingQuestion(true);
+    try {
+      const { error } = await supabase
+        .from('episode_questions')
+        .insert({
+          episode_id: episodeId,
+          user_id: user.id,
+          question_text: newQuestion.trim()
+        });
+
+      if (error) throw error;
+
+      setNewQuestion('');
+      await loadQuestions();
+    } catch (err: any) {
+      alert('Failed to post question: ' + err.message);
+    } finally {
+      setSubmittingQuestion(false);
+    }
+  };
+
+  const handleUpvote = async (questionId: string, currentlyUpvoted: boolean) => {
+    if (!user) {
+      alert('Please sign in to upvote questions');
+      return;
+    }
+
+    try {
+      if (currentlyUpvoted) {
+        await supabase
+          .from('episode_question_upvotes')
+          .delete()
+          .eq('question_id', questionId)
+          .eq('user_id', user.id);
+      } else {
+        await supabase
+          .from('episode_question_upvotes')
+          .insert({
+            question_id: questionId,
+            user_id: user.id
+          });
+      }
+
+      await loadQuestions();
+    } catch (err: any) {
+      console.error('Failed to upvote:', err);
     }
   };
 
@@ -329,37 +422,112 @@ export function EpisodeViewPage() {
                   )}
                 </div>
 
+                {user && (
+                  <div className="mb-6 bg-blue-50 rounded-xl p-4 border-2 border-blue-200">
+                    <h3 className="font-semibold text-slate-900 mb-3">Ask {episode.guest.full_name.split(' ')[0]} a Question</h3>
+                    <div className="flex gap-2">
+                      <input
+                        type="text"
+                        value={newQuestion}
+                        onChange={(e) => setNewQuestion(e.target.value)}
+                        onKeyDown={(e) => e.key === 'Enter' && handleAskQuestion()}
+                        placeholder="Type your question here..."
+                        className="flex-1 px-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        disabled={submittingQuestion}
+                      />
+                      <button
+                        onClick={handleAskQuestion}
+                        disabled={submittingQuestion || !newQuestion.trim()}
+                        className="flex items-center space-x-2 bg-blue-600 text-white px-5 py-2.5 rounded-lg hover:bg-blue-700 transition font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        <Send className="w-4 h-4" />
+                        <span>Ask</span>
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {!user && (
+                  <div className="mb-6 bg-slate-50 rounded-xl p-4 border border-slate-200 text-center">
+                    <p className="text-slate-600">
+                      <Link to="/login" className="text-blue-600 font-semibold hover:underline">Sign in</Link> to ask questions
+                    </p>
+                  </div>
+                )}
+
                 {questions.length > 0 ? (
-                  <div className="space-y-6">
-                    {questions.map((question, index) => (
-                      <div key={question.id} className="bg-slate-50 rounded-xl p-5 border-l-4 border-blue-600">
-                        <div className="flex items-center space-x-2 mb-3">
-                          <div className="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-sm">
-                            {index + 1}
+                  <div className="space-y-4">
+                    {questions.map((question) => (
+                      <div key={question.id} className="bg-slate-50 rounded-xl p-5 border border-slate-200">
+                        <div className="flex items-start gap-3">
+                          <div className="flex flex-col items-center gap-1">
+                            <button
+                              onClick={() => handleUpvote(question.id, question.user_has_upvoted || false)}
+                              className={`p-2 rounded-lg transition ${
+                                question.user_has_upvoted
+                                  ? 'bg-blue-600 text-white'
+                                  : 'bg-white text-slate-600 hover:bg-blue-50'
+                              }`}
+                            >
+                              <ThumbsUp className="w-4 h-4" />
+                            </button>
+                            <span className="text-sm font-bold text-slate-700">{question.upvotes}</span>
                           </div>
-                          <h3 className="font-bold text-slate-900 text-lg flex-1">
-                            {question.question_text}
-                          </h3>
-                        </div>
-                        {question.answer_text ? (
-                          <div className="ml-10">
-                            <div className="flex items-start space-x-2 mb-2">
-                              <div className="w-1 h-6 bg-gradient-to-b from-cyan-600 to-blue-600 rounded-full mt-1"></div>
-                              <h4 className="font-semibold text-slate-900">Answer</h4>
+
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2 mb-2">
+                              {question.user.avatar_url ? (
+                                <img
+                                  src={question.user.avatar_url}
+                                  alt={question.user.full_name}
+                                  className="w-6 h-6 rounded-full"
+                                />
+                              ) : (
+                                <div className="w-6 h-6 rounded-full bg-blue-600 text-white flex items-center justify-center text-xs font-bold">
+                                  {question.user.full_name.charAt(0)}
+                                </div>
+                              )}
+                              <span className="text-sm font-semibold text-slate-900">{question.user.full_name}</span>
+                              <span className="text-xs text-slate-500">
+                                {new Date(question.created_at).toLocaleDateString()}
+                              </span>
                             </div>
-                            <p className="text-slate-700 leading-relaxed ml-3">{question.answer_text}</p>
+                            <p className="text-slate-900 font-medium mb-3">{question.question_text}</p>
+
+                            {question.answer_text ? (
+                              <div className="bg-white rounded-lg p-4 border-l-4 border-green-500">
+                                <div className="flex items-center gap-2 mb-2">
+                                  {episode.guest.avatar_url ? (
+                                    <img
+                                      src={episode.guest.avatar_url}
+                                      alt={episode.guest.full_name}
+                                      className="w-6 h-6 rounded-full"
+                                    />
+                                  ) : (
+                                    <div className="w-6 h-6 rounded-full bg-green-600 text-white flex items-center justify-center text-xs font-bold">
+                                      {episode.guest.full_name.charAt(0)}
+                                    </div>
+                                  )}
+                                  <span className="text-sm font-semibold text-green-700">{episode.guest.full_name}</span>
+                                  <span className="text-xs text-slate-500">
+                                    {new Date(question.answered_at!).toLocaleDateString()}
+                                  </span>
+                                </div>
+                                <p className="text-slate-700 leading-relaxed">{question.answer_text}</p>
+                              </div>
+                            ) : (
+                              <p className="text-slate-400 italic text-sm">Waiting for {episode.guest.full_name.split(' ')[0]}'s answer...</p>
+                            )}
                           </div>
-                        ) : (
-                          <p className="text-slate-400 italic ml-10">Answer pending</p>
-                        )}
+                        </div>
                       </div>
                     ))}
                   </div>
                 ) : (
                   <div className="text-center py-12 bg-slate-50 rounded-xl">
                     <MessageCircle className="w-16 h-16 text-slate-300 mx-auto mb-3" />
-                    <p className="text-slate-500 font-medium">No questions added yet</p>
-                    <p className="text-slate-400 text-sm mt-1">Questions will appear here once added</p>
+                    <p className="text-slate-500 font-medium">No questions yet</p>
+                    <p className="text-slate-400 text-sm mt-1">Be the first to ask {episode.guest.full_name.split(' ')[0]} a question!</p>
                   </div>
                 )}
               </div>
