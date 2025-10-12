@@ -37,7 +37,7 @@ export function PublicLayout({ children }: PublicLayoutProps) {
               </div>
             </Link>
 
-            <div className="flex items-center space-x-6">
+            <div className="hidden md:flex items-center space-x-3 lg:space-x-6">
               {user ? (
                 <>
                   <Link to="/feed" className="flex items-center space-x-1 text-blue-600 hover:text-blue-700 font-medium transition">
@@ -97,6 +97,45 @@ export function PublicLayout({ children }: PublicLayoutProps) {
                 </>
               )}
             </div>
+
+            {/* Mobile Menu for logged-in users */}
+            {user && (
+              <div className="md:hidden flex items-center space-x-4">
+                <Link to="/feed" className="text-blue-600 hover:text-blue-700 transition">
+                  <Home className="w-5 h-5" />
+                </Link>
+                <Link to="/podcasts" className="text-slate-700 hover:text-slate-900 transition">
+                  <Radio className="w-5 h-5" />
+                </Link>
+                <Link to="/profile" className="text-slate-700 hover:text-slate-900 transition">
+                  <User className="w-5 h-5" />
+                </Link>
+                <button
+                  onClick={handleSignOut}
+                  className="text-slate-700 hover:text-red-600 transition"
+                >
+                  <LogOut className="w-5 h-5" />
+                </button>
+              </div>
+            )}
+
+            {/* Mobile Menu for non-logged-in users */}
+            {!user && (
+              <div className="md:hidden flex items-center space-x-3">
+                <Link
+                  to="/login"
+                  className="text-slate-700 hover:text-slate-900 font-medium transition text-sm"
+                >
+                  Sign In
+                </Link>
+                <Link
+                  to="/register"
+                  className="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition text-sm"
+                >
+                  Get Started
+                </Link>
+              </div>
+            )}
           </div>
         </div>
       </nav>
