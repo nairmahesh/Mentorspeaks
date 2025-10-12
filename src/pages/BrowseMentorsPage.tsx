@@ -240,7 +240,7 @@ export function BrowseMentorsPage() {
                       <div className="text-slate-700 mt-1">₹{mentor.consulting_rate_inr}/hr</div>
                     )}
                     {mentor.consulting_type === 'hybrid' && (
-                      <div className="text-blue-700 mt-1">Mixed Pricing</div>
+                      <div className="text-blue-700 mt-1">Free & Paid Options</div>
                     )}
                   </div>
                 )}

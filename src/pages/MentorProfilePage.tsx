@@ -239,7 +239,7 @@ export function MentorProfilePage() {
                         )}
                         {mentor.consulting_type === 'hybrid' && (
                           <span className="bg-purple-100 text-purple-800 px-4 py-2 rounded-lg font-bold">
-                            Mixed Pricing Available
+                            Free & Paid Options
                           </span>
                         )}
                         {mentor.free_hours_per_month && (
