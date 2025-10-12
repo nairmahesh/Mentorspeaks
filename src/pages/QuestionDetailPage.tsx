@@ -291,29 +291,6 @@ export function QuestionDetailPage() {
                       </div>
                     )}
 
-                    {answer.summary && (
-                      <div className="mb-6">
-                        <div className="flex items-center space-x-2 mb-3">
-                          <div className="w-1 h-6 bg-gradient-to-b from-blue-600 to-cyan-600 rounded-full"></div>
-                          <h4 className="text-lg font-bold text-slate-900">Summary</h4>
-                        </div>
-                        <div className="bg-gradient-to-r from-blue-50 to-cyan-50 rounded-xl p-5 border border-blue-100">
-                          <p className="text-slate-700 leading-relaxed">{answer.summary}</p>
-                        </div>
-                      </div>
-                    )}
-
-                    {answer.transcript && (
-                      <div className="mb-6">
-                        <div className="flex items-center space-x-2 mb-3">
-                          <div className="w-1 h-6 bg-gradient-to-b from-slate-600 to-slate-800 rounded-full"></div>
-                          <h4 className="text-lg font-bold text-slate-900">Full Transcript</h4>
-                        </div>
-                        <div className="bg-slate-50 rounded-xl p-5 border border-slate-200">
-                          <p className="text-slate-700 leading-relaxed whitespace-pre-wrap">{answer.transcript}</p>
-                        </div>
-                      </div>
-                    )}
 
                     <div className="flex flex-wrap items-center gap-3 pt-6 border-t border-slate-200 mb-4">
                       <button
