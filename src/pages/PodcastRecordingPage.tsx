@@ -1,13 +1,13 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
-import { ChevronLeft, ChevronRight, Video, Mic, Square, Play, ArrowLeft } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Video, Mic, Square, Play, ArrowLeft, VideoOff, User } from 'lucide-react';
 
 interface Episode {
   id: string;
   title: string;
   recording_type: string;
-  guest: { full_name: string; id: string };
+  guest: { full_name: string; id: string; avatar_url?: string };
   moderator: { full_name: string };
 }
 
@@ -27,9 +27,25 @@ export function PodcastRecordingPage() {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [isRecording, setIsRecording] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [showVideo, setShowVideo] = useState(true);
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  const [audioLevel, setAudioLevel] = useState(0);
+
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const recordedChunksRef = useRef<Blob[]>([]);
+  const audioContextRef = useRef<AudioContext | null>(null);
+  const analyserRef = useRef<Analyser | null>(null);
+  const animationFrameRef = useRef<number | null>(null);
 
   useEffect(() => {
     loadEpisodeData();
+    return () => {
+      stopMediaStream();
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
+      }
+    };
   }, [episodeId]);
 
   const loadEpisodeData = async () => {
@@ -40,11 +56,11 @@ export function PodcastRecordingPage() {
         .from('podcast_episodes')
         .select(`
           *,
-          guest:guest_id(id, full_name),
+          guest:guest_id(id, full_name, avatar_url),
           moderator:moderator_id(full_name)
         `)
         .eq('id', episodeId)
-        .single(),
+        .maybeSingle(),
       supabase
         .from('podcast_questions')
         .select('*')
@@ -56,6 +72,76 @@ export function PodcastRecordingPage() {
     if (questionsResult.data) setQuestions(questionsResult.data);
 
     setLoading(false);
+
+    if (episodeResult.data) {
+      await initializeMedia(episodeResult.data.recording_type);
+    }
+  };
+
+  const initializeMedia = async (recordingType: string) => {
+    try {
+      const constraints = recordingType === 'video'
+        ? { video: true, audio: true }
+        : { audio: true };
+
+      const stream = await navigator.mediaDevices.getUserMedia(constraints);
+
+      if (videoRef.current && recordingType === 'video') {
+        videoRef.current.srcObject = stream;
+      }
+
+      setupAudioAnalyser(stream);
+    } catch (error) {
+      console.error('Error accessing media devices:', error);
+      alert('Could not access camera/microphone. Please grant permissions and try again.');
+    }
+  };
+
+  const setupAudioAnalyser = (stream: MediaStream) => {
+    const audioContext = new AudioContext();
+    const analyser = audioContext.createAnalyser();
+    const microphone = audioContext.createMediaStreamSource(stream);
+
+    analyser.smoothingTimeConstant = 0.8;
+    analyser.fftSize = 1024;
+
+    microphone.connect(analyser);
+
+    audioContextRef.current = audioContext;
+    analyserRef.current = analyser;
+
+    detectAudio();
+  };
+
+  const detectAudio = () => {
+    if (!analyserRef.current) return;
+
+    const bufferLength = analyserRef.current.frequencyBinCount;
+    const dataArray = new Uint8Array(bufferLength);
+
+    const checkAudio = () => {
+      analyserRef.current!.getByteFrequencyData(dataArray);
+
+      const average = dataArray.reduce((a, b) => a + b) / bufferLength;
+      setAudioLevel(average);
+      setIsSpeaking(average > 20);
+
+      animationFrameRef.current = requestAnimationFrame(checkAudio);
+    };
+
+    checkAudio();
+  };
+
+  const stopMediaStream = () => {
+    if (videoRef.current && videoRef.current.srcObject) {
+      const stream = videoRef.current.srcObject as MediaStream;
+      stream.getTracks().forEach(track => track.stop());
+      videoRef.current.srcObject = null;
+    }
+
+    if (audioContextRef.current) {
+      audioContextRef.current.close();
+    }
   };
 
   const currentQuestion = questions[currentQuestionIndex];
@@ -74,15 +160,76 @@ export function PodcastRecordingPage() {
 
   const toggleRecording = async () => {
     if (!isRecording) {
+      await startRecording();
+    } else {
+      await stopRecording();
+    }
+  };
+
+  const startRecording = async () => {
+    try {
+      const stream = videoRef.current?.srcObject as MediaStream ||
+                     await navigator.mediaDevices.getUserMedia({ audio: true });
+
+      const options = { mimeType: 'video/webm;codecs=vp9' };
+      if (!MediaRecorder.isTypeSupported(options.mimeType)) {
+        options.mimeType = 'video/webm';
+      }
+
+      const mediaRecorder = new MediaRecorder(stream, options);
+      mediaRecorderRef.current = mediaRecorder;
+      recordedChunksRef.current = [];
+
+      mediaRecorder.ondataavailable = (event) => {
+        if (event.data.size > 0) {
+          recordedChunksRef.current.push(event.data);
+        }
+      };
+
+      mediaRecorder.start();
+      setIsRecording(true);
+
       await supabase
         .from('podcast_episodes')
         .update({ status: 'recording' })
         .eq('id', episodeId);
+    } catch (error) {
+      console.error('Error starting recording:', error);
+      alert('Could not start recording. Please check permissions.');
     }
-    setIsRecording(!isRecording);
+  };
+
+  const stopRecording = () => {
+    return new Promise<void>((resolve) => {
+      if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
+        mediaRecorderRef.current.onstop = () => {
+          const blob = new Blob(recordedChunksRef.current, {
+            type: 'video/webm'
+          });
+
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `${episode?.title || 'recording'}.webm`;
+          a.click();
+
+          resolve();
+        };
+
+        mediaRecorderRef.current.stop();
+        setIsRecording(false);
+      } else {
+        setIsRecording(false);
+        resolve();
+      }
+    });
   };
 
   const completeRecording = async () => {
+    if (isRecording) {
+      await stopRecording();
+    }
+
     await supabase
       .from('podcast_episodes')
       .update({ status: 'completed' })
@@ -112,9 +259,17 @@ export function PodcastRecordingPage() {
     );
   }
 
+  const getInitials = (name: string) => {
+    return name
+      .split(' ')
+      .map(n => n[0])
+      .join('')
+      .toUpperCase()
+      .slice(0, 2);
+  };
+
   return (
     <div className="min-h-screen bg-slate-900 text-white">
-      {/* Header */}
       <div className="bg-slate-800 border-b border-slate-700 px-6 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
@@ -145,32 +300,101 @@ export function PodcastRecordingPage() {
         </div>
       </div>
 
-      {/* Main Recording Area */}
       <div className="grid grid-cols-2 h-[calc(100vh-120px)]">
-        {/* Video/Audio Preview - Left Side */}
         <div className="bg-slate-950 flex items-center justify-center border-r border-slate-700">
-          <div className="text-center">
+          <div className="text-center w-full max-w-2xl px-8">
             {episode.recording_type === 'video' ? (
               <div className="relative">
-                <div className="w-96 h-72 bg-slate-800 rounded-lg flex items-center justify-center">
-                  <Video className="w-24 h-24 text-slate-600" />
-                </div>
-                <div className="absolute bottom-4 left-4 bg-slate-900/90 px-3 py-2 rounded-lg">
-                  <p className="text-sm font-semibold">{episode.guest?.full_name}</p>
-                  <p className="text-xs text-slate-400">Guest</p>
-                </div>
+                {showVideo ? (
+                  <div className="relative w-full aspect-video bg-slate-800 rounded-lg overflow-hidden">
+                    <video
+                      ref={videoRef}
+                      autoPlay
+                      playsInline
+                      muted
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute bottom-4 left-4 bg-slate-900/90 px-3 py-2 rounded-lg">
+                      <p className="text-sm font-semibold">{episode.guest?.full_name}</p>
+                      <p className="text-xs text-slate-400">Guest</p>
+                    </div>
+                    <button
+                      onClick={() => setShowVideo(false)}
+                      className="absolute top-4 right-4 bg-slate-900/90 hover:bg-slate-800 p-2 rounded-lg transition"
+                      title="Hide Video"
+                    >
+                      <VideoOff className="w-5 h-5" />
+                    </button>
+                  </div>
+                ) : (
+                  <div className="relative w-full aspect-video bg-slate-800 rounded-lg flex flex-col items-center justify-center">
+                    <div className="relative">
+                      {episode.guest?.avatar_url ? (
+                        <img
+                          src={episode.guest.avatar_url}
+                          alt={episode.guest.full_name}
+                          className="w-32 h-32 rounded-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-32 h-32 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+                          <span className="text-4xl font-bold text-white">
+                            {getInitials(episode.guest?.full_name || 'G')}
+                          </span>
+                        </div>
+                      )}
+
+                      {isSpeaking && (
+                        <div className="absolute -inset-3 rounded-full border-4 border-green-500 animate-pulse"></div>
+                      )}
+                    </div>
+
+                    <p className="text-xl font-semibold mt-6">{episode.guest?.full_name}</p>
+                    <p className="text-sm text-slate-400 mt-1">Guest</p>
+
+                    <button
+                      onClick={() => setShowVideo(true)}
+                      className="absolute top-4 right-4 bg-slate-900/90 hover:bg-slate-800 p-2 rounded-lg transition"
+                      title="Show Video"
+                    >
+                      <Video className="w-5 h-5" />
+                    </button>
+                  </div>
+                )}
               </div>
             ) : (
-              <div className="w-96 h-72 bg-slate-800 rounded-lg flex flex-col items-center justify-center">
-                <Mic className="w-24 h-24 text-slate-600 mb-4" />
-                <div className="flex space-x-2">
+              <div className="w-full aspect-video bg-slate-800 rounded-lg flex flex-col items-center justify-center">
+                <div className="relative mb-6">
+                  {episode.guest?.avatar_url ? (
+                    <img
+                      src={episode.guest.avatar_url}
+                      alt={episode.guest.full_name}
+                      className="w-32 h-32 rounded-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-32 h-32 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+                      <span className="text-4xl font-bold text-white">
+                        {getInitials(episode.guest?.full_name || 'G')}
+                      </span>
+                    </div>
+                  )}
+
+                  {isSpeaking && (
+                    <div className="absolute -inset-3 rounded-full border-4 border-green-500 animate-pulse"></div>
+                  )}
+                </div>
+
+                <p className="text-xl font-semibold">{episode.guest?.full_name}</p>
+                <p className="text-sm text-slate-400 mt-1">Guest - Audio Only</p>
+
+                <div className="flex space-x-2 mt-8">
                   {[...Array(20)].map((_, i) => (
                     <div
                       key={i}
-                      className="w-2 bg-blue-500 rounded-full"
+                      className="w-2 bg-blue-500 rounded-full transition-all"
                       style={{
-                        height: `${Math.random() * 60 + 20}px`,
-                        animation: isRecording ? 'pulse 0.5s infinite' : 'none'
+                        height: isRecording && isSpeaking
+                          ? `${Math.random() * 60 + 20}px`
+                          : '20px',
                       }}
                     ></div>
                   ))}
@@ -180,9 +404,7 @@ export function PodcastRecordingPage() {
           </div>
         </div>
 
-        {/* Question & Teleprompter - Right Side */}
         <div className="bg-slate-900 flex flex-col">
-          {/* Current Question */}
           <div className="bg-gradient-to-br from-blue-600 to-blue-700 p-8 border-b border-slate-700">
             <div className="text-sm font-semibold text-blue-200 mb-3">
               CURRENT QUESTION
@@ -192,7 +414,6 @@ export function PodcastRecordingPage() {
             </h2>
           </div>
 
-          {/* Teleprompter Area */}
           <div className="flex-1 overflow-y-auto p-8">
             <div className="text-sm font-semibold text-slate-400 mb-4">
               TELEPROMPTER / PRE-FILLED ANSWER
@@ -211,7 +432,6 @@ export function PodcastRecordingPage() {
             )}
           </div>
 
-          {/* Question Navigation */}
           <div className="bg-slate-800 border-t border-slate-700 p-4">
             <div className="flex items-center justify-between">
               <button
@@ -252,7 +472,6 @@ export function PodcastRecordingPage() {
         </div>
       </div>
 
-      {/* Recording Controls - Bottom */}
       <div className="bg-slate-800 border-t border-slate-700 px-6 py-4">
         <div className="flex items-center justify-center space-x-4">
           <button
