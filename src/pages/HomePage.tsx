@@ -29,6 +29,7 @@ type AnswerWithDetails = Answer & {
 export function HomePage() {
   const [featuredAnswers, setFeaturedAnswers] = useState<AnswerWithDetails[]>([]);
   const [topMentors, setTopMentors] = useState<Profile[]>([]);
+  const [stalwarts, setStalwarts] = useState<Profile[]>([]);
   const [stats, setStats] = useState({
     totalQuestions: 0,
     totalAnswers: 0,
@@ -46,6 +47,7 @@ export function HomePage() {
       const [
         answersRes,
         mentorsRes,
+        stalwartsRes,
         questionsCount,
         answersCount,
         mentorsCount
@@ -60,7 +62,15 @@ export function HomePage() {
           .from('profiles')
           .select('*')
           .eq('role', 'mentor')
+          .eq('is_stalwart', false)
           .limit(8),
+        supabase
+          .from('profiles')
+          .select('*')
+          .eq('role', 'mentor')
+          .eq('is_stalwart', true)
+          .order('stalwart_order', { ascending: true })
+          .limit(6),
         supabase.from('questions').select('*', { count: 'exact', head: true }),
         supabase.from('answers').select('*', { count: 'exact', head: true }),
         supabase.from('profiles').select('*', { count: 'exact', head: true }).eq('role', 'mentor')
@@ -68,6 +78,7 @@ export function HomePage() {
 
       if (answersRes.data) setFeaturedAnswers(answersRes.data as AnswerWithDetails[]);
       if (mentorsRes.data) setTopMentors(mentorsRes.data);
+      if (stalwartsRes.data) setStalwarts(stalwartsRes.data);
 
       setStats({
         totalQuestions: questionsCount.count || 0,
@@ -152,6 +163,110 @@ export function HomePage() {
           </div>
         </div>
       </div>
+
+      {stalwarts.length > 0 && (
+        <div className="bg-gradient-to-br from-amber-50 via-yellow-50 to-orange-50 py-20 border-y-4 border-amber-300">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16">
+              <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-amber-400 to-orange-500 px-6 py-3 rounded-full mb-6 shadow-xl">
+                <Sparkles className="w-5 h-5 text-white animate-pulse" />
+                <span className="text-sm font-bold text-white tracking-wider">STALWARTS CORNER</span>
+              </div>
+              <h2 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-amber-800 via-orange-700 to-red-700 bg-clip-text text-transparent mb-6">
+                Learn from Industry Stalwarts
+              </h2>
+              <p className="text-xl text-slate-700 max-w-3xl mx-auto leading-relaxed font-medium">
+                CXOs, Industry Leaders, and Veteran Experts sharing their invaluable experience and insights
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+              {stalwarts.map((stalwart) => (
+                <Link
+                  key={stalwart.id}
+                  to={`/profile/${stalwart.id}`}
+                  className="group bg-white rounded-3xl p-8 shadow-2xl hover:shadow-3xl transition-all border-4 border-amber-200 hover:border-amber-400 relative overflow-hidden"
+                >
+                  <div className="absolute top-0 right-0 bg-gradient-to-br from-amber-400 to-orange-500 text-white px-4 py-2 rounded-bl-2xl font-bold text-xs shadow-lg">
+                    <div className="flex items-center space-x-1">
+                      <Star className="w-3 h-3 fill-white" />
+                      <span>STALWART</span>
+                    </div>
+                  </div>
+
+                  <div className="relative mb-6">
+                    {stalwart.avatar_url ? (
+                      <img
+                        src={stalwart.avatar_url}
+                        alt={stalwart.full_name}
+                        className="w-32 h-32 rounded-full mx-auto ring-8 ring-amber-200 group-hover:ring-amber-400 transition shadow-xl"
+                      />
+                    ) : (
+                      <div className="w-32 h-32 rounded-full bg-gradient-to-br from-amber-400 via-orange-500 to-red-600 flex items-center justify-center mx-auto ring-8 ring-amber-200 group-hover:ring-amber-400 transition shadow-xl">
+                        <span className="text-5xl font-bold text-white">{stalwart.full_name.charAt(0)}</span>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="text-center">
+                    <h3 className="font-bold text-slate-900 text-xl mb-2 group-hover:text-orange-600 transition">
+                      {stalwart.full_name}
+                    </h3>
+
+                    {stalwart.stalwart_designation && (
+                      <div className="inline-block bg-gradient-to-r from-amber-100 to-orange-100 text-amber-900 px-4 py-1 rounded-full text-xs font-bold mb-3 border-2 border-amber-300">
+                        {stalwart.stalwart_designation}
+                      </div>
+                    )}
+
+                    {stalwart.professional_title && (
+                      <p className="text-sm text-slate-700 mb-4 font-semibold line-clamp-2">{stalwart.professional_title}</p>
+                    )}
+
+                    {stalwart.bio && (
+                      <div className="bg-gradient-to-r from-amber-50 to-orange-50 rounded-xl p-4 mb-4 border-l-4 border-amber-500">
+                        <p className="text-xs text-slate-700 leading-relaxed line-clamp-3 italic">
+                          "{stalwart.bio}"
+                        </p>
+                      </div>
+                    )}
+
+                    <div className="grid grid-cols-2 gap-3 mb-4">
+                      <div className="bg-blue-50 rounded-lg p-2 border border-blue-200">
+                        <div className="text-lg font-bold text-blue-900">{stalwart.total_answers || 0}</div>
+                        <div className="text-xs text-blue-700">Answers</div>
+                      </div>
+                      <div className="bg-amber-50 rounded-lg p-2 border border-amber-200">
+                        <div className="flex items-center justify-center space-x-1">
+                          <Star className="w-4 h-4 text-amber-600 fill-amber-600" />
+                          <span className="text-lg font-bold text-amber-900">{(stalwart.rating || 5.0).toFixed(1)}</span>
+                        </div>
+                        <div className="text-xs text-amber-700">Rating</div>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center justify-center space-x-2 text-orange-600 group-hover:text-orange-700 font-bold text-sm">
+                      <span>View Profile</span>
+                      <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition" />
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+
+            <div className="text-center">
+              <Link
+                to="/browse-mentors"
+                className="inline-flex items-center space-x-3 bg-gradient-to-r from-amber-500 to-orange-600 text-white px-10 py-5 rounded-2xl font-bold hover:from-amber-600 hover:to-orange-700 transition shadow-2xl text-lg"
+              >
+                <Users className="w-6 h-6" />
+                <span>Browse All Mentors</span>
+                <ArrowRight className="w-6 h-6" />
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="bg-slate-50 py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

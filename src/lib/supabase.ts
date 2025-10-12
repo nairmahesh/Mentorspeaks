@@ -29,6 +29,11 @@ export type Profile = {
   total_reviews?: number;
   total_answers?: number;
   total_videos?: number;
+  is_stalwart?: boolean;
+  stalwart_designation?: string | null;
+  stalwart_order?: number | null;
+  linkedin_url?: string | null;
+  expertise_areas?: string[];
 };
 
 export type Industry = {
