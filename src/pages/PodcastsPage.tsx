@@ -490,13 +490,42 @@ export function PodcastsPage() {
                     </Link>
 
                     <div className="flex items-center justify-between text-xs text-slate-500 mb-4 pt-4 border-t border-slate-100">
-                      <div className="flex items-center space-x-1">
-                        <Calendar className="w-3.5 h-3.5" />
-                        <span>{formatDate(podcast.created_at)}</span>
-                      </div>
-                      <div className="flex items-center space-x-1">
-                        <Headphones className="w-3.5 h-3.5" />
-                        <span>{podcast.view_count} listens</span>
+                      <div className="flex items-center space-x-3">
+                        <div className="flex items-center space-x-1">
+                          <Eye className="w-3.5 h-3.5" />
+                          <span>{podcast.view_count || 0}</span>
+                        </div>
+                        <button
+                          onClick={() => handleLike(podcast.id)}
+                          className={`flex items-center space-x-1 transition ${
+                            likedEpisodes.has(podcast.id) ? 'text-pink-600' : 'hover:text-pink-600'
+                          }`}
+                        >
+                          <Heart className={`w-3.5 h-3.5 ${likedEpisodes.has(podcast.id) ? 'fill-pink-600' : ''}`} />
+                          <span>{podcast.upvote_count || 0}</span>
+                        </button>
+                        <button
+                          onClick={() => handleShare({
+                            id: podcast.id,
+                            title: podcast.question?.title || '',
+                            description: podcast.summary || '',
+                            episode_number: 0,
+                            recording_type: 'audio',
+                            thumbnail_url: '',
+                            duration_minutes: Math.floor((podcast.duration_seconds || 0) / 60),
+                            view_count: podcast.view_count || 0,
+                            published_at: podcast.created_at,
+                            guest: {
+                              full_name: podcast.mentor?.full_name || '',
+                              professional_title: podcast.mentor?.professional_title || '',
+                              avatar_url: podcast.mentor?.avatar_url || ''
+                            }
+                          })}
+                          className="flex items-center space-x-1 hover:text-blue-600 transition"
+                        >
+                          <Share2 className="w-3.5 h-3.5" />
+                          <span>Share</span>
+                        </button>
                       </div>
                     </div>
 
