@@ -130,79 +130,12 @@ export function AboutPage() {
         <section className="mb-20">
           <div className="flex items-center space-x-3 mb-8">
             <Users className="w-8 h-8 text-blue-600" />
-            <h2 className="text-3xl font-bold text-slate-900">Our Team</h2>
+            <h2 className="text-3xl font-bold text-slate-900">Advisory Team</h2>
           </div>
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="bg-white rounded-xl border border-slate-200 overflow-hidden hover:shadow-lg transition">
-              <div className="bg-gradient-to-br from-blue-500 to-blue-600 h-48 flex items-center justify-center">
-                <div className="w-32 h-32 bg-white rounded-full flex items-center justify-center">
-                  <Users className="w-16 h-16 text-blue-600" />
-                </div>
-              </div>
-              <div className="p-6">
-                <div className="flex items-center justify-between mb-2">
-                  <h3 className="text-xl font-bold text-slate-900">Priya Sharma</h3>
-                  <a href="#" className="text-blue-600 hover:text-blue-700">
-                    <Linkedin className="w-5 h-5" />
-                  </a>
-                </div>
-                <p className="text-blue-600 font-medium mb-3">Co-Founder & CEO</p>
-                <p className="text-slate-600 text-sm leading-relaxed">
-                  Former Engineering Lead at a Fortune 500 company. 12 years building products and teams across India and
-                  Southeast Asia. Passionate about democratizing career guidance.
-                </p>
-              </div>
-            </div>
-
-            <div className="bg-white rounded-xl border border-slate-200 overflow-hidden hover:shadow-lg transition">
-              <div className="bg-gradient-to-br from-green-500 to-green-600 h-48 flex items-center justify-center">
-                <div className="w-32 h-32 bg-white rounded-full flex items-center justify-center">
-                  <Users className="w-16 h-16 text-green-600" />
-                </div>
-              </div>
-              <div className="p-6">
-                <div className="flex items-center justify-between mb-2">
-                  <h3 className="text-xl font-bold text-slate-900">Amit Patel</h3>
-                  <a href="#" className="text-blue-600 hover:text-blue-700">
-                    <Linkedin className="w-5 h-5" />
-                  </a>
-                </div>
-                <p className="text-green-600 font-medium mb-3">Co-Founder & CPO</p>
-                <p className="text-slate-600 text-sm leading-relaxed">
-                  Product strategist with experience at leading tech startups. Made 3 career pivots and wants to help others
-                  navigate transitions with confidence and clarity.
-                </p>
-              </div>
-            </div>
-
-            <div className="bg-white rounded-xl border border-slate-200 overflow-hidden hover:shadow-lg transition">
-              <div className="bg-gradient-to-br from-orange-500 to-orange-600 h-48 flex items-center justify-center">
-                <div className="w-32 h-32 bg-white rounded-full flex items-center justify-center">
-                  <Users className="w-16 h-16 text-orange-600" />
-                </div>
-              </div>
-              <div className="p-6">
-                <div className="flex items-center justify-between mb-2">
-                  <h3 className="text-xl font-bold text-slate-900">Sarah Al-Mansoori</h3>
-                  <a href="#" className="text-blue-600 hover:text-blue-700">
-                    <Linkedin className="w-5 h-5" />
-                  </a>
-                </div>
-                <p className="text-orange-600 font-medium mb-3">Co-Founder & CMO</p>
-                <p className="text-slate-600 text-sm leading-relaxed">
-                  Marketing leader who built global brands from the ground up. Believes in the power of authentic storytelling
-                  and community-driven growth.
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="mb-20">
-          <div className="flex items-center space-x-3 mb-8">
-            <Users className="w-8 h-8 text-slate-600" />
-            <h2 className="text-3xl font-bold text-slate-900">Our Advisors</h2>
-          </div>
+          <p className="text-slate-600 text-lg mb-10 max-w-3xl">
+            Our advisory team brings decades of combined experience in education, technology, business strategy, and psychology
+            to guide our mission of democratizing career mentorship.
+          </p>
           <div className="grid md:grid-cols-2 gap-6">
             <div className="bg-slate-50 rounded-xl p-6 border border-slate-200">
               <div className="flex items-start justify-between mb-3">
