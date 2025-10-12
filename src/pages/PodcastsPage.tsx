@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { supabase, Answer, Question, Profile } from '../lib/supabase';
 import { Layout } from '../components/Layout';
+import { CallBookingModal } from '../components/CallBookingModal';
 import {
   Mic,
   Play,
@@ -38,7 +39,7 @@ interface PodcastEpisode {
   duration_minutes: number;
   view_count: number;
   published_at: string;
-  guest: { full_name: string; professional_title: string; avatar_url: string };
+  guest: { id: string; full_name: string; professional_title: string; avatar_url: string; is_available_for_consulting: boolean };
   moderator?: { full_name: string; professional_title: string };
 }
 
@@ -50,6 +51,7 @@ export function PodcastsPage() {
   const [likedEpisodes, setLikedEpisodes] = useState<Set<string>>(new Set());
   const [shareModalOpen, setShareModalOpen] = useState(false);
   const [selectedEpisode, setSelectedEpisode] = useState<PodcastEpisode | null>(null);
+  const [consultingGuest, setConsultingGuest] = useState<{ id: string; full_name: string } | null>(null);
 
   useEffect(() => {
     loadPodcasts();
@@ -69,7 +71,7 @@ export function PodcastsPage() {
           .from('podcast_episodes')
           .select(`
             *,
-            guest:guest_id(full_name, professional_title, avatar_url),
+            guest:guest_id(id, full_name, professional_title, avatar_url, is_available_for_consulting),
             moderator:podcast_moderators!podcast_episodes_moderator_id_fkey(
               moderator:moderator_id(full_name, professional_title)
             )
@@ -306,9 +308,23 @@ export function PodcastsPage() {
                             </div>
                           </div>
 
-                          <div className="flex items-center justify-center space-x-1 text-blue-600 group-hover:text-blue-700 font-bold text-sm">
-                            <Play className="w-4 h-4" />
-                            <span>Watch</span>
+                          <div className="grid grid-cols-2 gap-3">
+                            <div className="flex items-center justify-center space-x-1 text-blue-600 group-hover:text-blue-700 font-bold text-sm">
+                              <Play className="w-4 h-4" />
+                              <span>Watch</span>
+                            </div>
+                            {episode.guest?.is_available_for_consulting && (
+                              <button
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  setConsultingGuest({ id: episode.guest.id, full_name: episode.guest.full_name });
+                                }}
+                                className="flex items-center justify-center space-x-1 bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700 transition font-semibold text-sm"
+                              >
+                                <Phone className="w-4 h-4" />
+                                <span>Book Call</span>
+                              </button>
+                            )}
                           </div>
                         </div>
                       </Link>
@@ -653,6 +669,15 @@ export function PodcastsPage() {
             </div>
           </div>
         </div>
+      )}
+
+      {/* Consultation Modal */}
+      {consultingGuest && (
+        <CallBookingModal
+          mentor={{ id: consultingGuest.id, full_name: consultingGuest.full_name } as any}
+          isOpen={true}
+          onClose={() => setConsultingGuest(null)}
+        />
       )}
     </Layout>
   );
