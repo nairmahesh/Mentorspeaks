@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { supabase, Profile } from '../lib/supabase';
 import { PublicLayout } from '../components/PublicLayout';
-import { ArrowRight, Star, Users, Video, MessageCircle, TrendingUp, Award, DollarSign, Sparkles, Globe, CheckCircle } from 'lucide-react';
+import { ArrowRight, Star, Users, Video, MessageCircle, TrendingUp, Award, DollarSign, Sparkles, Globe, CheckCircle, Heart, Users2 } from 'lucide-react';
 
 type SortOption = 'rating' | 'answers' | 'videos' | 'recent';
 
@@ -176,12 +176,57 @@ export function MentorsPage() {
 
             <div className="bg-gradient-to-br from-rose-50 to-rose-100 rounded-2xl p-8 border border-rose-200">
               <div className="w-14 h-14 bg-rose-600 rounded-xl flex items-center justify-center mb-6">
-                <TrendingUp className="w-7 h-7 text-white" />
+                <Heart className="w-7 h-7 text-white" />
               </div>
-              <h3 className="text-2xl font-bold text-slate-900 mb-3">Career Opportunities</h3>
+              <h3 className="text-2xl font-bold text-slate-900 mb-3">Give Back & Create Legacy</h3>
               <p className="text-slate-700 leading-relaxed">
-                Connect with companies seeking expert advisors. Your mentor profile serves as a powerful professional showcase.
+                Pay it forward by guiding others through challenges you once faced. Your wisdom can change lives and create a lasting impact on future generations.
               </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="py-20 bg-gradient-to-br from-amber-50 via-orange-50 to-rose-50">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="bg-white rounded-3xl p-12 shadow-xl border border-orange-100">
+            <div className="text-center mb-12">
+              <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-rose-500 to-orange-500 rounded-full mb-6">
+                <Heart className="w-10 h-10 text-white" fill="white" />
+              </div>
+              <h2 className="text-4xl font-bold text-slate-900 mb-4">Make a Difference That Matters</h2>
+              <p className="text-xl text-slate-600 leading-relaxed max-w-3xl mx-auto">
+                Behind every question is someone seeking guidance at a crossroads in their career. Your experience can be the light that shows them the way forward.
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-8 mb-12">
+              <div className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-2xl p-8 border border-blue-100">
+                <Users2 className="w-12 h-12 text-blue-600 mb-4" />
+                <h3 className="text-xl font-bold text-slate-900 mb-3">Empower the Next Generation</h3>
+                <p className="text-slate-700 leading-relaxed">
+                  Remember when you needed guidance and someone took the time to help? Now it's your turn. Share the lessons learned from your journey and help others avoid the pitfalls you faced.
+                </p>
+              </div>
+
+              <div className="bg-gradient-to-br from-rose-50 to-pink-50 rounded-2xl p-8 border border-rose-100">
+                <Heart className="w-12 h-12 text-rose-600 mb-4" />
+                <h3 className="text-xl font-bold text-slate-900 mb-3">Create Lasting Impact</h3>
+                <p className="text-slate-700 leading-relaxed">
+                  Your advice today could shape someone's entire career trajectory. Imagine the ripple effect of your wisdom - lives changed, families supported, dreams realized.
+                </p>
+              </div>
+            </div>
+
+            <div className="bg-gradient-to-r from-slate-50 to-slate-100 rounded-2xl p-8 border border-slate-200">
+              <blockquote className="text-center">
+                <p className="text-lg text-slate-700 italic mb-4 leading-relaxed">
+                  "The greatest legacy we can leave behind is not what we've accomplished, but who we've helped along the way. Mentoring isn't just about sharing knowledge—it's about transforming lives and giving hope to those who need it most."
+                </p>
+                <footer className="text-sm font-semibold text-slate-900">
+                  — The Heart of Mentorship
+                </footer>
+              </blockquote>
             </div>
           </div>
         </div>
