@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
-import { ChevronLeft, ChevronRight, Video, Mic, Square, Play } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Video, Mic, Square, Play, ArrowLeft } from 'lucide-react';
 
 interface Episode {
   id: string;
@@ -117,11 +117,19 @@ export function PodcastRecordingPage() {
       {/* Header */}
       <div className="bg-slate-800 border-b border-slate-700 px-6 py-4">
         <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-xl font-bold">{episode.title}</h1>
-            <p className="text-sm text-slate-400 mt-1">
-              Guest: {episode.guest?.full_name} | Moderator: {episode.moderator?.full_name}
-            </p>
+          <div className="flex items-center space-x-4">
+            <button
+              onClick={() => navigate('/podcasts/manage')}
+              className="flex items-center space-x-2 text-slate-400 hover:text-white transition"
+            >
+              <ArrowLeft className="w-5 h-5" />
+            </button>
+            <div>
+              <h1 className="text-xl font-bold">{episode.title}</h1>
+              <p className="text-sm text-slate-400 mt-1">
+                Guest: {episode.guest?.full_name} | Moderator: {episode.moderator?.full_name}
+              </p>
+            </div>
           </div>
           <div className="flex items-center space-x-4">
             <div className="text-sm text-slate-400">

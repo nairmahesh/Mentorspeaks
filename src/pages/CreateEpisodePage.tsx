@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Layout } from '../components/Layout';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../lib/supabase';
-import { Sparkles, Plus, Trash2 } from 'lucide-react';
+import { Sparkles, Plus, Trash2, ArrowLeft } from 'lucide-react';
 
 interface Series {
   id: string;
@@ -164,6 +164,13 @@ export function CreateEpisodePage() {
   return (
     <Layout>
       <div className="max-w-4xl mx-auto px-4 py-8">
+        <button
+          onClick={() => navigate('/podcasts/manage')}
+          className="flex items-center space-x-2 text-slate-600 hover:text-slate-900 mb-6 transition"
+        >
+          <ArrowLeft className="w-5 h-5" />
+          <span>Back to Podcast Management</span>
+        </button>
         <h1 className="text-3xl font-bold text-slate-900 mb-8">Create New Podcast Episode</h1>
 
         {error && (

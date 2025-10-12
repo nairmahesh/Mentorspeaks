@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Layout } from '../components/Layout';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../lib/supabase';
-import { Shield, UserPlus, Trash2, Crown, User as UserIcon } from 'lucide-react';
+import { Shield, UserPlus, Trash2, Crown, User as UserIcon, ArrowLeft } from 'lucide-react';
 
 interface Moderator {
   id: string;
@@ -27,6 +28,7 @@ interface Profile {
 
 export function ModeratorManagePage() {
   const { user, isModerator } = useAuth();
+  const navigate = useNavigate();
   const [moderators, setModerators] = useState<Moderator[]>([]);
   const [mentors, setMentors] = useState<Profile[]>([]);
   const [isAdmin, setIsAdmin] = useState(false);
@@ -203,6 +205,13 @@ export function ModeratorManagePage() {
   return (
     <Layout>
       <div className="max-w-6xl mx-auto px-4 py-8">
+        <button
+          onClick={() => navigate('/podcasts/manage')}
+          className="flex items-center space-x-2 text-slate-600 hover:text-slate-900 mb-6 transition"
+        >
+          <ArrowLeft className="w-5 h-5" />
+          <span>Back to Podcast Management</span>
+        </button>
         <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-3xl font-bold text-slate-900">Moderator Management</h1>

@@ -19,6 +19,7 @@ import { MentorProfilePage } from './pages/MentorProfilePage';
 import { PodcastsPage } from './pages/PodcastsPage';
 import { PodcastManagePage } from './pages/PodcastManagePage';
 import { CreateEpisodePage } from './pages/CreateEpisodePage';
+import { CreateSeriesPage } from './pages/CreateSeriesPage';
 import { PodcastRecordingPage } from './pages/PodcastRecordingPage';
 import { ModeratorManagePage } from './pages/ModeratorManagePage';
 import { CorporateFeaturesPage } from './pages/CorporateFeaturesPage';
@@ -60,6 +61,14 @@ function AppRoutes() {
         element={
           <ProtectedRoute>
             <CreateEpisodePage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/podcasts/series/new"
+        element={
+          <ProtectedRoute>
+            <CreateSeriesPage />
           </ProtectedRoute>
         }
       />
