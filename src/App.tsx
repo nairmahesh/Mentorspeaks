@@ -22,6 +22,8 @@ import { CreateEpisodePage } from './pages/CreateEpisodePage';
 import { CreateSeriesPage } from './pages/CreateSeriesPage';
 import { PodcastRecordingPage } from './pages/PodcastRecordingPage';
 import { ModeratorManagePage } from './pages/ModeratorManagePage';
+import { GuestResponsePage } from './pages/GuestResponsePage';
+import { EpisodeViewPage } from './pages/EpisodeViewPage';
 import { CorporateFeaturesPage } from './pages/CorporateFeaturesPage';
 import { CorporateSignupPage } from './pages/CorporateSignupPage';
 
@@ -48,6 +50,8 @@ function AppRoutes() {
       />
       <Route path="/" element={<HomePage />} />
       <Route path="/podcasts" element={<PodcastsPage />} />
+      <Route path="/podcasts/episode/:episodeId/view" element={<EpisodeViewPage />} />
+      <Route path="/guest/respond/:token" element={<GuestResponsePage />} />
       <Route
         path="/podcasts/manage"
         element={

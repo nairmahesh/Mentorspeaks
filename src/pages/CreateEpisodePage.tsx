@@ -14,6 +14,9 @@ interface Mentor {
   id: string;
   full_name: string;
   professional_title: string;
+  bio: string;
+  linkedin_url: string;
+  years_of_experience: number;
 }
 
 interface Question {
@@ -50,7 +53,7 @@ export function CreateEpisodePage() {
   const loadData = async () => {
     const [seriesResult, mentorsResult, moderatorsResult] = await Promise.all([
       supabase.from('podcast_series').select('id, title').eq('status', 'active'),
-      supabase.from('profiles').select('id, full_name, professional_title').eq('role', 'mentor'),
+      supabase.from('profiles').select('id, full_name, professional_title, bio, linkedin_url, years_of_experience').eq('role', 'mentor'),
       supabase
         .from('podcast_moderators')
         .select('user_id, profiles(id, full_name, professional_title)')
@@ -228,43 +231,80 @@ export function CreateEpisodePage() {
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
-                  Guest (Mentor) *
-                </label>
-                <select
-                  value={guestId}
-                  onChange={(e) => setGuestId(e.target.value)}
-                  required
-                  className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                >
-                  <option value="">Select a mentor</option>
-                  {mentors.map((m) => (
-                    <option key={m.id} value={m.id}>
-                      {m.full_name} {m.professional_title && `- ${m.professional_title}`}
-                    </option>
-                  ))}
-                </select>
-              </div>
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-2">
+                Guest (Mentor) *
+              </label>
+              <select
+                value={guestId}
+                onChange={(e) => setGuestId(e.target.value)}
+                required
+                className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              >
+                <option value="">Select a mentor</option>
+                {mentors.map((m) => (
+                  <option key={m.id} value={m.id}>
+                    {m.full_name} {m.professional_title && `- ${m.professional_title}`}
+                  </option>
+                ))}
+              </select>
 
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
-                  Moderator
-                </label>
-                <select
-                  value={moderatorId}
-                  onChange={(e) => setModeratorId(e.target.value)}
-                  className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                >
-                  <option value="">Me (Current User)</option>
-                  {moderators.map((m) => (
-                    <option key={m.id} value={m.id}>
-                      {m.full_name}
-                    </option>
-                  ))}
-                </select>
-              </div>
+              {guestId && mentors.find(m => m.id === guestId) && (
+                <div className="mt-4 p-4 bg-slate-50 rounded-lg border border-slate-200">
+                  <h3 className="font-semibold text-slate-900 mb-2">Guest Profile</h3>
+                  {(() => {
+                    const guest = mentors.find(m => m.id === guestId);
+                    return guest ? (
+                      <div className="space-y-2 text-sm">
+                        <p className="text-slate-700">
+                          <span className="font-medium">Name:</span> {guest.full_name}
+                        </p>
+                        {guest.professional_title && (
+                          <p className="text-slate-700">
+                            <span className="font-medium">Title:</span> {guest.professional_title}
+                          </p>
+                        )}
+                        {guest.years_of_experience && (
+                          <p className="text-slate-700">
+                            <span className="font-medium">Experience:</span> {guest.years_of_experience} years
+                          </p>
+                        )}
+                        {guest.bio && (
+                          <p className="text-slate-600 mt-2">{guest.bio}</p>
+                        )}
+                        {guest.linkedin_url && (
+                          <a
+                            href={guest.linkedin_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-600 hover:text-blue-700 inline-block mt-2"
+                          >
+                            View LinkedIn Profile →
+                          </a>
+                        )}
+                      </div>
+                    ) : null;
+                  })()}
+                </div>
+              )}
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-2">
+                Moderator
+              </label>
+              <select
+                value={moderatorId}
+                onChange={(e) => setModeratorId(e.target.value)}
+                className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              >
+                <option value="">Me (Current User)</option>
+                {moderators.map((m) => (
+                  <option key={m.id} value={m.id}>
+                    {m.full_name}
+                  </option>
+                ))}
+              </select>
             </div>
 
             <div className="grid grid-cols-3 gap-4">

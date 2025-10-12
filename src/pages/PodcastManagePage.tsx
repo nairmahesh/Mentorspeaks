@@ -34,6 +34,8 @@ export function PodcastManagePage() {
   const [loading, setLoading] = useState(true);
   const [isModerator, setIsModerator] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [activeTab, setActiveTab] = useState<'today' | 'past' | 'future'>('today');
+  const [stats, setStats] = useState({ total: 0, past: 0, today: 0, future: 0 });
 
   useEffect(() => {
     checkModeratorStatus();
@@ -72,12 +74,36 @@ export function PodcastManagePage() {
           guest:guest_id(full_name),
           moderator:moderator_id(full_name)
         `)
-        .order('created_at', { ascending: false })
-        .limit(20)
+        .order('scheduled_at', { ascending: false, nullsFirst: false })
     ]);
 
     if (seriesResult.data) setSeries(seriesResult.data);
-    if (episodesResult.data) setEpisodes(episodesResult.data as any);
+    if (episodesResult.data) {
+      const eps = episodesResult.data as any;
+      setEpisodes(eps);
+
+      const now = new Date();
+      const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      const endOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+
+      const past = eps.filter((e: any) => {
+        if (!e.scheduled_at) return false;
+        return new Date(e.scheduled_at) < startOfDay;
+      }).length;
+
+      const today = eps.filter((e: any) => {
+        if (!e.scheduled_at) return false;
+        const date = new Date(e.scheduled_at);
+        return date >= startOfDay && date < endOfDay;
+      }).length;
+
+      const future = eps.filter((e: any) => {
+        if (!e.scheduled_at) return false;
+        return new Date(e.scheduled_at) >= endOfDay;
+      }).length;
+
+      setStats({ total: eps.length, past, today, future });
+    }
 
     setLoading(false);
   };
@@ -181,9 +207,73 @@ export function PodcastManagePage() {
           </div>
 
           <div>
-            <h2 className="text-xl font-bold text-slate-900 mb-4">Recent Episodes</h2>
+            <div className="mb-6">
+              <div className="grid grid-cols-4 gap-4 mb-6">
+                <div className="bg-white rounded-lg border border-slate-200 p-4">
+                  <div className="text-2xl font-bold text-blue-600">{stats.total}</div>
+                  <div className="text-sm text-slate-600">Total Episodes</div>
+                </div>
+                <div className="bg-white rounded-lg border border-slate-200 p-4">
+                  <div className="text-2xl font-bold text-green-600">{stats.today}</div>
+                  <div className="text-sm text-slate-600">Today</div>
+                </div>
+                <div className="bg-white rounded-lg border border-slate-200 p-4">
+                  <div className="text-2xl font-bold text-orange-600">{stats.future}</div>
+                  <div className="text-sm text-slate-600">Upcoming</div>
+                </div>
+                <div className="bg-white rounded-lg border border-slate-200 p-4">
+                  <div className="text-2xl font-bold text-slate-600">{stats.past}</div>
+                  <div className="text-sm text-slate-600">Past</div>
+                </div>
+              </div>
+
+              <div className="flex space-x-2 mb-4 border-b border-slate-200">
+                <button
+                  onClick={() => setActiveTab('today')}
+                  className={`px-4 py-2 font-medium transition ${
+                    activeTab === 'today'
+                      ? 'text-blue-600 border-b-2 border-blue-600'
+                      : 'text-slate-600 hover:text-slate-900'
+                  }`}
+                >
+                  Today ({stats.today})
+                </button>
+                <button
+                  onClick={() => setActiveTab('future')}
+                  className={`px-4 py-2 font-medium transition ${
+                    activeTab === 'future'
+                      ? 'text-blue-600 border-b-2 border-blue-600'
+                      : 'text-slate-600 hover:text-slate-900'
+                  }`}
+                >
+                  Future ({stats.future})
+                </button>
+                <button
+                  onClick={() => setActiveTab('past')}
+                  className={`px-4 py-2 font-medium transition ${
+                    activeTab === 'past'
+                      ? 'text-blue-600 border-b-2 border-blue-600'
+                      : 'text-slate-600 hover:text-slate-900'
+                  }`}
+                >
+                  Past ({stats.past})
+                </button>
+              </div>
+            </div>
+
             <div className="space-y-3">
-              {episodes.map((ep) => (
+              {episodes.filter(ep => {
+                if (!ep.scheduled_at) return activeTab === 'today';
+                const now = new Date();
+                const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+                const endOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+                const epDate = new Date(ep.scheduled_at);
+
+                if (activeTab === 'today') return epDate >= startOfDay && epDate < endOfDay;
+                if (activeTab === 'past') return epDate < startOfDay;
+                if (activeTab === 'future') return epDate >= endOfDay;
+                return false;
+              }).map((ep) => (
                 <div
                   key={ep.id}
                   className="bg-white rounded-lg border border-slate-200 p-4 hover:shadow-md transition"
@@ -225,8 +315,16 @@ export function PodcastManagePage() {
                     </div>
                     <div className="flex flex-col space-y-2">
                       <Link
+                        to={`/podcasts/episode/${ep.id}/view`}
+                        className="text-slate-600 hover:text-slate-700 p-2"
+                        title="View & Share Episode"
+                      >
+                        <Eye className="w-4 h-4" />
+                      </Link>
+                      <Link
                         to={`/podcasts/episode/${ep.id}/edit`}
                         className="text-blue-600 hover:text-blue-700 p-2"
+                        title="Edit Episode"
                       >
                         <Edit className="w-4 h-4" />
                       </Link>
@@ -234,6 +332,7 @@ export function PodcastManagePage() {
                         <Link
                           to={`/podcasts/episode/${ep.id}/record`}
                           className="text-green-600 hover:text-green-700 p-2"
+                          title="Record Episode"
                         >
                           <Video className="w-4 h-4" />
                         </Link>
