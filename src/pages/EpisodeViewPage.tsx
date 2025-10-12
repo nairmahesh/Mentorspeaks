@@ -34,6 +34,19 @@ interface Episode {
   } | null;
 }
 
+interface MentorAnswer {
+  id: string;
+  answer_text: string;
+  upvotes: number;
+  created_at: string;
+  mentor: {
+    full_name: string;
+    avatar_url: string | null;
+    professional_title: string;
+  };
+  user_has_upvoted?: boolean;
+}
+
 interface CommunityQuestion {
   id: string;
   question_text: string;
@@ -46,6 +59,7 @@ interface CommunityQuestion {
     avatar_url: string | null;
   };
   user_has_upvoted?: boolean;
+  mentor_answers?: MentorAnswer[];
 }
 
 export function EpisodeViewPage() {
@@ -64,10 +78,27 @@ export function EpisodeViewPage() {
   const [isCallModalOpen, setIsCallModalOpen] = useState(false);
   const [newQuestion, setNewQuestion] = useState('');
   const [submittingQuestion, setSubmittingQuestion] = useState(false);
+  const [answeringQuestionId, setAnsweringQuestionId] = useState<string | null>(null);
+  const [answerText, setAnswerText] = useState('');
+  const [submittingAnswer, setSubmittingAnswer] = useState(false);
+  const [userProfile, setUserProfile] = useState<any>(null);
 
   useEffect(() => {
     loadEpisode();
-  }, [episodeId]);
+    if (user) {
+      loadUserProfile();
+    }
+  }, [episodeId, user]);
+
+  const loadUserProfile = async () => {
+    if (!user) return;
+    const { data } = await supabase
+      .from('profiles')
+      .select('role')
+      .eq('id', user.id)
+      .single();
+    setUserProfile(data);
+  };
 
   const loadEpisode = async () => {
     if (!episodeId) return;
@@ -111,23 +142,49 @@ export function EpisodeViewPage() {
 
       if (qError) throw qError;
 
-      // Check if user has upvoted each question
+      // Load mentor answers for each question
+      const questionsWithAnswers = await Promise.all(
+        (questionsData || []).map(async (q) => {
+          const { data: answers } = await supabase
+            .from('episode_question_answers')
+            .select(`
+              *,
+              mentor:profiles!episode_question_answers_mentor_id_fkey(full_name, avatar_url, professional_title)
+            `)
+            .eq('question_id', q.id)
+            .order('upvotes', { ascending: false });
+
+          return { ...q, mentor_answers: answers || [] };
+        })
+      );
+
+      // Check if user has upvoted each question and answer
       if (user) {
-        const { data: upvotes } = await supabase
+        const { data: questionUpvotes } = await supabase
           .from('episode_question_upvotes')
           .select('question_id')
           .eq('user_id', user.id);
 
-        const upvotedIds = new Set(upvotes?.map(u => u.question_id));
+        const { data: answerUpvotes } = await supabase
+          .from('episode_answer_upvotes')
+          .select('answer_id')
+          .eq('user_id', user.id);
 
-        const questionsWithUpvotes = (questionsData || []).map(q => ({
+        const upvotedQuestionIds = new Set(questionUpvotes?.map(u => u.question_id));
+        const upvotedAnswerIds = new Set(answerUpvotes?.map(u => u.answer_id));
+
+        const questionsWithUpvotes = questionsWithAnswers.map(q => ({
           ...q,
-          user_has_upvoted: upvotedIds.has(q.id)
+          user_has_upvoted: upvotedQuestionIds.has(q.id),
+          mentor_answers: q.mentor_answers.map((a: any) => ({
+            ...a,
+            user_has_upvoted: upvotedAnswerIds.has(a.id)
+          }))
         }));
 
         setQuestions(questionsWithUpvotes as any);
       } else {
-        setQuestions(questionsData as any || []);
+        setQuestions(questionsWithAnswers as any);
       }
     } catch (err: any) {
       console.error('Failed to load questions:', err);
@@ -185,6 +242,61 @@ export function EpisodeViewPage() {
       console.error('Failed to upvote:', err);
     }
   };
+
+  const handleAnswerQuestion = async (questionId: string) => {
+    if (!user || !answerText.trim()) return;
+
+    setSubmittingAnswer(true);
+    try {
+      const { error } = await supabase
+        .from('episode_question_answers')
+        .insert({
+          question_id: questionId,
+          mentor_id: user.id,
+          answer_text: answerText.trim()
+        });
+
+      if (error) throw error;
+
+      setAnswerText('');
+      setAnsweringQuestionId(null);
+      await loadQuestions();
+    } catch (err: any) {
+      alert('Failed to post answer: ' + err.message);
+    } finally {
+      setSubmittingAnswer(false);
+    }
+  };
+
+  const handleUpvoteAnswer = async (answerId: string, currentlyUpvoted: boolean) => {
+    if (!user) {
+      alert('Please sign in to upvote answers');
+      return;
+    }
+
+    try {
+      if (currentlyUpvoted) {
+        await supabase
+          .from('episode_answer_upvotes')
+          .delete()
+          .eq('answer_id', answerId)
+          .eq('user_id', user.id);
+      } else {
+        await supabase
+          .from('episode_answer_upvotes')
+          .insert({
+            answer_id: answerId,
+            user_id: user.id
+          });
+      }
+
+      await loadQuestions();
+    } catch (err: any) {
+      console.error('Failed to upvote answer:', err);
+    }
+  };
+
+  const isMentor = userProfile?.role === 'mentor' || userProfile?.role === 'ambassador' || userProfile?.role === 'admin';
 
   const currentUrl = window.location.href;
   const embedCode = `<iframe src="${currentUrl}" width="100%" height="600" frameborder="0"></iframe>`;
@@ -494,8 +606,9 @@ export function EpisodeViewPage() {
                             </div>
                             <p className="text-slate-900 font-medium mb-3">{question.question_text}</p>
 
-                            {question.answer_text ? (
-                              <div className="bg-white rounded-lg p-4 border-l-4 border-green-500">
+                            {/* Guest's primary answer */}
+                            {question.answer_text && (
+                              <div className="bg-white rounded-lg p-4 border-l-4 border-green-500 mb-3">
                                 <div className="flex items-center gap-2 mb-2">
                                   {episode.guest.avatar_url ? (
                                     <img
@@ -515,8 +628,102 @@ export function EpisodeViewPage() {
                                 </div>
                                 <p className="text-slate-700 leading-relaxed">{question.answer_text}</p>
                               </div>
-                            ) : (
-                              <p className="text-slate-400 italic text-sm">Waiting for {episode.guest.full_name.split(' ')[0]}'s answer...</p>
+                            )}
+
+                            {/* Mentor answers */}
+                            {question.mentor_answers && question.mentor_answers.length > 0 && (
+                              <div className="space-y-3 mb-3">
+                                {question.mentor_answers.map((answer) => (
+                                  <div key={answer.id} className="bg-white rounded-lg p-4 border-l-4 border-blue-500">
+                                    <div className="flex items-start gap-3">
+                                      <div className="flex flex-col items-center gap-1">
+                                        <button
+                                          onClick={() => handleUpvoteAnswer(answer.id, answer.user_has_upvoted || false)}
+                                          className={`p-1.5 rounded-lg transition ${
+                                            answer.user_has_upvoted
+                                              ? 'bg-blue-600 text-white'
+                                              : 'bg-slate-100 text-slate-600 hover:bg-blue-50'
+                                          }`}
+                                        >
+                                          <ThumbsUp className="w-3 h-3" />
+                                        </button>
+                                        <span className="text-xs font-bold text-slate-700">{answer.upvotes}</span>
+                                      </div>
+                                      <div className="flex-1">
+                                        <div className="flex items-center gap-2 mb-2">
+                                          {answer.mentor.avatar_url ? (
+                                            <img
+                                              src={answer.mentor.avatar_url}
+                                              alt={answer.mentor.full_name}
+                                              className="w-6 h-6 rounded-full"
+                                            />
+                                          ) : (
+                                            <div className="w-6 h-6 rounded-full bg-blue-600 text-white flex items-center justify-center text-xs font-bold">
+                                              {answer.mentor.full_name.charAt(0)}
+                                            </div>
+                                          )}
+                                          <div>
+                                            <span className="text-sm font-semibold text-blue-700">{answer.mentor.full_name}</span>
+                                            <span className="text-xs text-slate-500 block">{answer.mentor.professional_title}</span>
+                                          </div>
+                                          <span className="text-xs text-slate-500 ml-auto">
+                                            {new Date(answer.created_at).toLocaleDateString()}
+                                          </span>
+                                        </div>
+                                        <p className="text-slate-700 leading-relaxed">{answer.answer_text}</p>
+                                      </div>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+
+                            {/* Reply button for mentors */}
+                            {isMentor && (
+                              <div className="mt-3">
+                                {answeringQuestionId === question.id ? (
+                                  <div className="bg-blue-50 rounded-lg p-3 border border-blue-200">
+                                    <textarea
+                                      value={answerText}
+                                      onChange={(e) => setAnswerText(e.target.value)}
+                                      placeholder="Share your insights..."
+                                      className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 mb-2 min-h-[80px]"
+                                      disabled={submittingAnswer}
+                                    />
+                                    <div className="flex gap-2">
+                                      <button
+                                        onClick={() => handleAnswerQuestion(question.id)}
+                                        disabled={submittingAnswer || !answerText.trim()}
+                                        className="flex items-center space-x-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition font-semibold text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                                      >
+                                        <Send className="w-4 h-4" />
+                                        <span>Post Answer</span>
+                                      </button>
+                                      <button
+                                        onClick={() => {
+                                          setAnsweringQuestionId(null);
+                                          setAnswerText('');
+                                        }}
+                                        className="px-4 py-2 bg-slate-200 text-slate-700 rounded-lg hover:bg-slate-300 transition font-semibold text-sm"
+                                      >
+                                        Cancel
+                                      </button>
+                                    </div>
+                                  </div>
+                                ) : (
+                                  <button
+                                    onClick={() => setAnsweringQuestionId(question.id)}
+                                    className="text-blue-600 hover:text-blue-700 font-semibold text-sm flex items-center gap-1"
+                                  >
+                                    <MessageCircle className="w-4 h-4" />
+                                    <span>Add Your Insight</span>
+                                  </button>
+                                )}
+                              </div>
+                            )}
+
+                            {!question.answer_text && (!question.mentor_answers || question.mentor_answers.length === 0) && (
+                              <p className="text-slate-400 italic text-sm">Waiting for mentor responses...</p>
                             )}
                           </div>
                         </div>
