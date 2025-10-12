@@ -37,17 +37,25 @@ export function Layout({ children }: LayoutProps) {
               </div>
             </Link>
 
-            <div className="hidden sm:flex items-center space-x-2 md:space-x-4 lg:space-x-6">
+            <div className="hidden sm:flex items-center space-x-2 md:space-x-3 lg:space-x-4">
+              <Link to="/podcasts" className="text-slate-700 hover:text-slate-900 font-medium transition text-sm">
+                Podcasts
+              </Link>
+              <Link to="/about" className="text-slate-700 hover:text-slate-900 font-medium transition text-sm">
+                About
+              </Link>
+              <Link to="/mentors" className="text-slate-700 hover:text-slate-900 font-medium transition text-sm hidden md:inline">
+                Become a Mentor
+              </Link>
+              <Link to="/corporate" className="text-slate-700 hover:text-slate-900 font-medium transition text-sm hidden lg:inline">
+                For Corporates
+              </Link>
+
               {user ? (
                 <>
                 <Link to="/feed" className="flex items-center space-x-1 text-blue-600 hover:text-blue-700 transition">
                   <Sparkles className="w-4 h-4 md:w-5 md:h-5" />
                   <span className="font-medium text-sm lg:text-base hidden md:inline">My Feed</span>
-                </Link>
-
-                <Link to="/podcasts" className="flex items-center space-x-1 text-blue-600 hover:text-blue-700 transition">
-                  <Radio className="w-4 h-4 md:w-5 md:h-5" />
-                  <span className="font-medium text-sm lg:text-base hidden md:inline">Podcasts</span>
                 </Link>
 
                 <Link to="/questions" className="flex items-center space-x-1 text-slate-600 hover:text-slate-900 transition">
