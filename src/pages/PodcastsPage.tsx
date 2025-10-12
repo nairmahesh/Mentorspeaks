@@ -18,7 +18,9 @@ import {
   Heart,
   Share2,
   Star,
-  Sparkles
+  Sparkles,
+  X,
+  Mail
 } from 'lucide-react';
 
 type AnswerWithDetails = Answer & {
@@ -46,6 +48,8 @@ export function PodcastsPage() {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<'all' | 'trending' | 'recent'>('all');
   const [likedEpisodes, setLikedEpisodes] = useState<Set<string>>(new Set());
+  const [shareModalOpen, setShareModalOpen] = useState(false);
+  const [selectedEpisode, setSelectedEpisode] = useState<PodcastEpisode | null>(null);
 
   useEffect(() => {
     loadPodcasts();
@@ -107,21 +111,40 @@ export function PodcastsPage() {
     });
   };
 
-  const handleShare = async (episode: PodcastEpisode) => {
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: episode.title,
-          text: episode.description,
-          url: window.location.href,
-        });
-      } catch (err) {
-        console.log('Share cancelled');
-      }
-    } else {
-      navigator.clipboard.writeText(window.location.href);
-      alert('Link copied to clipboard!');
-    }
+  const handleShare = (episode: PodcastEpisode) => {
+    setSelectedEpisode(episode);
+    setShareModalOpen(true);
+  };
+
+  const copyLink = (episode: PodcastEpisode) => {
+    const episodeUrl = `${window.location.origin}/podcasts/episode/${episode.id}`;
+    navigator.clipboard.writeText(episodeUrl);
+    alert('Link copied to clipboard!');
+  };
+
+  const shareViaEmail = (episode: PodcastEpisode) => {
+    const episodeUrl = `${window.location.origin}/podcasts/episode/${episode.id}`;
+    const subject = encodeURIComponent(`Check out this podcast: ${episode.title}`);
+    const body = encodeURIComponent(
+      `I thought you might enjoy this podcast episode!\n\n` +
+      `${episode.title}\n` +
+      `Episode ${episode.episode_number}\n\n` +
+      `${episode.description}\n\n` +
+      `Watch here: ${episodeUrl}`
+    );
+    window.location.href = `mailto:?subject=${subject}&body=${body}`;
+  };
+
+  const shareViaWhatsApp = (episode: PodcastEpisode) => {
+    const episodeUrl = `${window.location.origin}/podcasts/episode/${episode.id}`;
+    const message = encodeURIComponent(
+      `🎙️ Check out this podcast episode!\n\n` +
+      `*${episode.title}*\n` +
+      `Episode ${episode.episode_number}\n\n` +
+      `${episode.description}\n\n` +
+      `Watch here: ${episodeUrl}`
+    );
+    window.open(`https://wa.me/?text=${message}`, '_blank');
   };
 
   const featuredEpisodes = episodes.filter((_, index) => index < 3);
@@ -531,6 +554,78 @@ export function PodcastsPage() {
           </div>
         </div>
       </div>
+
+      {/* Share Modal */}
+      {shareModalOpen && selectedEpisode && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-xl font-bold text-slate-900">Share Episode</h3>
+              <button
+                onClick={() => setShareModalOpen(false)}
+                className="text-slate-400 hover:text-slate-600 transition"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+
+            <div className="mb-6">
+              <h4 className="font-semibold text-slate-900 mb-1">{selectedEpisode.title}</h4>
+              <p className="text-sm text-slate-600">Episode {selectedEpisode.episode_number}</p>
+            </div>
+
+            <div className="space-y-3">
+              <button
+                onClick={() => {
+                  copyLink(selectedEpisode);
+                  setShareModalOpen(false);
+                }}
+                className="w-full flex items-center space-x-3 px-4 py-3 bg-slate-100 hover:bg-slate-200 rounded-lg transition text-left"
+              >
+                <div className="w-10 h-10 rounded-full bg-slate-600 flex items-center justify-center flex-shrink-0">
+                  <Share2 className="w-5 h-5 text-white" />
+                </div>
+                <div>
+                  <p className="font-semibold text-slate-900">Copy Link</p>
+                  <p className="text-xs text-slate-600">Share via any platform</p>
+                </div>
+              </button>
+
+              <button
+                onClick={() => {
+                  shareViaWhatsApp(selectedEpisode);
+                  setShareModalOpen(false);
+                }}
+                className="w-full flex items-center space-x-3 px-4 py-3 bg-green-50 hover:bg-green-100 rounded-lg transition text-left"
+              >
+                <div className="w-10 h-10 rounded-full bg-green-600 flex items-center justify-center flex-shrink-0">
+                  <MessageSquare className="w-5 h-5 text-white" />
+                </div>
+                <div>
+                  <p className="font-semibold text-slate-900">Share via WhatsApp</p>
+                  <p className="text-xs text-slate-600">Send to your contacts</p>
+                </div>
+              </button>
+
+              <button
+                onClick={() => {
+                  shareViaEmail(selectedEpisode);
+                  setShareModalOpen(false);
+                }}
+                className="w-full flex items-center space-x-3 px-4 py-3 bg-blue-50 hover:bg-blue-100 rounded-lg transition text-left"
+              >
+                <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center flex-shrink-0">
+                  <Mail className="w-5 h-5 text-white" />
+                </div>
+                <div>
+                  <p className="font-semibold text-slate-900">Share via Email</p>
+                  <p className="text-xs text-slate-600">Send to email recipients</p>
+                </div>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </Layout>
   );
 }
