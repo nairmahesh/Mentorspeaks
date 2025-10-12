@@ -1,14 +1,25 @@
 import { ReactNode } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { MessageSquareText, LogIn, UserPlus } from 'lucide-react';
+import { MessageSquareText, LogIn, UserPlus, LogOut, User, Radio, MessageCircle, Home } from 'lucide-react';
 
 type PublicLayoutProps = {
   children: ReactNode;
 };
 
 export function PublicLayout({ children }: PublicLayoutProps) {
-  const { user } = useAuth();
+  const { user, profile, signOut } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+      navigate('/login');
+    } catch (error) {
+      console.error('Error signing out:', error);
+      alert('Failed to sign out. Please try again.');
+    }
+  };
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -27,43 +38,63 @@ export function PublicLayout({ children }: PublicLayoutProps) {
             </Link>
 
             <div className="flex items-center space-x-6">
-              <Link to="/podcasts" className="text-slate-700 hover:text-slate-900 font-medium transition">
-                Podcasts
-              </Link>
-              <Link to="/about" className="text-slate-700 hover:text-slate-900 font-medium transition">
-                About
-              </Link>
-              <Link to="/mentors" className="text-slate-700 hover:text-slate-900 font-medium transition">
-                Become a Mentor
-              </Link>
-              <Link to="/corporate" className="text-slate-700 hover:text-slate-900 font-medium transition">
-                For Corporates
-              </Link>
-
               {user ? (
-                <Link
-                  to="/profile"
-                  className="bg-blue-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-700 transition"
-                >
-                  Dashboard
-                </Link>
+                <>
+                  <Link to="/feed" className="flex items-center space-x-1 text-blue-600 hover:text-blue-700 font-medium transition">
+                    <Home className="w-4 h-4" />
+                    <span>Feed</span>
+                  </Link>
+                  <Link to="/podcasts" className="flex items-center space-x-1 text-slate-700 hover:text-slate-900 font-medium transition">
+                    <Radio className="w-4 h-4" />
+                    <span>Podcasts</span>
+                  </Link>
+                  <Link to="/questions" className="flex items-center space-x-1 text-slate-700 hover:text-slate-900 font-medium transition">
+                    <MessageCircle className="w-4 h-4" />
+                    <span>Questions</span>
+                  </Link>
+                  <Link to="/profile" className="flex items-center space-x-1 text-slate-700 hover:text-slate-900 font-medium transition">
+                    <User className="w-4 h-4" />
+                    <span>Profile</span>
+                  </Link>
+                  <button
+                    onClick={handleSignOut}
+                    className="flex items-center space-x-1 text-slate-700 hover:text-red-600 font-medium transition"
+                  >
+                    <LogOut className="w-4 h-4" />
+                    <span>Sign Out</span>
+                  </button>
+                </>
               ) : (
-                <div className="flex items-center space-x-3">
-                  <Link
-                    to="/login"
-                    className="flex items-center space-x-1 text-slate-700 hover:text-slate-900 font-medium transition"
-                  >
-                    <LogIn className="w-4 h-4" />
-                    <span>Sign In</span>
+                <>
+                  <Link to="/podcasts" className="text-slate-700 hover:text-slate-900 font-medium transition">
+                    Podcasts
                   </Link>
-                  <Link
-                    to="/register"
-                    className="flex items-center space-x-1 bg-blue-600 text-white px-5 py-2 rounded-lg font-medium hover:bg-blue-700 transition"
-                  >
-                    <UserPlus className="w-4 h-4" />
-                    <span>Get Started</span>
+                  <Link to="/about" className="text-slate-700 hover:text-slate-900 font-medium transition">
+                    About
                   </Link>
-                </div>
+                  <Link to="/mentors" className="text-slate-700 hover:text-slate-900 font-medium transition">
+                    Become a Mentor
+                  </Link>
+                  <Link to="/corporate" className="text-slate-700 hover:text-slate-900 font-medium transition">
+                    For Corporates
+                  </Link>
+                  <div className="flex items-center space-x-3">
+                    <Link
+                      to="/login"
+                      className="flex items-center space-x-1 text-slate-700 hover:text-slate-900 font-medium transition"
+                    >
+                      <LogIn className="w-4 h-4" />
+                      <span>Sign In</span>
+                    </Link>
+                    <Link
+                      to="/register"
+                      className="flex items-center space-x-1 bg-blue-600 text-white px-5 py-2 rounded-lg font-medium hover:bg-blue-700 transition"
+                    >
+                      <UserPlus className="w-4 h-4" />
+                      <span>Get Started</span>
+                    </Link>
+                  </div>
+                </>
               )}
             </div>
           </div>
