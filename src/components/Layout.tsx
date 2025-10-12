@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { MessageSquareText, LogOut, User, Home, MessageCircle, BarChart3, Radio, Settings, MapPin, Shield, Sparkles } from 'lucide-react';
+import { MessageSquareText, LogOut, LogIn, User, UserPlus, Home, MessageCircle, BarChart3, Radio, Settings, Shield } from 'lucide-react';
 
 type LayoutProps = {
   children: ReactNode;
@@ -37,84 +37,81 @@ export function Layout({ children }: LayoutProps) {
               </div>
             </Link>
 
-            <div className="hidden sm:flex items-center space-x-2 md:space-x-3 lg:space-x-4">
-              <Link to="/podcasts" className="text-slate-700 hover:text-slate-900 font-medium transition text-sm">
-                Podcasts
-              </Link>
-              <Link to="/about" className="text-slate-700 hover:text-slate-900 font-medium transition text-sm">
-                About
-              </Link>
-              <Link to="/mentors" className="text-slate-700 hover:text-slate-900 font-medium transition text-sm hidden md:inline">
-                Become a Mentor
-              </Link>
-              <Link to="/corporate" className="text-slate-700 hover:text-slate-900 font-medium transition text-sm hidden lg:inline">
-                For Corporates
-              </Link>
-
+            <div className="hidden sm:flex items-center space-x-2 md:space-x-3 lg:space-x-6">
               {user ? (
                 <>
-                <Link to="/feed" className="flex items-center space-x-1 text-blue-600 hover:text-blue-700 transition">
-                  <Sparkles className="w-4 h-4 md:w-5 md:h-5" />
-                  <span className="font-medium text-sm lg:text-base hidden md:inline">My Feed</span>
-                </Link>
-
-                <Link to="/questions" className="flex items-center space-x-1 text-slate-600 hover:text-slate-900 transition">
-                  <MessageCircle className="w-4 h-4 md:w-5 md:h-5" />
-                  <span className="font-medium text-sm lg:text-base hidden md:inline">Questions</span>
-                </Link>
-
-                <Link to="/home" className="flex items-center space-x-1 text-slate-600 hover:text-slate-900 transition">
-                  <Home className="w-4 h-4 md:w-5 md:h-5" />
-                  <span className="font-medium text-sm lg:text-base hidden lg:inline">Explore</span>
-                </Link>
-
-                {profile?.role === 'mentor' && (
-                  <Link to="/mentor/dashboard" className="flex items-center space-x-1 text-slate-600 hover:text-slate-900 transition">
-                    <BarChart3 className="w-5 h-5" />
-                    <span className="font-medium">Dashboard</span>
+                  <Link to="/feed" className="flex items-center space-x-1 text-blue-600 hover:text-blue-700 font-medium transition text-sm">
+                    <Home className="w-4 h-4" />
+                    <span className="hidden md:inline">Feed</span>
                   </Link>
-                )}
-
-                {isModerator && (
-                  <>
-                    <Link to="/podcasts/manage" className="flex items-center space-x-1 text-blue-600 hover:text-blue-700 transition">
-                      <Settings className="w-5 h-5" />
-                      <span className="font-medium">Podcasts</span>
+                  <Link to="/podcasts" className="flex items-center space-x-1 text-slate-700 hover:text-slate-900 font-medium transition text-sm">
+                    <Radio className="w-4 h-4" />
+                    <span className="hidden md:inline">Podcasts</span>
+                  </Link>
+                  <Link to="/questions" className="flex items-center space-x-1 text-slate-700 hover:text-slate-900 font-medium transition text-sm">
+                    <MessageCircle className="w-4 h-4" />
+                    <span className="hidden md:inline">Questions</span>
+                  </Link>
+                  {profile?.role === 'mentor' && (
+                    <Link to="/mentor/dashboard" className="flex items-center space-x-1 text-slate-700 hover:text-slate-900 font-medium transition text-sm">
+                      <BarChart3 className="w-4 h-4" />
+                      <span className="hidden md:inline">Dashboard</span>
                     </Link>
-                    <Link to="/community/manage" className="flex items-center space-x-1 text-green-600 hover:text-green-700 transition">
-                      <Shield className="w-5 h-5" />
-                      <span className="font-medium">Community</span>
-                    </Link>
-                  </>
-                )}
-
-                <Link to="/profile" className="flex items-center space-x-1 text-slate-600 hover:text-slate-900 transition">
-                  <User className="w-4 h-4 md:w-5 md:h-5" />
-                  <span className="font-medium text-sm lg:text-base hidden lg:inline">Profile</span>
-                </Link>
-
-                <button
-                  onClick={handleSignOut}
-                  className="flex items-center space-x-1 text-slate-600 hover:text-red-600 transition"
-                >
-                  <LogOut className="w-4 h-4 md:w-5 md:h-5" />
-                  <span className="font-medium text-sm lg:text-base hidden lg:inline">Sign Out</span>
-                </button>
+                  )}
+                  {isModerator && (
+                    <>
+                      <Link to="/podcasts/manage" className="flex items-center space-x-1 text-blue-600 hover:text-blue-700 font-medium transition text-sm">
+                        <Settings className="w-4 h-4" />
+                        <span className="hidden md:inline">Manage Podcasts</span>
+                      </Link>
+                      <Link to="/community/manage" className="flex items-center space-x-1 text-green-600 hover:text-green-700 font-medium transition text-sm">
+                        <Shield className="w-4 h-4" />
+                        <span className="hidden md:inline">Community</span>
+                      </Link>
+                    </>
+                  )}
+                  <Link to="/profile" className="flex items-center space-x-1 text-slate-700 hover:text-slate-900 font-medium transition text-sm">
+                    <User className="w-4 h-4" />
+                    <span className="hidden md:inline">Profile</span>
+                  </Link>
+                  <button
+                    onClick={handleSignOut}
+                    className="flex items-center space-x-1 text-slate-700 hover:text-red-600 font-medium transition text-sm"
+                  >
+                    <LogOut className="w-4 h-4" />
+                    <span className="hidden md:inline">Sign Out</span>
+                  </button>
                 </>
               ) : (
                 <>
-                  <Link
-                    to="/login"
-                    className="text-slate-700 hover:text-slate-900 font-medium transition text-sm"
-                  >
-                    Sign In
+                  <Link to="/podcasts" className="text-slate-700 hover:text-slate-900 font-medium transition">
+                    Podcasts
                   </Link>
-                  <Link
-                    to="/register"
-                    className="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition text-sm"
-                  >
-                    Get Started
+                  <Link to="/about" className="text-slate-700 hover:text-slate-900 font-medium transition">
+                    About
                   </Link>
+                  <Link to="/mentors" className="text-slate-700 hover:text-slate-900 font-medium transition">
+                    Become a Mentor
+                  </Link>
+                  <Link to="/corporate" className="text-slate-700 hover:text-slate-900 font-medium transition">
+                    For Corporates
+                  </Link>
+                  <div className="flex items-center space-x-3">
+                    <Link
+                      to="/login"
+                      className="flex items-center space-x-1 text-slate-700 hover:text-slate-900 font-medium transition"
+                    >
+                      <LogIn className="w-4 h-4" />
+                      <span>Sign In</span>
+                    </Link>
+                    <Link
+                      to="/register"
+                      className="flex items-center space-x-1 bg-blue-600 text-white px-5 py-2 rounded-lg font-medium hover:bg-blue-700 transition"
+                    >
+                      <UserPlus className="w-4 h-4" />
+                      <span>Get Started</span>
+                    </Link>
+                  </div>
                 </>
               )}
             </div>
@@ -122,13 +119,36 @@ export function Layout({ children }: LayoutProps) {
             {user && (
               <div className="sm:hidden flex items-center space-x-4">
                 <Link to="/feed" className="text-blue-600 hover:text-blue-700 transition">
-                  <Sparkles className="w-6 h-6" />
+                  <Home className="w-5 h-5" />
                 </Link>
-                <Link to="/questions" className="text-slate-600 hover:text-slate-900 transition">
-                  <MessageCircle className="w-6 h-6" />
+                <Link to="/podcasts" className="text-slate-700 hover:text-slate-900 transition">
+                  <Radio className="w-5 h-5" />
                 </Link>
-                <Link to="/profile" className="text-slate-600 hover:text-slate-900 transition">
-                  <User className="w-6 h-6" />
+                <Link to="/profile" className="text-slate-700 hover:text-slate-900 transition">
+                  <User className="w-5 h-5" />
+                </Link>
+                <button
+                  onClick={handleSignOut}
+                  className="text-slate-700 hover:text-red-600 transition"
+                >
+                  <LogOut className="w-5 h-5" />
+                </button>
+              </div>
+            )}
+
+            {!user && (
+              <div className="sm:hidden flex items-center space-x-3">
+                <Link
+                  to="/login"
+                  className="text-slate-700 hover:text-slate-900 font-medium transition text-sm"
+                >
+                  Sign In
+                </Link>
+                <Link
+                  to="/register"
+                  className="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition text-sm"
+                >
+                  Get Started
                 </Link>
               </div>
             )}
