@@ -223,7 +223,7 @@ export function PersonalizedFeedPage() {
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
           {!hasCompletedOnboarding && (
-            <div className="bg-gradient-to-r from-cyan-500 to-indigo-700 text-white rounded-xl p-4 sm:p-6 mb-6 sm:mb-8">
+            <div className="bg-gradient-to-r from-cyan-400 to-blue-600 text-white rounded-xl p-4 sm:p-6 mb-6 sm:mb-8">
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div>
                   <h3 className="text-lg sm:text-xl font-bold mb-2">Complete Your Profile</h3>
@@ -319,7 +319,7 @@ export function PersonalizedFeedPage() {
                       to={`/questions/${answer.question.id}`}
                       className="group bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition border border-slate-200"
                     >
-                      <div className="relative aspect-video bg-gradient-to-br from-cyan-500 to-indigo-700 flex items-center justify-center">
+                      <div className="relative aspect-video bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center">
                         <Play className="w-12 h-12 sm:w-16 sm:h-16 text-white opacity-75 group-hover:opacity-100 transition" />
                         <div className="absolute top-2 right-2 bg-black bg-opacity-70 px-2 py-1 rounded text-white text-xs flex items-center space-x-1">
                           <ThumbsUp className="w-3 h-3" />
@@ -360,7 +360,7 @@ export function PersonalizedFeedPage() {
                           className="w-10 h-10 sm:w-12 sm:h-12 rounded-full ring-2 ring-blue-200 flex-shrink-0"
                         />
                       ) : (
-                        <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-cyan-500 to-indigo-700 flex items-center justify-center ring-2 ring-blue-200 flex-shrink-0">
+                        <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center ring-2 ring-blue-200 flex-shrink-0">
                           <span className="text-white text-sm sm:text-base font-bold">
                             {mentor.full_name.charAt(0)}
                           </span>

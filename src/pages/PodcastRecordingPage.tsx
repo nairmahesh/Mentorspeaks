@@ -336,7 +336,7 @@ export function PodcastRecordingPage() {
                           className="w-32 h-32 rounded-full object-cover"
                         />
                       ) : (
-                        <div className="w-32 h-32 rounded-full bg-gradient-to-br from-cyan-500 to-purple-600 flex items-center justify-center">
+                        <div className="w-32 h-32 rounded-full bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center">
                           <span className="text-4xl font-bold text-white">
                             {getInitials(episode.guest?.full_name || 'G')}
                           </span>
@@ -371,7 +371,7 @@ export function PodcastRecordingPage() {
                       className="w-32 h-32 rounded-full object-cover"
                     />
                   ) : (
-                    <div className="w-32 h-32 rounded-full bg-gradient-to-br from-cyan-500 to-purple-600 flex items-center justify-center">
+                    <div className="w-32 h-32 rounded-full bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center">
                       <span className="text-4xl font-bold text-white">
                         {getInitials(episode.guest?.full_name || 'G')}
                       </span>

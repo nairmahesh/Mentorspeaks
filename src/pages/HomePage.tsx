@@ -109,7 +109,7 @@ export function HomePage() {
 
             <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold mb-6 leading-tight">
               <span className="block">Conversations That Build</span>
-              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-blue-300 to-pink-300">
+              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-yellow-300 to-cyan-300">
                 Future Leaders
               </span>
             </h1>
@@ -196,11 +196,11 @@ export function HomePage() {
                         className={`w-16 h-16 sm:w-24 sm:h-24 rounded-full mx-auto ring-2 sm:ring-4 ${mentor.is_stalwart ? 'ring-amber-300 group-hover:ring-amber-400' : 'ring-blue-100 group-hover:ring-blue-300'} transition`}
                       />
                     ) : (
-                      <div className={`w-16 h-16 sm:w-24 sm:h-24 rounded-full bg-gradient-to-br ${mentor.is_stalwart ? 'from-amber-400 to-cyan-500' : 'from-cyan-400 to-indigo-700'} flex items-center justify-center mx-auto ring-2 sm:ring-4 ${mentor.is_stalwart ? 'ring-amber-300 group-hover:ring-amber-400' : 'ring-blue-100 group-hover:ring-blue-300'} transition`}>
+                      <div className={`w-16 h-16 sm:w-24 sm:h-24 rounded-full bg-gradient-to-br ${mentor.is_stalwart ? 'from-amber-400 to-cyan-500' : 'from-cyan-400 to-blue-600'} flex items-center justify-center mx-auto ring-2 sm:ring-4 ${mentor.is_stalwart ? 'ring-amber-300 group-hover:ring-amber-400' : 'ring-cyan-200 group-hover:ring-cyan-300'} transition`}>
                         <span className="text-xl sm:text-3xl font-bold text-white">{mentor.full_name.charAt(0)}</span>
                       </div>
                     )}
-                    <div className="absolute -bottom-1 sm:-bottom-2 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-cyan-500 to-indigo-700 text-white px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-bold flex items-center space-x-0.5 sm:space-x-1 shadow-lg">
+                    <div className="absolute -bottom-1 sm:-bottom-2 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-cyan-400 to-blue-600 text-white px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-bold flex items-center space-x-0.5 sm:space-x-1 shadow-lg">
                       <Mic className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
                       <span>LIVE</span>
                     </div>
@@ -296,7 +296,7 @@ export function HomePage() {
                           className="w-12 h-12 rounded-full ring-2 ring-blue-200"
                         />
                       ) : (
-                        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-cyan-500 to-indigo-700 flex items-center justify-center ring-2 ring-blue-200">
+                        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center ring-2 ring-blue-200">
                           <span className="text-white text-lg font-bold">
                             {answer.mentor?.full_name?.charAt(0)}
                           </span>
@@ -415,7 +415,7 @@ export function HomePage() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
             <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-lg transition group">
-              <div className="h-32 bg-gradient-to-br from-cyan-500 to-indigo-700 relative">
+              <div className="h-32 bg-gradient-to-br from-cyan-400 to-blue-600 relative">
                 <div className="absolute inset-0 flex items-center justify-center">
                   <MapPin className="w-16 h-16 text-white opacity-50" />
                 </div>

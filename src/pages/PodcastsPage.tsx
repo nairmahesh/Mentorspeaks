@@ -366,7 +366,7 @@ export function PodcastsPage() {
                                 className="w-12 h-12 rounded-full ring-2 ring-blue-200"
                               />
                             ) : (
-                              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-cyan-500 to-teal-600 flex items-center justify-center ring-2 ring-blue-200">
+                              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center ring-2 ring-blue-200">
                                 <span className="text-white text-lg font-bold">
                                   {episode.guest?.full_name?.charAt(0)}
                                 </span>
