@@ -1,90 +1,90 @@
 import { PublicLayout } from '../components/PublicLayout';
 import { Link } from 'react-router-dom';
 import {
-  Building2, Users, MessageSquare, Mic, Globe, BarChart3, Sparkles,
-  TrendingUp, Shield, Zap, Target, CheckCircle2, Radio, Video, Award
+  Building2, Users, MessageSquare, Globe, BarChart3, Sparkles,
+  TrendingUp, Shield, Zap, Target, CheckCircle2, Video, Award, Briefcase, GraduationCap, Lightbulb, HeartHandshake
 } from 'lucide-react';
 
 export function CorporateFeaturesPage() {
   const features = [
     {
-      icon: MessageSquare,
-      title: 'Internal Engagement',
-      description: 'Transform leadership communication with AI-powered voice cloning',
+      icon: Users,
+      title: 'Expert Mentor Pool',
+      description: 'Access industry veterans across domains on-demand',
       benefits: [
-        'CXO messages on vision, values, and culture in their own AI voice',
-        'Leadership cascades after town halls and strategy meetings',
-        'Training bytecasts from department heads',
-        'Process and safety updates in personalized voices'
+        'Vetted professionals with 10+ years of experience',
+        'Diverse expertise across industries and functions',
+        'Real-world insights from successful leaders',
+        'Quick turnaround on critical business questions'
       ],
       color: 'blue'
     },
     {
-      icon: TrendingUp,
-      title: 'External Thought Leadership',
-      description: 'Amplify your leadership voice across all channels',
+      icon: GraduationCap,
+      title: 'Employee Development',
+      description: 'Accelerate learning and skill development at scale',
       benefits: [
-        'LinkedIn-ready content auto-generated and branded',
-        'Investor and media updates in personalized clips',
-        'Brand storytelling with trusted CXO voices',
-        'Weekly leadership messages at scale'
+        'On-demand mentorship for leadership programs',
+        'Career guidance from industry experts',
+        'Video-based learning for distributed teams',
+        'Custom mentorship programs for high-potentials'
       ],
       color: 'green'
     },
     {
-      icon: Globe,
-      title: 'Multilingual Reach',
-      description: 'Break language barriers with AI dubbing technology',
+      icon: Lightbulb,
+      title: 'Strategic Guidance',
+      description: 'Get expert opinions on critical business decisions',
       benefits: [
-        'Voice cloning speaks Hindi, Tamil, and other Indian languages',
-        'Localized videos for regional workforces',
-        'Expand thought leadership reach across demographics',
-        'Native language communication for plant heads'
+        'Market entry strategies from experienced leaders',
+        'Product and technology roadmap validation',
+        'Go-to-market strategy reviews',
+        'Crisis management and change leadership advice'
       ],
       color: 'orange'
     },
     {
       icon: BarChart3,
-      title: 'Analytics & Distribution',
-      description: 'Track engagement and measure impact',
+      title: 'Measurable Impact',
+      description: 'Track engagement and ROI of mentorship programs',
       benefits: [
-        'Identify which messages resonate with employees',
-        'Track distributor and partner engagement',
-        'Social channel performance metrics',
-        'Influence maps showing CXO message impact'
+        'Employee satisfaction and retention metrics',
+        'Skill development progress tracking',
+        'Leadership pipeline analytics',
+        'Cost savings vs traditional consulting'
       ],
-      color: 'purple'
+      color: 'cyan'
     }
   ];
 
   const useCases = [
     {
-      icon: Users,
-      title: 'Employee Communication',
-      description: 'Share vision, values, and culture updates in authentic leadership voices'
-    },
-    {
-      icon: Mic,
-      title: 'Training & Development',
-      description: 'Create department-specific training content with leader voice clones'
-    },
-    {
-      icon: Award,
-      title: 'Brand Storytelling',
-      description: 'Explain purpose-driven initiatives in human, trusted voices'
+      icon: Briefcase,
+      title: 'Leadership Development',
+      description: 'Build your next generation of leaders with guidance from industry veterans'
     },
     {
       icon: Target,
-      title: 'Investor Relations',
-      description: 'Personalized leadership updates for stakeholders in multiple languages'
+      title: 'Strategic Consulting',
+      description: 'Get expert validation on business decisions without long-term commitments'
+    },
+    {
+      icon: HeartHandshake,
+      title: 'Employee Retention',
+      description: 'Provide meaningful career development opportunities to retain top talent'
+    },
+    {
+      icon: TrendingUp,
+      title: 'Innovation & Growth',
+      description: 'Access diverse perspectives to drive innovation and market expansion'
     }
   ];
 
   const stats = [
-    { label: 'Languages Supported', value: '12+' },
-    { label: 'Engagement Increase', value: '300%' },
-    { label: 'Time Saved', value: '80%' },
-    { label: 'Enterprise Clients', value: '50+' }
+    { label: 'Expert Mentors', value: '500+' },
+    { label: 'Industries Covered', value: '25+' },
+    { label: 'Response Time', value: '<48hrs' },
+    { label: 'Corporate Clients', value: '100+' }
   ];
 
   return (
@@ -98,11 +98,11 @@ export function CorporateFeaturesPage() {
             </div>
 
             <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
-              Transform Corporate <span className="text-yellow-300">Communication</span>
+              Empower Your Workforce with <span className="text-yellow-300">Expert Guidance</span>
             </h1>
 
             <p className="text-xl md:text-2xl text-blue-100 mb-10 leading-relaxed">
-              AI-powered voice cloning, multilingual content, and advanced analytics for modern enterprises
+              On-demand access to industry mentors for leadership development, strategic decisions, and employee growth
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -137,10 +137,10 @@ export function CorporateFeaturesPage() {
 
           <div className="text-center mb-12">
             <h2 className="text-4xl font-bold text-slate-900 mb-4">
-              Comprehensive Platform Features
+              Enterprise Mentorship Solutions
             </h2>
             <p className="text-xl text-slate-600 max-w-3xl mx-auto">
-              Everything you need to amplify leadership communication and drive engagement
+              Everything you need to build a world-class learning and development program
             </p>
           </div>
 
@@ -151,7 +151,8 @@ export function CorporateFeaturesPage() {
                 blue: 'bg-blue-100 text-blue-600',
                 green: 'bg-green-100 text-green-600',
                 orange: 'bg-orange-100 text-orange-600',
-                purple: 'bg-purple-100 text-purple-600'
+                purple: 'bg-purple-100 text-purple-600',
+                cyan: 'bg-cyan-100 text-cyan-600'
               };
 
               return (
@@ -183,9 +184,9 @@ export function CorporateFeaturesPage() {
 
           <div className="bg-gradient-to-br from-slate-900 to-blue-900 rounded-2xl p-12 text-white mb-20">
             <div className="text-center mb-12">
-              <h2 className="text-4xl font-bold mb-4">Platform Use Cases</h2>
+              <h2 className="text-4xl font-bold mb-4">How Corporates Benefit</h2>
               <p className="text-xl text-blue-100">
-                Beyond CXO communication - versatile solutions for every department
+                Transform your organization with expert mentorship across all functions
               </p>
             </div>
 
@@ -218,8 +219,8 @@ export function CorporateFeaturesPage() {
                       <Shield className="w-6 h-6 text-blue-600" />
                     </div>
                     <div>
-                      <h3 className="font-bold text-slate-900 mb-1">Enterprise Security</h3>
-                      <p className="text-slate-600">Bank-grade encryption and compliance standards</p>
+                      <h3 className="font-bold text-slate-900 mb-1">Vetted Experts</h3>
+                      <p className="text-slate-600">Pre-screened mentors with proven track records</p>
                     </div>
                   </div>
 
@@ -228,48 +229,48 @@ export function CorporateFeaturesPage() {
                       <Zap className="w-6 h-6 text-green-600" />
                     </div>
                     <div>
-                      <h3 className="font-bold text-slate-900 mb-1">Rapid Deployment</h3>
-                      <p className="text-slate-600">Go live in days, not months</p>
+                      <h3 className="font-bold text-slate-900 mb-1">Flexible Engagement</h3>
+                      <p className="text-slate-600">Pay-per-use or subscription-based models</p>
                     </div>
                   </div>
 
                   <div className="flex items-start space-x-4">
                     <div className="bg-orange-100 rounded-lg p-3">
-                      <Radio className="w-6 h-6 text-orange-600" />
+                      <Video className="w-6 h-6 text-orange-600" />
                     </div>
                     <div>
-                      <h3 className="font-bold text-slate-900 mb-1">AI Voice Cloning</h3>
-                      <p className="text-slate-600">Authentic leadership voices at scale</p>
+                      <h3 className="font-bold text-slate-900 mb-1">Video-First Platform</h3>
+                      <p className="text-slate-600">Authentic mentorship through personalized videos</p>
                     </div>
                   </div>
 
                   <div className="flex items-start space-x-4">
-                    <div className="bg-purple-100 rounded-lg p-3">
-                      <Video className="w-6 h-6 text-purple-600" />
+                    <div className="bg-cyan-100 rounded-lg p-3">
+                      <BarChart3 className="w-6 h-6 text-cyan-600" />
                     </div>
                     <div>
-                      <h3 className="font-bold text-slate-900 mb-1">Multi-Format Content</h3>
-                      <p className="text-slate-600">Video, audio, text - all in one platform</p>
+                      <h3 className="font-bold text-slate-900 mb-1">Data-Driven Insights</h3>
+                      <p className="text-slate-600">Track ROI and employee development progress</p>
                     </div>
                   </div>
                 </div>
               </div>
 
               <div className="bg-gradient-to-br from-blue-50 to-slate-50 rounded-xl p-8">
-                <h3 className="text-2xl font-bold text-slate-900 mb-6">Ready to Transform?</h3>
+                <h3 className="text-2xl font-bold text-slate-900 mb-6">Ready to Empower Your Team?</h3>
                 <p className="text-slate-600 mb-8">
-                  Join leading enterprises using effyMentor to amplify leadership communication
-                  and drive engagement across their organizations.
+                  Join leading enterprises using effyMentor to accelerate employee development,
+                  retain top talent, and drive organizational growth through expert mentorship.
                 </p>
                 <Link
                   to="/corporate/signup"
                   className="w-full bg-blue-600 text-white px-8 py-4 rounded-lg font-bold text-lg hover:bg-blue-700 transition flex items-center justify-center space-x-2"
                 >
-                  <span>Start Your Journey</span>
+                  <span>Get Started</span>
                   <CheckCircle2 className="w-5 h-5" />
                 </Link>
                 <p className="text-sm text-slate-500 text-center mt-4">
-                  No credit card required • Setup in 48 hours
+                  Custom plans available • Dedicated account support
                 </p>
               </div>
             </div>
