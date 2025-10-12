@@ -30,7 +30,7 @@ export function PublicLayout({ children }: PublicLayoutProps) {
               <Link to="/industries" className="text-slate-700 hover:text-slate-900 font-medium transition">
                 Industries
               </Link>
-              <Link to="/register" className="text-slate-700 hover:text-slate-900 font-medium transition">
+              <Link to="/mentors" className="text-slate-700 hover:text-slate-900 font-medium transition">
                 Become a Mentor
               </Link>
               <Link to="/corporate" className="text-slate-700 hover:text-slate-900 font-medium transition">
