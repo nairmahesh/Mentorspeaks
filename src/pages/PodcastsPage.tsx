@@ -201,8 +201,9 @@ export function PodcastsPage() {
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {featuredEpisodes.map((episode) => (
-                      <div
+                      <Link
                         key={episode.id}
+                        to={`/podcasts/episode/${episode.id}`}
                         className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all border-2 border-slate-200 hover:border-cyan-400 flex flex-col"
                       >
                         <div className="relative aspect-video bg-gradient-to-br from-cyan-500 via-blue-600 to-slate-700 flex items-center justify-center overflow-hidden group">
@@ -305,14 +306,12 @@ export function PodcastsPage() {
                             </div>
                           </div>
 
-                          <button
-                            className="w-full flex items-center justify-center space-x-2 bg-gradient-to-r from-blue-600 to-teal-600 text-white px-4 py-2.5 rounded-xl font-semibold hover:from-blue-700 hover:to-teal-700 transition text-sm"
-                          >
+                          <div className="flex items-center justify-center space-x-1 text-blue-600 group-hover:text-blue-700 font-bold text-sm">
                             <Play className="w-4 h-4" />
-                            <span>Watch Episode</span>
-                          </button>
+                            <span>Watch</span>
+                          </div>
                         </div>
-                      </div>
+                      </Link>
                     ))}
                   </div>
                 </div>
@@ -329,7 +328,7 @@ export function PodcastsPage() {
                     {upcomingEpisodes.map((episode) => (
                       <div
                         key={episode.id}
-                        className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all border-2 border-blue-200 hover:border-cyan-400 flex flex-col"
+                        className="bg-white rounded-2xl overflow-hidden shadow-lg transition-all border-2 border-blue-200 flex flex-col cursor-not-allowed opacity-75"
                       >
                         <div className="relative aspect-video bg-gradient-to-br from-cyan-500 via-teal-600 to-cyan-600 flex items-center justify-center overflow-hidden group">
                           {episode.thumbnail_url ? (

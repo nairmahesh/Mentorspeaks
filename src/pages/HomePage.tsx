@@ -81,7 +81,7 @@ export function HomePage() {
           `)
           .in('status', ['completed', 'published'])
           .order('created_at', { ascending: false })
-          .limit(8),
+          .limit(6),
         supabase.from('questions').select('*', { count: 'exact', head: true }),
         supabase.from('answers').select('*', { count: 'exact', head: true }),
         supabase.from('profiles').select('*', { count: 'exact', head: true }).eq('role', 'mentor')
@@ -190,7 +190,7 @@ export function HomePage() {
           </div>
 
           {featuredPodcasts.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6 mb-12">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
               {featuredPodcasts.map((episode) => (
                 <Link
                   key={episode.id}
@@ -274,6 +274,17 @@ export function HomePage() {
               <p className="text-slate-600">No podcast episodes published yet.</p>
             </div>
           )}
+
+          <div className="text-center">
+            <Link
+              to="/podcasts"
+              className="inline-flex items-center space-x-3 bg-gradient-to-r from-blue-600 to-cyan-600 text-white px-10 py-5 rounded-2xl font-bold hover:from-blue-700 hover:to-cyan-700 transition shadow-xl text-lg"
+            >
+              <Radio className="w-6 h-6" />
+              <span>View All Podcasts</span>
+              <ArrowRight className="w-6 h-6" />
+            </Link>
+          </div>
         </div>
       </div>
 
