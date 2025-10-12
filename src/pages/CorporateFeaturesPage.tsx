@@ -89,7 +89,7 @@ export function CorporateFeaturesPage() {
 
   return (
     <PublicLayout>
-      <div className="bg-gradient-to-br from-blue-600 via-blue-700 to-slate-900 text-white py-20">
+      <div className="bg-gradient-to-br from-orange-600 via-orange-700 to-slate-900 text-white py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-4xl mx-auto">
             <div className="inline-flex items-center space-x-2 bg-white bg-opacity-10 backdrop-blur-sm px-4 py-2 rounded-full mb-6">
@@ -101,14 +101,14 @@ export function CorporateFeaturesPage() {
               Empower Your Workforce with <span className="text-yellow-300">Expert Guidance</span>
             </h1>
 
-            <p className="text-xl md:text-2xl text-blue-100 mb-10 leading-relaxed">
+            <p className="text-xl md:text-2xl text-orange-100 mb-10 leading-relaxed">
               On-demand access to industry mentors for leadership development, strategic decisions, and employee growth
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 to="/corporate/signup"
-                className="bg-white text-blue-600 px-8 py-4 rounded-lg font-bold text-lg hover:bg-blue-50 transition flex items-center justify-center space-x-2"
+                className="bg-white text-orange-600 px-8 py-4 rounded-lg font-bold text-lg hover:bg-orange-50 transition flex items-center justify-center space-x-2"
               >
                 <span>Get Started</span>
                 <Sparkles className="w-5 h-5" />
@@ -129,7 +129,7 @@ export function CorporateFeaturesPage() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-20">
             {stats.map((stat, index) => (
               <div key={index} className="text-center">
-                <div className="text-4xl font-bold text-blue-600 mb-2">{stat.value}</div>
+                <div className="text-4xl font-bold text-orange-600 mb-2">{stat.value}</div>
                 <div className="text-slate-600 font-medium">{stat.label}</div>
               </div>
             ))}
@@ -148,9 +148,9 @@ export function CorporateFeaturesPage() {
             {features.map((feature, index) => {
               const Icon = feature.icon;
               const colorClasses = {
-                blue: 'bg-blue-100 text-blue-600',
+                blue: 'bg-orange-100 text-orange-600',
                 green: 'bg-green-100 text-green-600',
-                orange: 'bg-blue-100 text-blue-600',
+                orange: 'bg-orange-100 text-orange-600',
                 purple: 'bg-purple-100 text-purple-600',
                 cyan: 'bg-cyan-100 text-cyan-600'
               };
@@ -182,10 +182,10 @@ export function CorporateFeaturesPage() {
             })}
           </div>
 
-          <div className="bg-gradient-to-br from-slate-900 to-blue-900 rounded-2xl p-12 text-white mb-20">
+          <div className="bg-gradient-to-br from-slate-900 to-orange-900 rounded-2xl p-12 text-white mb-20">
             <div className="text-center mb-12">
               <h2 className="text-4xl font-bold mb-4">How Corporates Benefit</h2>
-              <p className="text-xl text-blue-100">
+              <p className="text-xl text-orange-100">
                 Transform your organization with expert mentorship across all functions
               </p>
             </div>
@@ -200,7 +200,7 @@ export function CorporateFeaturesPage() {
                   >
                     <Icon className="w-10 h-10 text-yellow-300 mb-4" />
                     <h3 className="text-lg font-bold mb-2">{useCase.title}</h3>
-                    <p className="text-sm text-blue-100">{useCase.description}</p>
+                    <p className="text-sm text-orange-100">{useCase.description}</p>
                   </div>
                 );
               })}
@@ -215,8 +215,8 @@ export function CorporateFeaturesPage() {
                 </h2>
                 <div className="space-y-6">
                   <div className="flex items-start space-x-4">
-                    <div className="bg-blue-100 rounded-lg p-3">
-                      <Shield className="w-6 h-6 text-blue-600" />
+                    <div className="bg-orange-100 rounded-lg p-3">
+                      <Shield className="w-6 h-6 text-orange-600" />
                     </div>
                     <div>
                       <h3 className="font-bold text-slate-900 mb-1">Vetted Experts</h3>
@@ -235,8 +235,8 @@ export function CorporateFeaturesPage() {
                   </div>
 
                   <div className="flex items-start space-x-4">
-                    <div className="bg-blue-100 rounded-lg p-3">
-                      <Video className="w-6 h-6 text-blue-600" />
+                    <div className="bg-orange-100 rounded-lg p-3">
+                      <Video className="w-6 h-6 text-orange-600" />
                     </div>
                     <div>
                       <h3 className="font-bold text-slate-900 mb-1">Video-First Platform</h3>
@@ -256,7 +256,7 @@ export function CorporateFeaturesPage() {
                 </div>
               </div>
 
-              <div className="bg-gradient-to-br from-blue-50 to-slate-50 rounded-xl p-8">
+              <div className="bg-gradient-to-br from-orange-50 to-slate-50 rounded-xl p-8">
                 <h3 className="text-2xl font-bold text-slate-900 mb-6">Ready to Empower Your Team?</h3>
                 <p className="text-slate-600 mb-8">
                   Join leading enterprises using effyMentor to accelerate employee development,
@@ -264,7 +264,7 @@ export function CorporateFeaturesPage() {
                 </p>
                 <Link
                   to="/corporate/signup"
-                  className="w-full bg-blue-600 text-white px-8 py-4 rounded-lg font-bold text-lg hover:bg-blue-700 transition flex items-center justify-center space-x-2"
+                  className="w-full bg-orange-600 text-white px-8 py-4 rounded-lg font-bold text-lg hover:bg-orange-700 transition flex items-center justify-center space-x-2"
                 >
                   <span>Get Started</span>
                   <CheckCircle2 className="w-5 h-5" />

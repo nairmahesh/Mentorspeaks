@@ -74,7 +74,7 @@ export function CreateSeriesPage() {
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               required
-              className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
               placeholder="e.g., Tech Leaders Insights"
             />
           </div>
@@ -88,7 +88,7 @@ export function CreateSeriesPage() {
               onChange={(e) => setDescription(e.target.value)}
               required
               rows={4}
-              className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
               placeholder="Describe what this podcast series is about..."
             />
           </div>
@@ -101,7 +101,7 @@ export function CreateSeriesPage() {
               type="url"
               value={coverImageUrl}
               onChange={(e) => setCoverImageUrl(e.target.value)}
-              className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
               placeholder="https://example.com/cover.jpg"
             />
             <p className="text-sm text-slate-500 mt-1">
@@ -116,7 +116,7 @@ export function CreateSeriesPage() {
             <select
               value={status}
               onChange={(e) => setStatus(e.target.value as 'draft' | 'active' | 'archived')}
-              className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
             >
               <option value="draft">Draft</option>
               <option value="active">Active</option>
@@ -128,7 +128,7 @@ export function CreateSeriesPage() {
             <button
               type="submit"
               disabled={loading}
-              className="flex items-center space-x-2 bg-blue-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-blue-700 transition disabled:opacity-50"
+              className="flex items-center space-x-2 bg-orange-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-orange-700 transition disabled:opacity-50"
             >
               <Save className="w-5 h-5" />
               <span>{loading ? 'Creating...' : 'Create Series'}</span>

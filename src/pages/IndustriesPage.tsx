@@ -32,7 +32,7 @@ export function IndustriesPage() {
     return (
       <PublicLayout>
         <div className="flex items-center justify-center min-h-screen">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600"></div>
         </div>
       </PublicLayout>
     );
@@ -53,14 +53,14 @@ export function IndustriesPage() {
               <Link
                 key={industry.id}
                 to={`/industries/${industry.slug}`}
-                className="bg-white rounded-xl p-8 shadow-sm border border-slate-200 hover:border-blue-500 hover:shadow-xl transition-all duration-300 group"
+                className="bg-white rounded-xl p-8 shadow-sm border border-slate-200 hover:border-orange-500 hover:shadow-xl transition-all duration-300 group"
               >
                 <div className="flex items-center space-x-4 mb-4">
-                  <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center group-hover:scale-110 transition-transform">
                     <IconComponent className="w-7 h-7 text-white" />
                   </div>
                   <div className="flex-1">
-                    <h3 className="text-xl font-bold text-slate-900 group-hover:text-blue-600 transition">
+                    <h3 className="text-xl font-bold text-slate-900 group-hover:text-orange-600 transition">
                       {industry.name}
                     </h3>
                   </div>
@@ -68,7 +68,7 @@ export function IndustriesPage() {
                 {industry.description && (
                   <p className="text-slate-600 text-sm mb-4">{industry.description}</p>
                 )}
-                <div className="flex items-center text-blue-600 font-medium text-sm group-hover:translate-x-1 transition-transform">
+                <div className="flex items-center text-orange-600 font-medium text-sm group-hover:translate-x-1 transition-transform">
                   <span>Explore</span>
                   <ArrowRight className="w-4 h-4 ml-1" />
                 </div>

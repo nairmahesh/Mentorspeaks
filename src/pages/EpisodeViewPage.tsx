@@ -103,7 +103,7 @@ export function EpisodeViewPage() {
       <PublicLayout>
         <div className="flex items-center justify-center min-h-screen">
           <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600 mx-auto"></div>
             <p className="mt-4 text-slate-600">Loading episode...</p>
           </div>
         </div>
@@ -126,17 +126,17 @@ export function EpisodeViewPage() {
     <PublicLayout>
       <div className="max-w-5xl mx-auto px-4 py-8">
         <div className="bg-white rounded-lg shadow-sm border border-slate-200 overflow-hidden mb-8">
-          <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white p-8">
+          <div className="bg-gradient-to-r from-orange-600 to-orange-700 text-white p-8">
             <div className="flex items-start justify-between">
               <div className="flex-1">
                 <div className="text-sm font-semibold mb-2">Episode {episode.episode_number}</div>
                 <h1 className="text-4xl font-bold mb-4">{episode.title}</h1>
-                <p className="text-blue-100 text-lg">{episode.description}</p>
+                <p className="text-orange-100 text-lg">{episode.description}</p>
               </div>
               <div className="relative ml-4">
                 <button
                   onClick={() => setShowShareMenu(!showShareMenu)}
-                  className="flex items-center space-x-2 bg-white text-blue-600 px-4 py-2 rounded-lg hover:bg-blue-50 transition"
+                  className="flex items-center space-x-2 bg-white text-orange-600 px-4 py-2 rounded-lg hover:bg-orange-50 transition"
                 >
                   <Share2 className="w-5 h-5" />
                   <span>Share</span>
@@ -150,14 +150,14 @@ export function EpisodeViewPage() {
                         onClick={shareToLinkedIn}
                         className="w-full flex items-center space-x-3 px-4 py-2 text-left hover:bg-slate-50 rounded-lg transition"
                       >
-                        <Linkedin className="w-5 h-5 text-blue-600" />
+                        <Linkedin className="w-5 h-5 text-orange-600" />
                         <span className="text-slate-700">Share on LinkedIn</span>
                       </button>
                       <button
                         onClick={shareToFacebook}
                         className="w-full flex items-center space-x-3 px-4 py-2 text-left hover:bg-slate-50 rounded-lg transition"
                       >
-                        <Facebook className="w-5 h-5 text-blue-600" />
+                        <Facebook className="w-5 h-5 text-orange-600" />
                         <span className="text-slate-700">Share on Facebook</span>
                       </button>
                       <button
@@ -218,7 +218,7 @@ export function EpisodeViewPage() {
                 {episode.guest.full_name}
               </h3>
               {episode.guest.professional_title && (
-                <p className="text-blue-600 font-medium mb-3">
+                <p className="text-orange-600 font-medium mb-3">
                   {episode.guest.professional_title}
                 </p>
               )}
@@ -230,7 +230,7 @@ export function EpisodeViewPage() {
                   href={episode.guest.linkedin_url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center space-x-2 text-blue-600 hover:text-blue-700 font-medium"
+                  className="inline-flex items-center space-x-2 text-orange-600 hover:text-orange-700 font-medium"
                 >
                   <Linkedin className="w-5 h-5" />
                   <span>Connect on LinkedIn</span>
@@ -241,7 +241,7 @@ export function EpisodeViewPage() {
             <h2 className="text-2xl font-bold text-slate-900 mb-6">Q&A</h2>
             <div className="space-y-6">
               {questions.map((question, index) => (
-                <div key={question.id} className="border-l-4 border-blue-600 pl-6">
+                <div key={question.id} className="border-l-4 border-orange-600 pl-6">
                   <h3 className="font-semibold text-slate-900 mb-3">
                     Q{index + 1}: {question.question_text}
                   </h3>

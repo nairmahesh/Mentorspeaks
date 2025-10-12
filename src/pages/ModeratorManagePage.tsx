@@ -182,7 +182,7 @@ export function ModeratorManagePage() {
       <Layout>
         <div className="flex items-center justify-center min-h-screen">
           <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600 mx-auto"></div>
             <p className="mt-4 text-slate-600">Loading...</p>
           </div>
         </div>
@@ -219,7 +219,7 @@ export function ModeratorManagePage() {
           </div>
           <button
             onClick={() => setShowAddForm(!showAddForm)}
-            className="flex items-center space-x-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
+            className="flex items-center space-x-2 bg-orange-600 text-white px-4 py-2 rounded-lg hover:bg-orange-700 transition"
           >
             <UserPlus className="w-5 h-5" />
             <span>Add Moderator</span>
@@ -250,7 +250,7 @@ export function ModeratorManagePage() {
                   value={selectedMentor}
                   onChange={(e) => setSelectedMentor(e.target.value)}
                   required
-                  className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                 >
                   <option value="">Choose a mentor...</option>
                   {mentors
@@ -269,7 +269,7 @@ export function ModeratorManagePage() {
                   type="checkbox"
                   checked={makeAdmin}
                   onChange={(e) => setMakeAdmin(e.target.checked)}
-                  className="w-4 h-4 text-blue-600 border-slate-300 rounded focus:ring-blue-500"
+                  className="w-4 h-4 text-orange-600 border-slate-300 rounded focus:ring-orange-500"
                 />
                 <label htmlFor="makeAdmin" className="text-sm font-medium text-slate-700">
                   Grant admin privileges (can manage other moderators)
@@ -279,7 +279,7 @@ export function ModeratorManagePage() {
               <div className="flex space-x-3">
                 <button
                   type="submit"
-                  className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition"
+                  className="bg-orange-600 text-white px-6 py-2 rounded-lg hover:bg-orange-700 transition"
                 >
                   Add Moderator
                 </button>
@@ -310,12 +310,12 @@ export function ModeratorManagePage() {
                 <div className="flex items-start justify-between">
                   <div className="flex items-start space-x-4">
                     <div className={`w-12 h-12 rounded-full flex items-center justify-center ${
-                      mod.is_admin ? 'bg-gradient-to-br from-yellow-400 to-blue-500' : 'bg-blue-100'
+                      mod.is_admin ? 'bg-gradient-to-br from-yellow-400 to-orange-500' : 'bg-orange-100'
                     }`}>
                       {mod.is_admin ? (
                         <Crown className="w-6 h-6 text-white" />
                       ) : (
-                        <UserIcon className="w-6 h-6 text-blue-600" />
+                        <UserIcon className="w-6 h-6 text-orange-600" />
                       )}
                     </div>
 
@@ -323,7 +323,7 @@ export function ModeratorManagePage() {
                       <div className="flex items-center space-x-2">
                         <h3 className="font-bold text-slate-900">{mod.user?.full_name}</h3>
                         {mod.is_admin && (
-                          <span className="bg-gradient-to-r from-yellow-400 to-blue-500 text-white text-xs px-2 py-1 rounded-full font-semibold">
+                          <span className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white text-xs px-2 py-1 rounded-full font-semibold">
                             ADMIN
                           </span>
                         )}
@@ -346,8 +346,8 @@ export function ModeratorManagePage() {
                       onClick={() => toggleAdminStatus(mod.id, mod.is_admin)}
                       className={`px-3 py-1 rounded-lg text-sm font-medium transition ${
                         mod.is_admin
-                          ? 'bg-blue-100 text-blue-700 hover:bg-blue-200'
-                          : 'bg-blue-100 text-blue-700 hover:bg-blue-200'
+                          ? 'bg-orange-100 text-orange-700 hover:bg-orange-200'
+                          : 'bg-orange-100 text-orange-700 hover:bg-orange-200'
                       }`}
                     >
                       {mod.is_admin ? 'Revoke Admin' : 'Make Admin'}
@@ -374,15 +374,15 @@ export function ModeratorManagePage() {
           </div>
         </div>
 
-        <div className="mt-8 bg-blue-50 border border-blue-200 rounded-lg p-6">
+        <div className="mt-8 bg-orange-50 border border-orange-200 rounded-lg p-6">
           <h3 className="font-semibold text-blue-900 mb-2">Moderator Hierarchy</h3>
           <ul className="text-sm text-blue-800 space-y-2">
             <li className="flex items-start space-x-2">
-              <Crown className="w-4 h-4 mt-0.5 text-blue-500" />
+              <Crown className="w-4 h-4 mt-0.5 text-orange-500" />
               <span><strong>Admin Moderators:</strong> Can create podcasts, manage episodes, and add/remove other moderators</span>
             </li>
             <li className="flex items-start space-x-2">
-              <Shield className="w-4 h-4 mt-0.5 text-blue-500" />
+              <Shield className="w-4 h-4 mt-0.5 text-orange-500" />
               <span><strong>Regular Moderators:</strong> Can create and manage podcasts but cannot manage other moderators</span>
             </li>
           </ul>

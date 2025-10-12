@@ -192,15 +192,15 @@ export function ProfilePage() {
           <div className="flex items-center justify-between">
             <div>
               <div className="flex items-center space-x-3 mb-2">
-                <User className="w-8 h-8 text-blue-600" />
+                <User className="w-8 h-8 text-orange-600" />
                 <h1 className="text-4xl font-bold text-slate-900">Profile Settings</h1>
               </div>
               <p className="text-slate-600">Manage your account information</p>
             </div>
             {linkedinUrl && (
-              <div className="flex items-center space-x-2 bg-blue-50 px-4 py-2 rounded-lg border border-blue-200">
-                <Linkedin className="w-5 h-5 text-blue-600" />
-                <span className="text-sm font-medium text-blue-700">LinkedIn Connected</span>
+              <div className="flex items-center space-x-2 bg-orange-50 px-4 py-2 rounded-lg border border-orange-200">
+                <Linkedin className="w-5 h-5 text-orange-600" />
+                <span className="text-sm font-medium text-orange-700">LinkedIn Connected</span>
               </div>
             )}
           </div>
@@ -253,7 +253,7 @@ export function ProfilePage() {
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
               required
-              className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
             />
           </div>
 
@@ -266,7 +266,7 @@ export function ProfilePage() {
               value={country}
               onChange={(e) => setCountry(e.target.value)}
               required
-              className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
             >
               <option value="">Select your country</option>
               <option value="India">India</option>
@@ -313,7 +313,7 @@ export function ProfilePage() {
                   type="text"
                   value={professionalTitle}
                   onChange={(e) => setProfessionalTitle(e.target.value)}
-                  className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                   placeholder="e.g., Senior Software Engineer at Google"
                 />
               </div>
@@ -321,10 +321,10 @@ export function ProfilePage() {
               <div>
                 <label htmlFor="linkedinUrl" className="block text-sm font-medium text-slate-700 mb-2">
                   <div className="flex items-center space-x-2">
-                    <Linkedin className={`w-4 h-4 ${linkedinUrl ? 'text-blue-600' : 'text-slate-400'}`} />
+                    <Linkedin className={`w-4 h-4 ${linkedinUrl ? 'text-orange-600' : 'text-slate-400'}`} />
                     <span>LinkedIn Profile URL</span>
                     {linkedinUrl && (
-                      <span className="text-xs text-blue-600 font-medium">✓ Added</span>
+                      <span className="text-xs text-orange-600 font-medium">✓ Added</span>
                     )}
                   </div>
                 </label>
@@ -333,8 +333,8 @@ export function ProfilePage() {
                   type="url"
                   value={linkedinUrl}
                   onChange={(e) => setLinkedinUrl(e.target.value)}
-                  className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                    linkedinUrl ? 'border-blue-300 bg-blue-50' : 'border-slate-300'
+                  className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent ${
+                    linkedinUrl ? 'border-orange-300 bg-orange-50' : 'border-slate-300'
                   }`}
                   placeholder="https://linkedin.com/in/yourprofile"
                 />
@@ -351,7 +351,7 @@ export function ProfilePage() {
                   max="70"
                   value={yearsOfExperience}
                   onChange={(e) => setYearsOfExperience(e.target.value)}
-                  className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                   placeholder="10"
                 />
               </div>
@@ -367,7 +367,7 @@ export function ProfilePage() {
               value={bio}
               onChange={(e) => setBio(e.target.value)}
               rows={4}
-              className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
               placeholder="Tell us about yourself..."
             />
           </div>
@@ -375,7 +375,7 @@ export function ProfilePage() {
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-3">
               <div className="flex items-center space-x-2">
-                <Target className="w-5 h-5 text-blue-600" />
+                <Target className="w-5 h-5 text-orange-600" />
                 <span>Your Interests</span>
               </div>
             </label>
@@ -392,7 +392,7 @@ export function ProfilePage() {
                     onClick={() => toggleUserInterest(industry.id)}
                     className={`px-4 py-3 rounded-lg border-2 transition text-left ${
                       userInterestIndustries.includes(industry.id)
-                        ? 'border-blue-600 bg-blue-50 text-blue-700'
+                        ? 'border-orange-600 bg-orange-50 text-orange-700'
                         : 'border-slate-300 bg-white text-slate-700 hover:border-slate-400'
                     }`}
                   >
@@ -428,7 +428,7 @@ export function ProfilePage() {
                       onClick={() => toggleIndustry(industry.id)}
                       className={`px-4 py-3 rounded-lg border-2 transition text-left ${
                         selectedIndustries.includes(industry.id)
-                          ? 'border-blue-600 bg-blue-50 text-blue-700'
+                          ? 'border-orange-600 bg-orange-50 text-orange-700'
                           : 'border-slate-300 bg-white text-slate-700 hover:border-slate-400'
                       }`}
                     >
@@ -463,7 +463,7 @@ export function ProfilePage() {
                       onClick={() => toggleMenteeType(type.value)}
                       className={`px-3 py-2 rounded-lg border-2 transition text-sm ${
                         willingToMentor.includes(type.value)
-                          ? 'border-blue-600 bg-blue-50 text-blue-700'
+                          ? 'border-orange-600 bg-orange-50 text-orange-700'
                           : 'border-slate-300 bg-white text-slate-700 hover:border-slate-400'
                       }`}
                     >
@@ -496,7 +496,7 @@ export function ProfilePage() {
                     onClick={() => setMentoringRateType('paid')}
                     className={`px-4 py-3 rounded-lg border-2 transition text-center ${
                       mentoringRateType === 'paid'
-                        ? 'border-blue-600 bg-blue-50 text-blue-700'
+                        ? 'border-orange-600 bg-orange-50 text-orange-700'
                         : 'border-slate-300 bg-white text-slate-700 hover:border-slate-400'
                     }`}
                   >
@@ -509,7 +509,7 @@ export function ProfilePage() {
                     onClick={() => setMentoringRateType('both')}
                     className={`px-4 py-3 rounded-lg border-2 transition text-center ${
                       mentoringRateType === 'both'
-                        ? 'border-blue-600 bg-blue-50 text-blue-700'
+                        ? 'border-orange-600 bg-orange-50 text-orange-700'
                         : 'border-slate-300 bg-white text-slate-700 hover:border-slate-400'
                     }`}
                   >
@@ -534,7 +534,7 @@ export function ProfilePage() {
                         max="168"
                         value={freeHoursPerWeek}
                         onChange={(e) => setFreeHoursPerWeek(e.target.value)}
-                        className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                         placeholder="5"
                       />
                     </div>
@@ -552,7 +552,7 @@ export function ProfilePage() {
                         step="0.01"
                         value={hourlyRate}
                         onChange={(e) => setHourlyRate(e.target.value)}
-                        className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                         placeholder="100"
                       />
                     </div>
@@ -566,7 +566,7 @@ export function ProfilePage() {
             <button
               type="submit"
               disabled={loading}
-              className="flex items-center space-x-2 bg-blue-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex items-center space-x-2 bg-orange-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 transition disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <Save className="w-5 h-5" />
               <span>{loading ? 'Saving...' : 'Save Changes'}</span>

@@ -126,7 +126,7 @@ export function AnswerQuestionPage() {
     return (
       <Layout>
         <div className="flex items-center justify-center min-h-screen">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600"></div>
         </div>
       </Layout>
     );
@@ -160,7 +160,7 @@ export function AnswerQuestionPage() {
                 onClick={() => setContentType('video')}
                 className={`flex flex-col items-center px-4 py-4 rounded-lg border-2 transition ${
                   contentType === 'video'
-                    ? 'border-blue-600 bg-blue-50 text-blue-700'
+                    ? 'border-orange-600 bg-orange-50 text-orange-700'
                     : 'border-slate-300 bg-white text-slate-700 hover:border-slate-400'
                 }`}
               >
@@ -173,7 +173,7 @@ export function AnswerQuestionPage() {
                 onClick={() => setContentType('audio')}
                 className={`flex flex-col items-center px-4 py-4 rounded-lg border-2 transition ${
                   contentType === 'audio'
-                    ? 'border-blue-600 bg-blue-50 text-blue-700'
+                    ? 'border-orange-600 bg-orange-50 text-orange-700'
                     : 'border-slate-300 bg-white text-slate-700 hover:border-slate-400'
                 }`}
               >
@@ -186,7 +186,7 @@ export function AnswerQuestionPage() {
                 onClick={() => setContentType('text')}
                 className={`flex flex-col items-center px-4 py-4 rounded-lg border-2 transition ${
                   contentType === 'text'
-                    ? 'border-blue-600 bg-blue-50 text-blue-700'
+                    ? 'border-orange-600 bg-orange-50 text-orange-700'
                     : 'border-slate-300 bg-white text-slate-700 hover:border-slate-400'
                 }`}
               >
@@ -209,7 +209,7 @@ export function AnswerQuestionPage() {
                   <button
                     type="button"
                     onClick={() => setShowTeleprompter(!showTeleprompter)}
-                    className="text-sm text-blue-600 hover:text-blue-700 font-medium"
+                    className="text-sm text-orange-600 hover:text-orange-700 font-medium"
                   >
                     {showTeleprompter ? 'Hide' : 'Show'} Teleprompter
                   </button>
@@ -218,7 +218,7 @@ export function AnswerQuestionPage() {
                   value={teleprompterNotes}
                   onChange={(e) => setTeleprompterNotes(e.target.value)}
                   rows={4}
-                  className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                   placeholder="Add bullet points or a script to help you during recording..."
                 />
 
@@ -311,7 +311,7 @@ export function AnswerQuestionPage() {
                     <button
                       type="button"
                       onClick={stopRecording}
-                      className="flex items-center space-x-2 bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition"
+                      className="flex items-center space-x-2 bg-orange-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-orange-700 transition"
                     >
                       <Check className="w-5 h-5" />
                       <span>Done</span>
@@ -340,7 +340,7 @@ export function AnswerQuestionPage() {
                 onChange={(e) => setTextAnswer(e.target.value)}
                 rows={12}
                 required
-                className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                 placeholder="Write your detailed answer here..."
               />
             </div>
@@ -351,7 +351,7 @@ export function AnswerQuestionPage() {
               type="button"
               onClick={handleSubmit}
               disabled={loading || (contentType === 'text' && !textAnswer.trim()) || (contentType !== 'text' && recordingTime === 0)}
-              className="flex-1 bg-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex-1 bg-orange-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 transition disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? 'Submitting...' : 'Submit Answer'}
             </button>

@@ -64,11 +64,11 @@ export function CorporateSignupPage() {
 
   return (
     <PublicLayout>
-      <div className="bg-gradient-to-br from-slate-50 to-blue-50 py-16">
+      <div className="bg-gradient-to-br from-slate-50 to-orange-50 py-16">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <div className="inline-flex items-center space-x-2 bg-blue-100 px-4 py-2 rounded-full mb-4">
-              <Building2 className="w-5 h-5 text-blue-600" />
+            <div className="inline-flex items-center space-x-2 bg-orange-100 px-4 py-2 rounded-full mb-4">
+              <Building2 className="w-5 h-5 text-orange-600" />
               <span className="text-sm font-bold text-blue-900">FOR ENTERPRISES</span>
             </div>
             <h1 className="text-4xl md:text-5xl font-bold text-slate-900 mb-4">
@@ -94,7 +94,7 @@ export function CorporateSignupPage() {
                       value={formData.companyName}
                       onChange={handleChange}
                       required
-                      className="w-full pl-11 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full pl-11 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                       placeholder="Acme Corporation"
                     />
                   </div>
@@ -112,7 +112,7 @@ export function CorporateSignupPage() {
                       value={formData.companyEmail}
                       onChange={handleChange}
                       required
-                      className="w-full pl-11 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full pl-11 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                       placeholder="contact@acme.com"
                     />
                   </div>
@@ -129,7 +129,7 @@ export function CorporateSignupPage() {
                       name="companyWebsite"
                       value={formData.companyWebsite}
                       onChange={handleChange}
-                      className="w-full pl-11 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full pl-11 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                       placeholder="https://acme.com"
                     />
                   </div>
@@ -146,7 +146,7 @@ export function CorporateSignupPage() {
                       name="industry"
                       value={formData.industry}
                       onChange={handleChange}
-                      className="w-full pl-11 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full pl-11 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                       placeholder="Technology, Healthcare, Finance..."
                     />
                   </div>
@@ -162,7 +162,7 @@ export function CorporateSignupPage() {
                       name="employeeCount"
                       value={formData.employeeCount}
                       onChange={handleChange}
-                      className="w-full pl-11 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white"
+                      className="w-full pl-11 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent appearance-none bg-white"
                     >
                       <option value="">Select size</option>
                       <option value="1-50">1-50 employees</option>
@@ -186,7 +186,7 @@ export function CorporateSignupPage() {
                       value={formData.contactPersonName}
                       onChange={handleChange}
                       required
-                      className="w-full pl-11 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full pl-11 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                       placeholder="John Doe"
                     />
                   </div>
@@ -203,7 +203,7 @@ export function CorporateSignupPage() {
                       name="contactPersonTitle"
                       value={formData.contactPersonTitle}
                       onChange={handleChange}
-                      className="w-full pl-11 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full pl-11 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                       placeholder="Head of Communications"
                     />
                   </div>
@@ -220,7 +220,7 @@ export function CorporateSignupPage() {
                       name="phoneNumber"
                       value={formData.phoneNumber}
                       onChange={handleChange}
-                      className="w-full pl-11 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full pl-11 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                       placeholder="+91 98765 43210"
                     />
                   </div>
@@ -229,14 +229,14 @@ export function CorporateSignupPage() {
 
               <div className="border-t border-slate-200 pt-8">
                 <h3 className="text-lg font-bold text-slate-900 mb-4 flex items-center space-x-2">
-                  <CreditCard className="w-5 h-5 text-blue-600" />
+                  <CreditCard className="w-5 h-5 text-orange-600" />
                   <span>Choose Your Plan</span>
                 </h3>
 
                 <div className="grid md:grid-cols-3 gap-4 mb-6">
                   <label className={`relative flex flex-col p-4 border-2 rounded-lg cursor-pointer transition ${
                     formData.subscriptionTier === 'starter'
-                      ? 'border-blue-600 bg-blue-50'
+                      ? 'border-orange-600 bg-orange-50'
                       : 'border-slate-300 hover:border-slate-400'
                   }`}>
                     <input
@@ -250,13 +250,13 @@ export function CorporateSignupPage() {
                     <span className="font-bold text-slate-900 mb-1">Starter</span>
                     <span className="text-sm text-slate-600">Perfect for small teams</span>
                     {formData.subscriptionTier === 'starter' && (
-                      <CheckCircle2 className="absolute top-3 right-3 w-5 h-5 text-blue-600" />
+                      <CheckCircle2 className="absolute top-3 right-3 w-5 h-5 text-orange-600" />
                     )}
                   </label>
 
                   <label className={`relative flex flex-col p-4 border-2 rounded-lg cursor-pointer transition ${
                     formData.subscriptionTier === 'professional'
-                      ? 'border-blue-600 bg-blue-50'
+                      ? 'border-orange-600 bg-orange-50'
                       : 'border-slate-300 hover:border-slate-400'
                   }`}>
                     <input
@@ -270,13 +270,13 @@ export function CorporateSignupPage() {
                     <span className="font-bold text-slate-900 mb-1">Professional</span>
                     <span className="text-sm text-slate-600">For growing organizations</span>
                     {formData.subscriptionTier === 'professional' && (
-                      <CheckCircle2 className="absolute top-3 right-3 w-5 h-5 text-blue-600" />
+                      <CheckCircle2 className="absolute top-3 right-3 w-5 h-5 text-orange-600" />
                     )}
                   </label>
 
                   <label className={`relative flex flex-col p-4 border-2 rounded-lg cursor-pointer transition ${
                     formData.subscriptionTier === 'enterprise'
-                      ? 'border-blue-600 bg-blue-50'
+                      ? 'border-orange-600 bg-orange-50'
                       : 'border-slate-300 hover:border-slate-400'
                   }`}>
                     <input
@@ -290,7 +290,7 @@ export function CorporateSignupPage() {
                     <span className="font-bold text-slate-900 mb-1">Enterprise</span>
                     <span className="text-sm text-slate-600">Custom solutions</span>
                     {formData.subscriptionTier === 'enterprise' && (
-                      <CheckCircle2 className="absolute top-3 right-3 w-5 h-5 text-blue-600" />
+                      <CheckCircle2 className="absolute top-3 right-3 w-5 h-5 text-orange-600" />
                     )}
                   </label>
                 </div>
@@ -307,7 +307,7 @@ export function CorporateSignupPage() {
                         value="monthly"
                         checked={formData.billingCycle === 'monthly'}
                         onChange={handleChange}
-                        className="w-4 h-4 text-blue-600"
+                        className="w-4 h-4 text-orange-600"
                       />
                       <span className="text-slate-700">Monthly</span>
                     </label>
@@ -318,7 +318,7 @@ export function CorporateSignupPage() {
                         value="yearly"
                         checked={formData.billingCycle === 'yearly'}
                         onChange={handleChange}
-                        className="w-4 h-4 text-blue-600"
+                        className="w-4 h-4 text-orange-600"
                       />
                       <span className="text-slate-700">Yearly</span>
                       <span className="text-sm text-green-600 font-medium">(Save 20%)</span>
@@ -336,7 +336,7 @@ export function CorporateSignupPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-blue-600 text-white py-4 rounded-lg font-bold text-lg hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
+                className="w-full bg-orange-600 text-white py-4 rounded-lg font-bold text-lg hover:bg-orange-700 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
               >
                 {loading ? (
                   <span>Submitting...</span>

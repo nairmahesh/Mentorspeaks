@@ -17,11 +17,11 @@ export function PublicLayout({ children }: PublicLayoutProps) {
           <div className="flex justify-between items-center h-16">
             <Link to="/" className="flex items-center space-x-3 group">
               <div className="relative">
-                <div className="absolute inset-0 bg-blue-600 rounded-lg blur opacity-25 group-hover:opacity-40 transition"></div>
-                <MessageSquareText className="relative w-8 h-8 text-blue-600" />
+                <div className="absolute inset-0 bg-orange-600 rounded-lg blur opacity-25 group-hover:opacity-40 transition"></div>
+                <MessageSquareText className="relative w-8 h-8 text-orange-600" />
               </div>
               <div className="flex flex-col">
-                <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent leading-tight">effyMentor</span>
+                <span className="text-2xl font-bold bg-gradient-to-r from-orange-600 to-orange-800 bg-clip-text text-transparent leading-tight">effyMentor</span>
                 <span className="text-xs text-slate-500 font-medium italic">Where Experience Speaks</span>
               </div>
             </Link>
@@ -43,7 +43,7 @@ export function PublicLayout({ children }: PublicLayoutProps) {
               {user ? (
                 <Link
                   to="/profile"
-                  className="bg-blue-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-700 transition"
+                  className="bg-orange-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-orange-700 transition"
                 >
                   Dashboard
                 </Link>
@@ -58,7 +58,7 @@ export function PublicLayout({ children }: PublicLayoutProps) {
                   </Link>
                   <Link
                     to="/register"
-                    className="flex items-center space-x-1 bg-blue-600 text-white px-5 py-2 rounded-lg font-medium hover:bg-blue-700 transition"
+                    className="flex items-center space-x-1 bg-orange-600 text-white px-5 py-2 rounded-lg font-medium hover:bg-orange-700 transition"
                   >
                     <UserPlus className="w-4 h-4" />
                     <span>Get Started</span>
@@ -78,8 +78,8 @@ export function PublicLayout({ children }: PublicLayoutProps) {
             <div>
               <div className="mb-4">
                 <div className="flex items-center space-x-2 text-xl font-bold mb-1">
-                  <MessageSquareText className="w-6 h-6 text-blue-400" />
-                  <span className="bg-gradient-to-r from-blue-400 to-blue-300 bg-clip-text text-transparent">effyMentor</span>
+                  <MessageSquareText className="w-6 h-6 text-orange-400" />
+                  <span className="bg-gradient-to-r from-orange-400 to-orange-300 bg-clip-text text-transparent">effyMentor</span>
                 </div>
                 <p className="text-xs text-slate-500 italic">Where Experience Speaks</p>
               </div>

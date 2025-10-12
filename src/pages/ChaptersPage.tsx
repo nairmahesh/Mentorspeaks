@@ -102,7 +102,7 @@ export function ChaptersPage() {
       <PublicLayout>
         <div className="flex items-center justify-center min-h-screen">
           <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600 mx-auto"></div>
             <p className="mt-4 text-slate-600">Loading chapters...</p>
           </div>
         </div>
@@ -112,7 +112,7 @@ export function ChaptersPage() {
 
   return (
     <PublicLayout>
-      <div className="bg-gradient-to-br from-blue-600 via-blue-700 to-slate-900 text-white py-16 sm:py-20">
+      <div className="bg-gradient-to-br from-orange-600 via-orange-700 to-slate-900 text-white py-16 sm:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <div className="inline-flex items-center space-x-2 bg-white bg-opacity-10 backdrop-blur-sm px-4 py-2 rounded-full mb-6">
@@ -120,7 +120,7 @@ export function ChaptersPage() {
               <span className="text-sm font-medium">Join Your Regional Community</span>
             </div>
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4">Regional Chapters</h1>
-            <p className="text-lg sm:text-xl text-blue-100 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-lg sm:text-xl text-orange-100 max-w-3xl mx-auto leading-relaxed">
               Connect with mentors and professionals in your region. Join chapter-exclusive events, discussions, and networking opportunities.
             </p>
           </div>
@@ -135,7 +135,7 @@ export function ChaptersPage() {
               to={`/chapters/${chapter.slug}`}
               className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-lg transition group"
             >
-              <div className="h-32 sm:h-48 bg-gradient-to-br from-blue-500 to-blue-700 relative">
+              <div className="h-32 sm:h-48 bg-gradient-to-br from-orange-500 to-orange-700 relative">
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div className="text-center text-white">
                     <MapPin className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-2 opacity-50" />
@@ -162,7 +162,7 @@ export function ChaptersPage() {
                     <button
                       onClick={(e) => joinChapter(chapter.id, e)}
                       disabled={joiningChapter === chapter.id}
-                      className="flex items-center space-x-1 text-blue-600 hover:text-blue-700 text-xs sm:text-sm font-medium disabled:opacity-50"
+                      className="flex items-center space-x-1 text-orange-600 hover:text-orange-700 text-xs sm:text-sm font-medium disabled:opacity-50"
                     >
                       <UserPlus className="w-4 h-4" />
                       <span>{joiningChapter === chapter.id ? 'Joining...' : 'Join'}</span>
@@ -170,7 +170,7 @@ export function ChaptersPage() {
                   ) : null}
                 </div>
 
-                <div className="flex items-center justify-center space-x-2 bg-blue-600 text-white py-2.5 sm:py-3 px-4 sm:px-6 rounded-lg font-medium hover:bg-blue-700 transition group-hover:bg-blue-700">
+                <div className="flex items-center justify-center space-x-2 bg-orange-600 text-white py-2.5 sm:py-3 px-4 sm:px-6 rounded-lg font-medium hover:bg-orange-700 transition group-hover:bg-orange-700">
                   <span className="text-sm sm:text-base">View Chapter</span>
                   <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
                 </div>

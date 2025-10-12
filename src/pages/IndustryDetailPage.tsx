@@ -47,7 +47,7 @@ export function IndustryDetailPage() {
     return (
       <PublicLayout>
         <div className="flex items-center justify-center min-h-screen">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600"></div>
         </div>
       </PublicLayout>
     );
@@ -58,7 +58,7 @@ export function IndustryDetailPage() {
       <PublicLayout>
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
           <h1 className="text-2xl font-bold text-slate-900 mb-4">Industry not found</h1>
-          <Link to="/industries" className="text-blue-600 hover:text-blue-700">
+          <Link to="/industries" className="text-orange-600 hover:text-orange-700">
             Back to Industries
           </Link>
         </div>
@@ -70,11 +70,11 @@ export function IndustryDetailPage() {
 
   return (
     <PublicLayout>
-      <div className="bg-gradient-to-br from-blue-600 to-blue-800 text-white py-16">
+      <div className="bg-gradient-to-br from-orange-600 to-orange-800 text-white py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <Link
             to="/industries"
-            className="inline-flex items-center space-x-2 text-blue-200 hover:text-white mb-6 transition"
+            className="inline-flex items-center space-x-2 text-orange-200 hover:text-white mb-6 transition"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>Back to Industries</span>
@@ -86,7 +86,7 @@ export function IndustryDetailPage() {
             <div>
               <h1 className="text-4xl font-bold mb-2">{industry.name}</h1>
               {industry.description && (
-                <p className="text-blue-100 text-lg">{industry.description}</p>
+                <p className="text-orange-100 text-lg">{industry.description}</p>
               )}
             </div>
           </div>
@@ -105,18 +105,18 @@ export function IndustryDetailPage() {
               <Link
                 key={question.id}
                 to={`/questions/${question.id}`}
-                className="bg-white rounded-xl p-6 shadow-sm border border-slate-200 hover:border-blue-400 hover:shadow-lg transition-all group"
+                className="bg-white rounded-xl p-6 shadow-sm border border-slate-200 hover:border-orange-400 hover:shadow-lg transition-all group"
               >
                 <div className="flex items-start justify-between mb-3">
-                  <div className="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center group-hover:bg-blue-200 transition">
-                    <MessageCircle className="w-5 h-5 text-blue-600" />
+                  <div className="w-10 h-10 rounded-lg bg-orange-100 flex items-center justify-center group-hover:bg-orange-200 transition">
+                    <MessageCircle className="w-5 h-5 text-orange-600" />
                   </div>
                   <div className="flex items-center space-x-1 text-xs text-slate-500">
                     <Eye className="w-3 h-3" />
                     <span>{question.view_count}</span>
                   </div>
                 </div>
-                <h3 className="font-bold text-slate-900 mb-2 line-clamp-2 group-hover:text-blue-600 transition">
+                <h3 className="font-bold text-slate-900 mb-2 line-clamp-2 group-hover:text-orange-600 transition">
                   {question.title}
                 </h3>
                 {question.description && (
@@ -124,7 +124,7 @@ export function IndustryDetailPage() {
                 )}
                 <div className="flex gap-2">
                   {question.tags.slice(0, 2).map((tag) => (
-                    <span key={tag} className="px-2 py-1 bg-blue-50 text-blue-700 rounded-md text-xs font-medium">
+                    <span key={tag} className="px-2 py-1 bg-orange-50 text-orange-700 rounded-md text-xs font-medium">
                       {tag}
                     </span>
                   ))}
@@ -139,7 +139,7 @@ export function IndustryDetailPage() {
             <p className="text-slate-600 mb-6">Be the first to ask a question in this industry!</p>
             <Link
               to="/register"
-              className="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition"
+              className="inline-block bg-orange-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-orange-700 transition"
             >
               Ask a Question
             </Link>

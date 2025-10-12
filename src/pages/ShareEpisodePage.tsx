@@ -84,7 +84,7 @@ export function ShareEpisodePage() {
     return (
       <Layout>
         <div className="flex items-center justify-center min-h-screen">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600"></div>
         </div>
       </Layout>
     );
@@ -95,7 +95,7 @@ export function ShareEpisodePage() {
       <Layout>
         <div className="max-w-2xl mx-auto px-4 py-16 text-center">
           <h1 className="text-2xl font-bold text-slate-900 mb-4">Episode Not Found</h1>
-          <Link to="/podcasts/manage" className="text-blue-600 hover:text-blue-700">
+          <Link to="/podcasts/manage" className="text-orange-600 hover:text-orange-700">
             Back to Podcast Management
           </Link>
         </div>
@@ -114,7 +114,7 @@ export function ShareEpisodePage() {
           <span>Back to Management</span>
         </button>
 
-        <div className="bg-gradient-to-r from-green-50 to-blue-50 rounded-2xl p-8 mb-8 border border-green-200">
+        <div className="bg-gradient-to-r from-green-50 to-orange-50 rounded-2xl p-8 mb-8 border border-green-200">
           <div className="flex items-center space-x-2 text-green-700 mb-4">
             <Check className="w-6 h-6" />
             <h1 className="text-2xl font-bold">Episode Created Successfully!</h1>
@@ -177,7 +177,7 @@ export function ShareEpisodePage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
             <button
               onClick={handleEmailShare}
-              className="flex items-center justify-center space-x-2 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition font-semibold"
+              className="flex items-center justify-center space-x-2 bg-orange-600 text-white px-6 py-3 rounded-lg hover:bg-orange-700 transition font-semibold"
             >
               <Mail className="w-5 h-5" />
               <span>Share via Email</span>
@@ -196,23 +196,23 @@ export function ShareEpisodePage() {
             <h3 className="font-semibold text-slate-900 mb-3">What happens next?</h3>
             <ol className="space-y-2 text-sm text-slate-600">
               <li className="flex items-start space-x-2">
-                <span className="font-bold text-blue-600 flex-shrink-0">1.</span>
+                <span className="font-bold text-orange-600 flex-shrink-0">1.</span>
                 <span>The guest receives the recording link</span>
               </li>
               <li className="flex items-start space-x-2">
-                <span className="font-bold text-blue-600 flex-shrink-0">2.</span>
+                <span className="font-bold text-orange-600 flex-shrink-0">2.</span>
                 <span>They can preview the questions and prepare their responses</span>
               </li>
               <li className="flex items-start space-x-2">
-                <span className="font-bold text-blue-600 flex-shrink-0">3.</span>
+                <span className="font-bold text-orange-600 flex-shrink-0">3.</span>
                 <span>They record video/audio answers for each question</span>
               </li>
               <li className="flex items-start space-x-2">
-                <span className="font-bold text-blue-600 flex-shrink-0">4.</span>
+                <span className="font-bold text-orange-600 flex-shrink-0">4.</span>
                 <span>They can preview, modify, and re-record before submitting</span>
               </li>
               <li className="flex items-start space-x-2">
-                <span className="font-bold text-blue-600 flex-shrink-0">5.</span>
+                <span className="font-bold text-orange-600 flex-shrink-0">5.</span>
                 <span>You'll be notified when they submit their responses</span>
               </li>
             </ol>
@@ -222,7 +222,7 @@ export function ShareEpisodePage() {
         <div className="flex space-x-4 mt-8">
           <Link
             to={`/podcasts/record/${episodeId}`}
-            className="flex items-center space-x-2 text-blue-600 hover:text-blue-700 font-semibold transition"
+            className="flex items-center space-x-2 text-orange-600 hover:text-orange-700 font-semibold transition"
           >
             <ExternalLink className="w-4 h-4" />
             <span>Preview Recording Page</span>

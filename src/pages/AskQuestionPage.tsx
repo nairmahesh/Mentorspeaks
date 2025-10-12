@@ -72,7 +72,7 @@ export function AskQuestionPage() {
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="mb-8">
           <div className="flex items-center space-x-3 mb-2">
-            <MessageCircle className="w-8 h-8 text-blue-600" />
+            <MessageCircle className="w-8 h-8 text-orange-600" />
             <h1 className="text-4xl font-bold text-slate-900">Ask a Question</h1>
           </div>
           <p className="text-slate-600">
@@ -97,7 +97,7 @@ export function AskQuestionPage() {
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               required
-              className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
               placeholder="What would you like to know?"
             />
           </div>
@@ -111,7 +111,7 @@ export function AskQuestionPage() {
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               rows={5}
-              className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
               placeholder="Provide more details about your question..."
             />
           </div>
@@ -124,7 +124,7 @@ export function AskQuestionPage() {
               id="industry"
               value={industryId}
               onChange={(e) => setIndustryId(e.target.value)}
-              className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
             >
               <option value="">Select an industry</option>
               {industries.map((industry) => (
@@ -144,7 +144,7 @@ export function AskQuestionPage() {
               type="text"
               value={tags}
               onChange={(e) => setTags(e.target.value)}
-              className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
               placeholder="Separate tags with commas (e.g., javascript, react, frontend)"
             />
           </div>
@@ -156,7 +156,7 @@ export function AskQuestionPage() {
                 type="checkbox"
                 checked={isPaid}
                 onChange={(e) => setIsPaid(e.target.checked)}
-                className="w-4 h-4 text-blue-600 border-slate-300 rounded focus:ring-blue-500"
+                className="w-4 h-4 text-orange-600 border-slate-300 rounded focus:ring-orange-500"
               />
               <label htmlFor="isPaid" className="text-sm font-medium text-slate-700">
                 Make this a paid question
@@ -176,7 +176,7 @@ export function AskQuestionPage() {
                   required={isPaid}
                   min="1"
                   step="1"
-                  className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                   placeholder="Enter amount in INR"
                 />
               </div>
@@ -187,7 +187,7 @@ export function AskQuestionPage() {
             <button
               type="submit"
               disabled={loading}
-              className="flex-1 bg-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex-1 bg-orange-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 transition disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? 'Posting...' : 'Post Question'}
             </button>

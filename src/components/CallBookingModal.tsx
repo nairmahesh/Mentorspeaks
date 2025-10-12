@@ -39,13 +39,13 @@ export function CallBookingModal({ mentor, isOpen, onClose }: CallBookingModalPr
       return {
         available: true,
         text: `₹${mentor.consulting_rate_inr?.toLocaleString()}/hour`,
-        color: 'text-blue-600'
+        color: 'text-orange-600'
       };
     }
     return {
       available: true,
       text: `Free & Paid (₹${mentor.consulting_rate_inr?.toLocaleString()}/hour)`,
-      color: 'text-blue-600'
+      color: 'text-orange-600'
     };
   };
 
@@ -148,7 +148,7 @@ export function CallBookingModal({ mentor, isOpen, onClose }: CallBookingModalPr
                 min={new Date().toISOString().split('T')[0]}
                 value={selectedDate}
                 onChange={(e) => setSelectedDate(e.target.value)}
-                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
               />
             </div>
 
@@ -163,7 +163,7 @@ export function CallBookingModal({ mentor, isOpen, onClose }: CallBookingModalPr
                 required
                 value={selectedTime}
                 onChange={(e) => setSelectedTime(e.target.value)}
-                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
               >
                 <option value="">Select a time</option>
                 <option value="09:00">9:00 AM</option>
@@ -188,11 +188,11 @@ export function CallBookingModal({ mentor, isOpen, onClose }: CallBookingModalPr
                 onChange={(e) => setTopic(e.target.value)}
                 placeholder="Brief description of what you'd like help with..."
                 rows={4}
-                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 resize-none"
               />
             </div>
 
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+            <div className="bg-orange-50 border border-orange-200 rounded-lg p-4">
               <p className="text-sm text-blue-900">
                 <strong>Note:</strong> This is a call request. {mentor.full_name} will review your request and confirm the meeting time via email.
               </p>
@@ -208,7 +208,7 @@ export function CallBookingModal({ mentor, isOpen, onClose }: CallBookingModalPr
               </button>
               <button
                 type="submit"
-                className="flex-1 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium"
+                className="flex-1 py-3 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition font-medium"
               >
                 Send Request
               </button>

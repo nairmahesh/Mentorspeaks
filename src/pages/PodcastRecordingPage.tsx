@@ -336,7 +336,7 @@ export function PodcastRecordingPage() {
                           className="w-32 h-32 rounded-full object-cover"
                         />
                       ) : (
-                        <div className="w-32 h-32 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+                        <div className="w-32 h-32 rounded-full bg-gradient-to-br from-orange-500 to-purple-600 flex items-center justify-center">
                           <span className="text-4xl font-bold text-white">
                             {getInitials(episode.guest?.full_name || 'G')}
                           </span>
@@ -371,7 +371,7 @@ export function PodcastRecordingPage() {
                       className="w-32 h-32 rounded-full object-cover"
                     />
                   ) : (
-                    <div className="w-32 h-32 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+                    <div className="w-32 h-32 rounded-full bg-gradient-to-br from-orange-500 to-purple-600 flex items-center justify-center">
                       <span className="text-4xl font-bold text-white">
                         {getInitials(episode.guest?.full_name || 'G')}
                       </span>
@@ -390,7 +390,7 @@ export function PodcastRecordingPage() {
                   {[...Array(20)].map((_, i) => (
                     <div
                       key={i}
-                      className="w-2 bg-blue-500 rounded-full transition-all"
+                      className="w-2 bg-orange-500 rounded-full transition-all"
                       style={{
                         height: isRecording && isSpeaking
                           ? `${Math.random() * 60 + 20}px`
@@ -405,8 +405,8 @@ export function PodcastRecordingPage() {
         </div>
 
         <div className="bg-slate-900 flex flex-col">
-          <div className="bg-gradient-to-br from-blue-600 to-blue-700 p-8 border-b border-slate-700">
-            <div className="text-sm font-semibold text-blue-200 mb-3">
+          <div className="bg-gradient-to-br from-orange-600 to-orange-700 p-8 border-b border-slate-700">
+            <div className="text-sm font-semibold text-orange-200 mb-3">
               CURRENT QUESTION
             </div>
             <h2 className="text-2xl font-bold leading-relaxed">
@@ -450,7 +450,7 @@ export function PodcastRecordingPage() {
                     onClick={() => setCurrentQuestionIndex(index)}
                     className={`w-10 h-10 rounded-lg font-semibold transition ${
                       index === currentQuestionIndex
-                        ? 'bg-blue-600 text-white'
+                        ? 'bg-orange-600 text-white'
                         : 'bg-slate-700 text-slate-400 hover:bg-slate-600'
                     }`}
                   >
@@ -497,7 +497,7 @@ export function PodcastRecordingPage() {
 
           <button
             onClick={completeRecording}
-            className="px-6 py-4 bg-blue-600 hover:bg-blue-700 rounded-lg font-semibold transition"
+            className="px-6 py-4 bg-orange-600 hover:bg-orange-700 rounded-lg font-semibold transition"
           >
             Complete & Save
           </button>

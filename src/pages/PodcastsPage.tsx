@@ -153,7 +153,7 @@ export function PodcastsPage() {
   return (
     <Layout>
       <div className="min-h-screen bg-slate-50">
-        <div className="relative bg-gradient-to-br from-blue-600 via-teal-600 to-cyan-600 text-white py-16">
+        <div className="relative bg-gradient-to-br from-orange-600 via-teal-600 to-cyan-600 text-white py-16">
           <div className="absolute inset-0 bg-black bg-opacity-10"></div>
           <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center">
@@ -164,7 +164,7 @@ export function PodcastsPage() {
               <h1 className="text-5xl md:text-6xl font-bold mb-4">
                 Listen & Learn
               </h1>
-              <p className="text-xl text-blue-100 max-w-3xl mx-auto">
+              <p className="text-xl text-orange-100 max-w-3xl mx-auto">
                 Explore podcast episodes where industry experts share their knowledge and answer community questions
               </p>
             </div>
@@ -180,7 +180,7 @@ export function PodcastsPage() {
 
             <Link
               to="/podcasts/manage"
-              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition text-sm font-semibold"
+              className="bg-orange-600 text-white px-4 py-2 rounded-lg hover:bg-orange-700 transition text-sm font-semibold"
             >
               Manage Podcasts
             </Link>
@@ -188,7 +188,7 @@ export function PodcastsPage() {
 
           {loading ? (
             <div className="flex items-center justify-center py-20">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600"></div>
             </div>
           ) : (
             <>
@@ -203,9 +203,9 @@ export function PodcastsPage() {
                     {featuredEpisodes.map((episode) => (
                       <div
                         key={episode.id}
-                        className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all border-2 border-slate-200 hover:border-blue-400 flex flex-col"
+                        className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all border-2 border-slate-200 hover:border-orange-400 flex flex-col"
                       >
-                        <div className="relative aspect-video bg-gradient-to-br from-blue-500 via-blue-600 to-slate-700 flex items-center justify-center overflow-hidden group">
+                        <div className="relative aspect-video bg-gradient-to-br from-orange-500 via-orange-600 to-slate-700 flex items-center justify-center overflow-hidden group">
                           {episode.thumbnail_url ? (
                             <img src={episode.thumbnail_url} alt={episode.title} className="w-full h-full object-cover" />
                           ) : (
@@ -213,14 +213,14 @@ export function PodcastsPage() {
                               <div className="absolute inset-0 bg-black bg-opacity-20"></div>
                               <div className="relative z-10 text-center">
                                 <div className="w-20 h-20 rounded-full bg-white bg-opacity-95 flex items-center justify-center group-hover:scale-110 transition shadow-2xl mx-auto mb-3">
-                                  <Play className="w-10 h-10 text-blue-600 ml-1" />
+                                  <Play className="w-10 h-10 text-orange-600 ml-1" />
                                 </div>
                                 <Mic className="w-8 h-8 text-white opacity-60 mx-auto" />
                               </div>
                             </>
                           )}
                           <div className="absolute top-3 left-3">
-                            <div className="bg-blue-600 px-3 py-1.5 rounded-full text-white text-xs font-bold">
+                            <div className="bg-orange-600 px-3 py-1.5 rounded-full text-white text-xs font-bold">
                               EP {episode.episode_number}
                             </div>
                           </div>
@@ -243,10 +243,10 @@ export function PodcastsPage() {
                               <img
                                 src={episode.guest.avatar_url}
                                 alt={episode.guest.full_name}
-                                className="w-12 h-12 rounded-full ring-2 ring-blue-200"
+                                className="w-12 h-12 rounded-full ring-2 ring-orange-200"
                               />
                             ) : (
-                              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center ring-2 ring-blue-200">
+                              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center ring-2 ring-orange-200">
                                 <span className="text-white text-lg font-bold">
                                   {episode.guest?.full_name?.charAt(0)}
                                 </span>
@@ -297,7 +297,7 @@ export function PodcastsPage() {
                               </button>
                               <button
                                 onClick={() => handleShare(episode)}
-                                className="flex items-center space-x-1 hover:text-blue-600 transition"
+                                className="flex items-center space-x-1 hover:text-orange-600 transition"
                               >
                                 <Share2 className="w-3.5 h-3.5" />
                                 <span>Share</span>
@@ -306,7 +306,7 @@ export function PodcastsPage() {
                           </div>
 
                           <button
-                            className="w-full flex items-center justify-center space-x-2 bg-gradient-to-r from-blue-600 to-teal-600 text-white px-4 py-2.5 rounded-xl font-semibold hover:from-blue-700 hover:to-teal-700 transition text-sm"
+                            className="w-full flex items-center justify-center space-x-2 bg-gradient-to-r from-orange-600 to-teal-600 text-white px-4 py-2.5 rounded-xl font-semibold hover:from-orange-700 hover:to-teal-700 transition text-sm"
                           >
                             <Play className="w-4 h-4" />
                             <span>Watch Episode</span>
@@ -322,16 +322,16 @@ export function PodcastsPage() {
               {upcomingEpisodes.length > 0 && (
                 <div className="mb-12">
                   <div className="flex items-center space-x-2 mb-6">
-                    <Sparkles className="w-6 h-6 text-blue-600" />
+                    <Sparkles className="w-6 h-6 text-orange-600" />
                     <h3 className="text-2xl font-bold text-slate-900">Upcoming Episodes</h3>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {upcomingEpisodes.map((episode) => (
                       <div
                         key={episode.id}
-                        className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all border-2 border-blue-200 hover:border-blue-400 flex flex-col"
+                        className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all border-2 border-orange-200 hover:border-orange-400 flex flex-col"
                       >
-                        <div className="relative aspect-video bg-gradient-to-br from-blue-500 via-teal-600 to-cyan-600 flex items-center justify-center overflow-hidden group">
+                        <div className="relative aspect-video bg-gradient-to-br from-orange-500 via-teal-600 to-cyan-600 flex items-center justify-center overflow-hidden group">
                           {episode.thumbnail_url ? (
                             <img src={episode.thumbnail_url} alt={episode.title} className="w-full h-full object-cover opacity-80" />
                           ) : (
@@ -339,14 +339,14 @@ export function PodcastsPage() {
                               <div className="absolute inset-0 bg-black bg-opacity-20"></div>
                               <div className="relative z-10 text-center">
                                 <div className="w-20 h-20 rounded-full bg-white bg-opacity-95 flex items-center justify-center group-hover:scale-110 transition shadow-2xl mx-auto mb-3">
-                                  <Calendar className="w-10 h-10 text-blue-600" />
+                                  <Calendar className="w-10 h-10 text-orange-600" />
                                 </div>
                                 <p className="text-white font-bold text-sm">Coming Soon</p>
                               </div>
                             </>
                           )}
                           <div className="absolute top-3 left-3">
-                            <div className="bg-blue-600 px-3 py-1.5 rounded-full text-white text-xs font-bold">
+                            <div className="bg-orange-600 px-3 py-1.5 rounded-full text-white text-xs font-bold">
                               EP {episode.episode_number}
                             </div>
                           </div>
@@ -363,10 +363,10 @@ export function PodcastsPage() {
                               <img
                                 src={episode.guest.avatar_url}
                                 alt={episode.guest.full_name}
-                                className="w-12 h-12 rounded-full ring-2 ring-blue-200"
+                                className="w-12 h-12 rounded-full ring-2 ring-orange-200"
                               />
                             ) : (
-                              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-teal-600 flex items-center justify-center ring-2 ring-blue-200">
+                              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-orange-500 to-teal-600 flex items-center justify-center ring-2 ring-orange-200">
                                 <span className="text-white text-lg font-bold">
                                   {episode.guest?.full_name?.charAt(0)}
                                 </span>
@@ -437,7 +437,7 @@ export function PodcastsPage() {
                         <Mic className="w-8 h-8 text-white opacity-60 mx-auto" />
                       </div>
                       <div className="absolute top-3 left-3 right-3 flex items-center justify-between">
-                        <div className="bg-gradient-to-r from-blue-600 to-blue-700 px-3 py-1.5 rounded-full text-white text-xs font-bold flex items-center space-x-1 shadow-lg">
+                        <div className="bg-gradient-to-r from-orange-600 to-orange-700 px-3 py-1.5 rounded-full text-white text-xs font-bold flex items-center space-x-1 shadow-lg">
                           <ArrowBigUp className="w-3.5 h-3.5" />
                           <span>{podcast.upvote_count || 0}</span>
                         </div>
@@ -478,7 +478,7 @@ export function PodcastsPage() {
                     </div>
 
                     <Link to={`/questions/${podcast.question_id}`} className="flex-1">
-                      <h3 className="font-bold text-slate-900 mb-2 line-clamp-2 text-lg hover:text-blue-600 transition leading-snug">
+                      <h3 className="font-bold text-slate-900 mb-2 line-clamp-2 text-lg hover:text-orange-600 transition leading-snug">
                         {podcast.question?.title}
                       </h3>
 
@@ -521,7 +521,7 @@ export function PodcastsPage() {
                               avatar_url: podcast.mentor?.avatar_url || ''
                             }
                           })}
-                          className="flex items-center space-x-1 hover:text-blue-600 transition"
+                          className="flex items-center space-x-1 hover:text-orange-600 transition"
                         >
                           <Share2 className="w-3.5 h-3.5" />
                           <span>Share</span>
@@ -540,7 +540,7 @@ export function PodcastsPage() {
                       {podcast.mentor?.is_available_for_consulting && (
                         <Link
                           to={`/questions/${podcast.question_id}`}
-                          className="flex items-center justify-center space-x-2 bg-blue-600 text-white px-4 py-2.5 rounded-xl font-semibold hover:bg-blue-700 transition text-sm"
+                          className="flex items-center justify-center space-x-2 bg-orange-600 text-white px-4 py-2.5 rounded-xl font-semibold hover:bg-orange-700 transition text-sm"
                         >
                           <Phone className="w-4 h-4" />
                           <span>Book Call</span>
@@ -565,17 +565,17 @@ export function PodcastsPage() {
           )}
         </div>
 
-        <div className="bg-gradient-to-r from-blue-600 to-slate-900 py-16">
+        <div className="bg-gradient-to-r from-orange-600 to-slate-900 py-16">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
               Have a Question?
             </h2>
-            <p className="text-xl text-blue-100 mb-8">
+            <p className="text-xl text-orange-100 mb-8">
               Ask our community of experts and get podcast-style responses
             </p>
             <Link
               to="/ask"
-              className="inline-flex items-center space-x-2 bg-white text-blue-600 px-8 py-4 rounded-xl font-bold hover:bg-blue-50 transition shadow-xl text-lg"
+              className="inline-flex items-center space-x-2 bg-white text-orange-600 px-8 py-4 rounded-xl font-bold hover:bg-orange-50 transition shadow-xl text-lg"
             >
               <MessageSquare className="w-5 h-5" />
               <span>Ask a Question</span>
@@ -641,9 +641,9 @@ export function PodcastsPage() {
                   shareViaEmail(selectedEpisode);
                   setShareModalOpen(false);
                 }}
-                className="w-full flex items-center space-x-3 px-4 py-3 bg-blue-50 hover:bg-blue-100 rounded-lg transition text-left"
+                className="w-full flex items-center space-x-3 px-4 py-3 bg-orange-50 hover:bg-orange-100 rounded-lg transition text-left"
               >
-                <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center flex-shrink-0">
+                <div className="w-10 h-10 rounded-full bg-orange-600 flex items-center justify-center flex-shrink-0">
                   <Mail className="w-5 h-5 text-white" />
                 </div>
                 <div>

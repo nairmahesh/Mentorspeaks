@@ -117,7 +117,7 @@ export function QuestionDetailPage() {
     return (
       <PublicLayout>
         <div className="flex items-center justify-center min-h-screen">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600"></div>
         </div>
       </PublicLayout>
     );
@@ -154,7 +154,7 @@ export function QuestionDetailPage() {
             {question.tags.map((tag) => (
               <span
                 key={tag}
-                className="px-3 py-1 bg-blue-50 text-blue-600 rounded-full text-sm font-medium"
+                className="px-3 py-1 bg-orange-50 text-orange-600 rounded-full text-sm font-medium"
               >
                 {tag}
               </span>
@@ -176,7 +176,7 @@ export function QuestionDetailPage() {
                   question.status === 'open'
                     ? 'bg-green-100 text-green-700'
                     : question.status === 'answered'
-                    ? 'bg-blue-100 text-blue-700'
+                    ? 'bg-orange-100 text-orange-700'
                     : 'bg-slate-100 text-slate-700'
                 }`}
               >
@@ -196,7 +196,7 @@ export function QuestionDetailPage() {
               {profile?.role === 'mentor' && (
                 <button
                   onClick={handleAnswer}
-                  className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+                  className="flex items-center space-x-2 px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition"
                 >
                   <Video className="w-4 h-4" />
                   <span>Answer</span>
@@ -272,7 +272,7 @@ export function QuestionDetailPage() {
                       onClick={() => handleUpvote(answer.id)}
                       className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition ${
                         answer.user_has_upvoted
-                          ? 'bg-blue-600 text-white'
+                          ? 'bg-orange-600 text-white'
                           : 'border border-slate-300 text-slate-700 hover:bg-slate-50'
                       }`}
                     >
