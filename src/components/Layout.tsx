@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { Sparkles, LogOut, User, Home, MessageCircle, BarChart3, Radio, Settings, MapPin, Shield } from 'lucide-react';
+import { MessageSquareText, LogOut, User, Home, MessageCircle, BarChart3, Radio, Settings, MapPin, Shield } from 'lucide-react';
 
 type LayoutProps = {
   children: ReactNode;
@@ -29,7 +29,7 @@ export function Layout({ children }: LayoutProps) {
             <Link to="/" className="flex items-center space-x-3 group">
               <div className="relative">
                 <div className="absolute inset-0 bg-blue-600 rounded-lg blur opacity-25 group-hover:opacity-40 transition"></div>
-                <Sparkles className="relative w-8 h-8 text-blue-600" />
+                <MessageSquareText className="relative w-8 h-8 text-blue-600" />
               </div>
               <div className="flex flex-col">
                 <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent leading-tight">effyMentor</span>
@@ -104,7 +104,7 @@ export function Layout({ children }: LayoutProps) {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
               <div className="flex items-center space-x-2 text-xl font-bold mb-4">
-                <Sparkles className="w-6 h-6 text-blue-600" />
+                <MessageSquareText className="w-6 h-6 text-blue-600" />
                 <span className="bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">effyMentor</span>
               </div>
               <p className="text-slate-600 text-sm">
