@@ -53,8 +53,8 @@ export function EpisodeViewPage() {
         .from('podcast_episodes')
         .select(`
           *,
-          guest:guest_id(full_name, professional_title, bio, linkedin_url),
-          moderator:moderator_id(full_name)
+          guest:profiles!podcast_episodes_guest_id_fkey(full_name, professional_title, bio, linkedin_url),
+          moderator:profiles!podcast_episodes_moderator_id_fkey(full_name)
         `)
         .eq('id', episodeId)
         .single();

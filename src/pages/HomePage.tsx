@@ -194,7 +194,7 @@ export function HomePage() {
               {featuredPodcasts.map((episode) => (
                 <Link
                   key={episode.id}
-                  to={`/episode/${episode.id}`}
+                  to={`/podcasts/episode/${episode.id}`}
                   className="group bg-white rounded-2xl p-4 sm:p-5 shadow-lg hover:shadow-2xl transition-all border-2 border-slate-200 hover:border-cyan-400 relative flex flex-col"
                 >
                   <div className="absolute top-3 right-3 z-10">
