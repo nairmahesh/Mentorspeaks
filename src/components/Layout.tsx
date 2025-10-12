@@ -28,23 +28,23 @@ export function Layout({ children }: LayoutProps) {
           <div className="flex justify-between items-center h-16">
             <Link to="/" className="flex items-center space-x-3 group">
               <div className="relative">
-                <div className="absolute inset-0 bg-orange-600 rounded-lg blur opacity-25 group-hover:opacity-40 transition"></div>
-                <MessageSquareText className="relative w-8 h-8 text-orange-600" />
+                <div className="absolute inset-0 bg-blue-600 rounded-lg blur opacity-25 group-hover:opacity-40 transition"></div>
+                <MessageSquareText className="relative w-8 h-8 text-blue-600" />
               </div>
               <div className="flex flex-col">
-                <span className="text-2xl font-bold bg-gradient-to-r from-orange-600 to-orange-800 bg-clip-text text-transparent leading-tight">effyMentor</span>
+                <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent leading-tight">effyMentor</span>
                 <span className="text-xs text-slate-500 font-medium italic">Where Experience Speaks</span>
               </div>
             </Link>
 
             {user && (
               <div className="hidden lg:flex items-center space-x-6">
-                <Link to="/feed" className="flex items-center space-x-1 text-orange-600 hover:text-orange-700 transition">
+                <Link to="/feed" className="flex items-center space-x-1 text-blue-600 hover:text-blue-700 transition">
                   <Sparkles className="w-5 h-5" />
                   <span className="font-medium">My Feed</span>
                 </Link>
 
-                <Link to="/podcasts" className="flex items-center space-x-1 text-orange-600 hover:text-orange-700 transition">
+                <Link to="/podcasts" className="flex items-center space-x-1 text-blue-600 hover:text-blue-700 transition">
                   <Radio className="w-5 h-5" />
                   <span className="font-medium">Podcasts</span>
                 </Link>
@@ -68,7 +68,7 @@ export function Layout({ children }: LayoutProps) {
 
                 {isModerator && (
                   <>
-                    <Link to="/podcasts/manage" className="flex items-center space-x-1 text-orange-600 hover:text-orange-700 transition">
+                    <Link to="/podcasts/manage" className="flex items-center space-x-1 text-blue-600 hover:text-blue-700 transition">
                       <Settings className="w-5 h-5" />
                       <span className="font-medium">Podcasts</span>
                     </Link>
@@ -96,7 +96,7 @@ export function Layout({ children }: LayoutProps) {
 
             {user && (
               <div className="lg:hidden flex items-center space-x-4">
-                <Link to="/feed" className="text-orange-600 hover:text-orange-700 transition">
+                <Link to="/feed" className="text-blue-600 hover:text-blue-700 transition">
                   <Sparkles className="w-6 h-6" />
                 </Link>
                 <Link to="/questions" className="text-slate-600 hover:text-slate-900 transition">
@@ -118,8 +118,8 @@ export function Layout({ children }: LayoutProps) {
           <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
             <div>
               <div className="flex items-center space-x-2 text-xl font-bold mb-4">
-                <MessageSquareText className="w-6 h-6 text-orange-600" />
-                <span className="bg-gradient-to-r from-orange-600 to-orange-800 bg-clip-text text-transparent">effyMentor</span>
+                <MessageSquareText className="w-6 h-6 text-blue-600" />
+                <span className="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">effyMentor</span>
               </div>
               <p className="text-slate-600 text-sm">
                 Empowering professionals to share authentic insights through impactful conversations.

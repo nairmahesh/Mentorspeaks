@@ -113,7 +113,7 @@ export function PodcastManagePage() {
       <Layout>
         <div className="flex items-center justify-center min-h-screen">
           <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600 mx-auto"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
             <p className="mt-4 text-slate-600">Loading...</p>
           </div>
         </div>
@@ -141,7 +141,7 @@ export function PodcastManagePage() {
             {isAdmin && (
               <Link
                 to="/moderators/manage"
-                className="flex items-center space-x-2 bg-gradient-to-r from-orange-500 to-orange-600 text-white px-4 py-2 rounded-lg hover:from-orange-600 hover:to-orange-700 transition"
+                className="flex items-center space-x-2 bg-gradient-to-r from-cyan-500 to-blue-600 text-white px-4 py-2 rounded-lg hover:from-blue-600 hover:to-blue-700 transition"
               >
                 <Shield className="w-5 h-5" />
                 <span>Manage Moderators</span>
@@ -149,7 +149,7 @@ export function PodcastManagePage() {
             )}
             <Link
               to="/podcasts/series/new"
-              className="flex items-center space-x-2 bg-orange-600 text-white px-4 py-2 rounded-lg hover:bg-orange-700 transition"
+              className="flex items-center space-x-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
             >
               <Plus className="w-5 h-5" />
               <span>New Series</span>
@@ -191,7 +191,7 @@ export function PodcastManagePage() {
                     </div>
                     <Link
                       to={`/podcasts/series/${s.id}/edit`}
-                      className="text-orange-600 hover:text-orange-700 p-2"
+                      className="text-blue-600 hover:text-blue-700 p-2"
                     >
                       <Edit className="w-4 h-4" />
                     </Link>
@@ -210,7 +210,7 @@ export function PodcastManagePage() {
             <div className="mb-6">
               <div className="grid grid-cols-4 gap-4 mb-6">
                 <div className="bg-white rounded-lg border border-slate-200 p-4">
-                  <div className="text-2xl font-bold text-orange-600">{stats.total}</div>
+                  <div className="text-2xl font-bold text-blue-600">{stats.total}</div>
                   <div className="text-sm text-slate-600">Total Episodes</div>
                 </div>
                 <div className="bg-white rounded-lg border border-slate-200 p-4">
@@ -218,7 +218,7 @@ export function PodcastManagePage() {
                   <div className="text-sm text-slate-600">Today</div>
                 </div>
                 <div className="bg-white rounded-lg border border-slate-200 p-4">
-                  <div className="text-2xl font-bold text-orange-600">{stats.future}</div>
+                  <div className="text-2xl font-bold text-blue-600">{stats.future}</div>
                   <div className="text-sm text-slate-600">Upcoming</div>
                 </div>
                 <div className="bg-white rounded-lg border border-slate-200 p-4">
@@ -232,7 +232,7 @@ export function PodcastManagePage() {
                   onClick={() => setActiveTab('today')}
                   className={`px-4 py-2 font-medium transition ${
                     activeTab === 'today'
-                      ? 'text-orange-600 border-b-2 border-orange-600'
+                      ? 'text-blue-600 border-b-2 border-blue-600'
                       : 'text-slate-600 hover:text-slate-900'
                   }`}
                 >
@@ -242,7 +242,7 @@ export function PodcastManagePage() {
                   onClick={() => setActiveTab('future')}
                   className={`px-4 py-2 font-medium transition ${
                     activeTab === 'future'
-                      ? 'text-orange-600 border-b-2 border-orange-600'
+                      ? 'text-blue-600 border-b-2 border-blue-600'
                       : 'text-slate-600 hover:text-slate-900'
                   }`}
                 >
@@ -252,7 +252,7 @@ export function PodcastManagePage() {
                   onClick={() => setActiveTab('past')}
                   className={`px-4 py-2 font-medium transition ${
                     activeTab === 'past'
-                      ? 'text-orange-600 border-b-2 border-orange-600'
+                      ? 'text-blue-600 border-b-2 border-blue-600'
                       : 'text-slate-600 hover:text-slate-900'
                   }`}
                 >
@@ -298,7 +298,7 @@ export function PodcastManagePage() {
                           ep.status === 'published'
                             ? 'bg-green-100 text-green-700'
                             : ep.status === 'recording'
-                            ? 'bg-orange-100 text-orange-700'
+                            ? 'bg-blue-100 text-blue-700'
                             : ep.status === 'scheduled'
                             ? 'bg-yellow-100 text-yellow-700'
                             : 'bg-slate-100 text-slate-700'
@@ -323,7 +323,7 @@ export function PodcastManagePage() {
                       </Link>
                       <Link
                         to={`/podcasts/episode/${ep.id}/edit`}
-                        className="text-orange-600 hover:text-orange-700 p-2"
+                        className="text-blue-600 hover:text-blue-700 p-2"
                         title="Edit Episode"
                       >
                         <Edit className="w-4 h-4" />

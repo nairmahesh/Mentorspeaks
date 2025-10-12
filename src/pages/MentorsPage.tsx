@@ -5,7 +5,7 @@ import { ArrowRight, Users, Award, DollarSign, Sparkles, Globe, CheckCircle, Hea
 export function MentorsPage() {
   return (
     <PublicLayout>
-      <div className="bg-gradient-to-br from-orange-600 to-orange-800 text-white py-20">
+      <div className="bg-gradient-to-br from-blue-600 to-cyan-600 text-white py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
@@ -19,13 +19,13 @@ export function MentorsPage() {
               <p className="text-2xl font-semibold text-yellow-300 mb-4">
                 Share Your Expertise, Shape Careers
               </p>
-              <p className="text-xl text-orange-100 mb-8 leading-relaxed">
+              <p className="text-xl text-blue-100 mb-8 leading-relaxed">
                 Join our community of industry leaders and help professionals navigate their career journey through personalized video answers
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link
                   to="/register"
-                  className="inline-flex items-center justify-center space-x-2 bg-white text-orange-600 px-8 py-4 rounded-lg font-bold text-lg hover:bg-orange-50 transition shadow-xl"
+                  className="inline-flex items-center justify-center space-x-2 bg-white text-blue-600 px-8 py-4 rounded-lg font-bold text-lg hover:bg-blue-50 transition shadow-xl"
                 >
                   <span>Start Mentoring</span>
                   <ArrowRight className="w-5 h-5" />
@@ -42,22 +42,22 @@ export function MentorsPage() {
               <div className="bg-white bg-opacity-10 backdrop-blur-sm rounded-xl p-6 border border-white border-opacity-20">
                 <Award className="w-10 h-10 text-yellow-300 mb-3" />
                 <div className="text-3xl font-bold mb-1">Build Authority</div>
-                <p className="text-orange-100 text-sm">Establish yourself as an industry expert</p>
+                <p className="text-blue-100 text-sm">Establish yourself as an industry expert</p>
               </div>
               <div className="bg-white bg-opacity-10 backdrop-blur-sm rounded-xl p-6 border border-white border-opacity-20 mt-8">
                 <DollarSign className="w-10 h-10 text-green-300 mb-3" />
                 <div className="text-3xl font-bold mb-1">Earn Income</div>
-                <p className="text-orange-100 text-sm">Monetize your knowledge and time</p>
+                <p className="text-blue-100 text-sm">Monetize your knowledge and time</p>
               </div>
               <div className="bg-white bg-opacity-10 backdrop-blur-sm rounded-xl p-6 border border-white border-opacity-20">
-                <Globe className="w-10 h-10 text-orange-300 mb-3" />
+                <Globe className="w-10 h-10 text-blue-300 mb-3" />
                 <div className="text-3xl font-bold mb-1">Global Reach</div>
-                <p className="text-orange-100 text-sm">Impact professionals worldwide</p>
+                <p className="text-blue-100 text-sm">Impact professionals worldwide</p>
               </div>
               <div className="bg-white bg-opacity-10 backdrop-blur-sm rounded-xl p-6 border border-white border-opacity-20 mt-8">
                 <Sparkles className="w-10 h-10 text-purple-300 mb-3" />
                 <div className="text-3xl font-bold mb-1">Flexible</div>
-                <p className="text-orange-100 text-sm">Answer questions on your schedule</p>
+                <p className="text-blue-100 text-sm">Answer questions on your schedule</p>
               </div>
             </div>
           </div>
@@ -74,8 +74,8 @@ export function MentorsPage() {
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-2xl p-8 border border-orange-200">
-              <div className="w-14 h-14 bg-orange-600 rounded-xl flex items-center justify-center mb-6">
+            <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-8 border border-blue-200">
+              <div className="w-14 h-14 bg-blue-600 rounded-xl flex items-center justify-center mb-6">
                 <Award className="w-7 h-7 text-white" />
               </div>
               <h3 className="text-2xl font-bold text-slate-900 mb-3">Build Your Brand</h3>
@@ -94,8 +94,8 @@ export function MentorsPage() {
               </p>
             </div>
 
-            <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-2xl p-8 border border-orange-200">
-              <div className="w-14 h-14 bg-orange-600 rounded-xl flex items-center justify-center mb-6">
+            <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-8 border border-blue-200">
+              <div className="w-14 h-14 bg-blue-600 rounded-xl flex items-center justify-center mb-6">
                 <Globe className="w-7 h-7 text-white" />
               </div>
               <h3 className="text-2xl font-bold text-slate-900 mb-3">Global Impact</h3>
@@ -137,11 +137,11 @@ export function MentorsPage() {
         </div>
       </div>
 
-      <div className="py-20 bg-gradient-to-br from-amber-50 via-orange-50 to-rose-50">
+      <div className="py-20 bg-gradient-to-br from-amber-50 via-blue-50 to-rose-50">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-white rounded-3xl p-12 shadow-xl border border-orange-100">
+          <div className="bg-white rounded-3xl p-12 shadow-xl border border-blue-100">
             <div className="text-center mb-12">
-              <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-rose-500 to-orange-500 rounded-full mb-6">
+              <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-rose-500 to-cyan-500 rounded-full mb-6">
                 <Heart className="w-10 h-10 text-white" fill="white" />
               </div>
               <h2 className="text-4xl font-bold text-slate-900 mb-4">Make a Difference That Matters</h2>
@@ -151,8 +151,8 @@ export function MentorsPage() {
             </div>
 
             <div className="grid md:grid-cols-2 gap-8 mb-12">
-              <div className="bg-gradient-to-br from-orange-50 to-cyan-50 rounded-2xl p-8 border border-orange-100">
-                <Users2 className="w-12 h-12 text-orange-600 mb-4" />
+              <div className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-2xl p-8 border border-blue-100">
+                <Users2 className="w-12 h-12 text-blue-600 mb-4" />
                 <h3 className="text-xl font-bold text-slate-900 mb-3">Empower the Next Generation</h3>
                 <p className="text-slate-700 leading-relaxed">
                   Remember when you needed guidance and someone took the time to help? Now it's your turn. Share the lessons learned from your journey and help others avoid the pitfalls you faced.
@@ -191,7 +191,7 @@ export function MentorsPage() {
 
           <div className="space-y-8">
             <div className="flex items-start space-x-6 bg-white rounded-2xl p-8 shadow-sm border border-slate-200">
-              <div className="w-12 h-12 bg-orange-600 text-white rounded-full flex items-center justify-center font-bold text-xl flex-shrink-0">
+              <div className="w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold text-xl flex-shrink-0">
                 1
               </div>
               <div>
@@ -203,7 +203,7 @@ export function MentorsPage() {
             </div>
 
             <div className="flex items-start space-x-6 bg-white rounded-2xl p-8 shadow-sm border border-slate-200">
-              <div className="w-12 h-12 bg-orange-600 text-white rounded-full flex items-center justify-center font-bold text-xl flex-shrink-0">
+              <div className="w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold text-xl flex-shrink-0">
                 2
               </div>
               <div>
@@ -215,7 +215,7 @@ export function MentorsPage() {
             </div>
 
             <div className="flex items-start space-x-6 bg-white rounded-2xl p-8 shadow-sm border border-slate-200">
-              <div className="w-12 h-12 bg-orange-600 text-white rounded-full flex items-center justify-center font-bold text-xl flex-shrink-0">
+              <div className="w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold text-xl flex-shrink-0">
                 3
               </div>
               <div>
@@ -227,7 +227,7 @@ export function MentorsPage() {
             </div>
 
             <div className="flex items-start space-x-6 bg-white rounded-2xl p-8 shadow-sm border border-slate-200">
-              <div className="w-12 h-12 bg-orange-600 text-white rounded-full flex items-center justify-center font-bold text-xl flex-shrink-0">
+              <div className="w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold text-xl flex-shrink-0">
                 4
               </div>
               <div>
@@ -295,23 +295,23 @@ export function MentorsPage() {
         </div>
       </div>
 
-      <div className="bg-gradient-to-br from-orange-600 to-orange-800 text-white py-20">
+      <div className="bg-gradient-to-br from-blue-600 to-cyan-600 text-white py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-4xl font-bold mb-4">Ready to Make an Impact?</h2>
-          <p className="text-xl text-orange-100 mb-10 max-w-2xl mx-auto">
+          <p className="text-xl text-blue-100 mb-10 max-w-2xl mx-auto">
             Join our community of mentors and start shaping the next generation of professionals
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
               to="/register"
-              className="inline-flex items-center space-x-2 bg-white text-orange-600 px-10 py-5 rounded-xl font-bold text-xl hover:bg-orange-50 transition shadow-2xl"
+              className="inline-flex items-center space-x-2 bg-white text-blue-600 px-10 py-5 rounded-xl font-bold text-xl hover:bg-blue-50 transition shadow-2xl"
             >
               <span>Become a Mentor Today</span>
               <ArrowRight className="w-6 h-6" />
             </Link>
             <Link
               to="/browse-mentors"
-              className="inline-flex items-center space-x-2 bg-orange-700 text-white px-10 py-5 rounded-xl font-bold text-xl hover:bg-blue-800 transition border-2 border-orange-400"
+              className="inline-flex items-center space-x-2 bg-blue-700 text-white px-10 py-5 rounded-xl font-bold text-xl hover:bg-blue-800 transition border-2 border-cyan-400"
             >
               <Users className="w-6 h-6" />
               <span>Browse Mentors</span>

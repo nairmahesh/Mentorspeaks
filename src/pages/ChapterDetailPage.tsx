@@ -43,7 +43,7 @@ interface Member {
 
 const roleIcons = {
   chapter_lead: <Crown className="w-5 h-5 text-yellow-600" />,
-  co_lead: <Shield className="w-5 h-5 text-orange-600" />,
+  co_lead: <Shield className="w-5 h-5 text-blue-600" />,
   community_manager: <UserCheck className="w-5 h-5 text-green-600" />,
   advisor: <Users className="w-5 h-5 text-purple-600" />
 };
@@ -190,7 +190,7 @@ export function ChapterDetailPage() {
       <PublicLayout>
         <div className="flex items-center justify-center min-h-screen">
           <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600 mx-auto"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
             <p className="mt-4 text-slate-600">Loading chapter...</p>
           </div>
         </div>
@@ -215,12 +215,12 @@ export function ChapterDetailPage() {
     <PublicLayout>
       <div className="max-w-7xl mx-auto px-4 py-8">
         <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mb-8">
-          <div className="h-64 bg-gradient-to-br from-orange-500 to-orange-700 relative">
+          <div className="h-64 bg-gradient-to-br from-cyan-500 to-blue-700 relative">
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="text-center text-white">
                 <MapPin className="w-20 h-20 mx-auto mb-4 opacity-50" />
                 <h1 className="text-4xl font-bold mb-2">{chapter.name}</h1>
-                <p className="text-xl text-orange-100">{chapter.region}</p>
+                <p className="text-xl text-blue-100">{chapter.region}</p>
               </div>
             </div>
           </div>
@@ -262,7 +262,7 @@ export function ChapterDetailPage() {
                 <button
                   onClick={requestToJoin}
                   disabled={requesting}
-                  className="bg-orange-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-orange-700 transition disabled:opacity-50"
+                  className="bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition disabled:opacity-50"
                 >
                   {requesting ? 'Requesting...' : 'Request to Join'}
                 </button>
@@ -274,7 +274,7 @@ export function ChapterDetailPage() {
                 onClick={() => setActiveTab('overview')}
                 className={`px-4 py-2 font-medium transition ${
                   activeTab === 'overview'
-                    ? 'text-orange-600 border-b-2 border-orange-600'
+                    ? 'text-blue-600 border-b-2 border-blue-600'
                     : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
@@ -284,7 +284,7 @@ export function ChapterDetailPage() {
                 onClick={() => setActiveTab('leadership')}
                 className={`px-4 py-2 font-medium transition ${
                   activeTab === 'leadership'
-                    ? 'text-orange-600 border-b-2 border-orange-600'
+                    ? 'text-blue-600 border-b-2 border-blue-600'
                     : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
@@ -294,7 +294,7 @@ export function ChapterDetailPage() {
                 onClick={() => setActiveTab('members')}
                 className={`px-4 py-2 font-medium transition ${
                   activeTab === 'members'
-                    ? 'text-orange-600 border-b-2 border-orange-600'
+                    ? 'text-blue-600 border-b-2 border-blue-600'
                     : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
@@ -315,7 +315,7 @@ export function ChapterDetailPage() {
                     {chapter.allowed_countries.map((country) => (
                       <span
                         key={country}
-                        className="px-3 py-1 bg-orange-50 text-orange-700 rounded-full text-sm font-medium"
+                        className="px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-sm font-medium"
                       >
                         {country}
                       </span>
@@ -334,7 +334,7 @@ export function ChapterDetailPage() {
                           </div>
                           <div className="flex-1">
                             <h4 className="font-semibold text-slate-900">{leader.user.full_name}</h4>
-                            <p className="text-sm text-orange-600 font-medium">{leader.title}</p>
+                            <p className="text-sm text-blue-600 font-medium">{leader.title}</p>
                           </div>
                         </div>
                       ))}
@@ -354,7 +354,7 @@ export function ChapterDetailPage() {
                       </div>
                       <div className="flex-1">
                         <h3 className="text-xl font-bold text-slate-900">{leader.user.full_name}</h3>
-                        <p className="text-orange-600 font-medium mb-1">{leader.title}</p>
+                        <p className="text-blue-600 font-medium mb-1">{leader.title}</p>
                         {leader.user.professional_title && (
                           <p className="text-slate-600 text-sm mb-3">{leader.user.professional_title}</p>
                         )}
@@ -366,7 +366,7 @@ export function ChapterDetailPage() {
                             href={leader.user.linkedin_url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center space-x-2 text-orange-600 hover:text-orange-700"
+                            className="inline-flex items-center space-x-2 text-blue-600 hover:text-blue-700"
                           >
                             <Linkedin className="w-4 h-4" />
                             <span className="text-sm font-medium">Connect on LinkedIn</span>

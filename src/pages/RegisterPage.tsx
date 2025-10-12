@@ -162,19 +162,19 @@ export function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-slate-50 to-slate-100 flex items-center justify-center px-4 py-12">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-slate-50 to-slate-100 flex items-center justify-center px-4 py-12">
       <div className="max-w-2xl w-full">
         <Link
           to="/"
-          className="inline-flex items-center space-x-2 text-slate-600 hover:text-orange-600 mb-6 font-medium transition"
+          className="inline-flex items-center space-x-2 text-slate-600 hover:text-blue-600 mb-6 font-medium transition"
         >
           <ArrowLeft className="w-5 h-5" />
           <span>Back to Home</span>
         </Link>
 
         <div className="text-center mb-8">
-          <Link to="/" className="inline-flex items-center space-x-3 text-3xl font-bold text-slate-900 mb-2 hover:text-orange-600 transition">
-            <Video className="w-10 h-10 text-orange-600" />
+          <Link to="/" className="inline-flex items-center space-x-3 text-3xl font-bold text-slate-900 mb-2 hover:text-blue-600 transition">
+            <Video className="w-10 h-10 text-blue-600" />
             <div className="flex flex-col">
               <span>effyMentor</span>
               <span className="text-xs text-slate-500 font-medium italic -mt-1">Where Experience Speaks</span>
@@ -188,13 +188,13 @@ export function RegisterPage() {
             <div className="mb-6">
               <div className="flex items-center justify-center space-x-2">
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
-                  step >= 1 ? 'bg-orange-600 text-white' : 'bg-slate-200 text-slate-600'
+                  step >= 1 ? 'bg-blue-600 text-white' : 'bg-slate-200 text-slate-600'
                 }`}>
                   1
                 </div>
-                <div className={`h-1 w-16 ${step >= 2 ? 'bg-orange-600' : 'bg-slate-200'}`}></div>
+                <div className={`h-1 w-16 ${step >= 2 ? 'bg-blue-600' : 'bg-slate-200'}`}></div>
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
-                  step >= 2 ? 'bg-orange-600 text-white' : 'bg-slate-200 text-slate-600'
+                  step >= 2 ? 'bg-blue-600 text-white' : 'bg-slate-200 text-slate-600'
                 }`}>
                   2
                 </div>
@@ -229,7 +229,7 @@ export function RegisterPage() {
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
                     required
-                    className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition"
+                    className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition"
                     placeholder="John Doe"
                   />
                 </div>
@@ -244,7 +244,7 @@ export function RegisterPage() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
-                    className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition"
+                    className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition"
                     placeholder="you@example.com"
                   />
                 </div>
@@ -260,7 +260,7 @@ export function RegisterPage() {
                     onChange={(e) => setPassword(e.target.value)}
                     required
                     minLength={6}
-                    className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition"
+                    className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition"
                     placeholder="••••••••"
                   />
                 </div>
@@ -275,11 +275,11 @@ export function RegisterPage() {
                       onClick={() => setRole('seeker')}
                       className={`px-4 py-4 rounded-xl border-2 transition ${
                         role === 'seeker'
-                          ? 'border-orange-600 bg-orange-50 text-orange-700 shadow-md'
+                          ? 'border-blue-600 bg-blue-50 text-blue-700 shadow-md'
                           : 'border-slate-300 bg-white text-slate-700 hover:border-slate-400'
                       }`}
                     >
-                      <UserCircle className="w-12 h-12 mx-auto mb-2 text-orange-600" />
+                      <UserCircle className="w-12 h-12 mx-auto mb-2 text-blue-600" />
                       <div className="font-semibold">Seeker</div>
                       <div className="text-xs mt-1">Ask questions</div>
                     </button>
@@ -289,11 +289,11 @@ export function RegisterPage() {
                       onClick={() => setRole('mentor')}
                       className={`px-4 py-4 rounded-xl border-2 transition ${
                         role === 'mentor'
-                          ? 'border-orange-600 bg-orange-50 text-orange-700 shadow-md'
+                          ? 'border-blue-600 bg-blue-50 text-blue-700 shadow-md'
                           : 'border-slate-300 bg-white text-slate-700 hover:border-slate-400'
                       }`}
                     >
-                      <GraduationCap className="w-12 h-12 mx-auto mb-2 text-orange-600" />
+                      <GraduationCap className="w-12 h-12 mx-auto mb-2 text-blue-600" />
                       <div className="font-semibold">Mentor</div>
                       <div className="text-xs mt-1">Share insights</div>
                     </button>
@@ -315,7 +315,7 @@ export function RegisterPage() {
                         value={linkedinUrl}
                         onChange={(e) => setLinkedinUrl(e.target.value)}
                         required
-                        className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition"
+                        className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition"
                         placeholder="https://linkedin.com/in/yourprofile"
                       />
                     </div>
@@ -332,7 +332,7 @@ export function RegisterPage() {
                         value={yearsOfExperience}
                         onChange={(e) => setYearsOfExperience(e.target.value)}
                         required
-                        className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition"
+                        className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition"
                         placeholder="10"
                       />
                     </div>
@@ -358,14 +358,14 @@ export function RegisterPage() {
                           onClick={() => toggleIndustry(industry.id)}
                           className={`px-3 py-3 rounded-xl border-2 transition text-left text-sm hover:shadow-md ${
                             selectedIndustries.includes(industry.id)
-                              ? 'border-orange-600 bg-orange-50 text-orange-700 shadow-md'
-                              : 'border-slate-300 bg-white text-slate-700 hover:border-orange-300'
+                              ? 'border-blue-600 bg-blue-50 text-blue-700 shadow-md'
+                              : 'border-slate-300 bg-white text-slate-700 hover:border-blue-300'
                           }`}
                         >
                           <div className="flex items-center space-x-3">
                             <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
                               selectedIndustries.includes(industry.id)
-                                ? 'bg-orange-600'
+                                ? 'bg-blue-600'
                                 : 'bg-slate-100'
                             }`}>
                               <IconComponent className={`w-4 h-4 ${
@@ -398,7 +398,7 @@ export function RegisterPage() {
                         onClick={() => toggleMenteeType(type.value)}
                         className={`px-3 py-2 rounded-lg border-2 transition text-sm ${
                           willingToMentor.includes(type.value)
-                            ? 'border-orange-600 bg-orange-50 text-orange-700'
+                            ? 'border-blue-600 bg-blue-50 text-blue-700'
                             : 'border-slate-300 bg-white text-slate-700 hover:border-slate-400'
                         }`}
                       >
@@ -431,7 +431,7 @@ export function RegisterPage() {
                       onClick={() => setMentoringRateType('paid')}
                       className={`px-4 py-3 rounded-lg border-2 transition text-center ${
                         mentoringRateType === 'paid'
-                          ? 'border-orange-600 bg-orange-50 text-orange-700'
+                          ? 'border-blue-600 bg-blue-50 text-blue-700'
                           : 'border-slate-300 bg-white text-slate-700 hover:border-slate-400'
                       }`}
                     >
@@ -444,7 +444,7 @@ export function RegisterPage() {
                       onClick={() => setMentoringRateType('both')}
                       className={`px-4 py-3 rounded-lg border-2 transition text-center ${
                         mentoringRateType === 'both'
-                          ? 'border-orange-600 bg-orange-50 text-orange-700'
+                          ? 'border-blue-600 bg-blue-50 text-blue-700'
                           : 'border-slate-300 bg-white text-slate-700 hover:border-slate-400'
                       }`}
                     >
@@ -470,7 +470,7 @@ export function RegisterPage() {
                           value={freeHoursPerWeek}
                           onChange={(e) => setFreeHoursPerWeek(e.target.value)}
                           required
-                          className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition"
+                          className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition"
                           placeholder="5"
                         />
                       </div>
@@ -489,7 +489,7 @@ export function RegisterPage() {
                           value={hourlyRate}
                           onChange={(e) => setHourlyRate(e.target.value)}
                           required
-                          className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition"
+                          className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition"
                           placeholder="100"
                         />
                       </div>
@@ -504,7 +504,7 @@ export function RegisterPage() {
                       type="checkbox"
                       checked={offersConsulting}
                       onChange={(e) => setOffersConsulting(e.target.checked)}
-                      className="w-4 h-4 text-orange-600 border-slate-300 rounded focus:ring-orange-500"
+                      className="w-4 h-4 text-blue-600 border-slate-300 rounded focus:ring-cyan-500"
                     />
                     <label htmlFor="offersConsulting" className="text-sm font-medium text-slate-700">
                       I want to offer one-on-one consulting services
@@ -537,7 +537,7 @@ export function RegisterPage() {
                             onClick={() => setConsultingType('paid')}
                             className={`px-4 py-3 rounded-lg border-2 transition text-center ${
                               consultingType === 'paid'
-                                ? 'border-orange-600 bg-orange-50 text-orange-700'
+                                ? 'border-blue-600 bg-blue-50 text-blue-700'
                                 : 'border-slate-300 bg-white text-slate-700 hover:border-slate-400'
                             }`}
                           >
@@ -578,7 +578,7 @@ export function RegisterPage() {
                             required
                             min="0"
                             step="100"
-                            className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                            className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
                             placeholder="e.g., 2000"
                           />
                         </div>
@@ -597,7 +597,7 @@ export function RegisterPage() {
                             required
                             min="0"
                             max="100"
-                            className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                            className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
                             placeholder="e.g., 5"
                           />
                         </div>
@@ -612,7 +612,7 @@ export function RegisterPage() {
                           value={consultingDescription}
                           onChange={(e) => setConsultingDescription(e.target.value)}
                           rows={3}
-                          className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                          className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
                           placeholder="Describe what you can help with in consulting sessions..."
                         />
                       </div>
@@ -636,7 +636,7 @@ export function RegisterPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="flex-1 bg-orange-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
+                className="flex-1 bg-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
               >
                 <span>{loading ? 'Creating account...' : step === 2 || role === 'seeker' ? 'Create Account' : 'Continue'}</span>
                 {step === 1 && role === 'mentor' && !loading && <ChevronRight className="w-5 h-5" />}
@@ -647,7 +647,7 @@ export function RegisterPage() {
           <div className="mt-6 text-center">
             <p className="text-slate-600 text-sm">
               Already have an account?{' '}
-              <Link to="/login" className="text-orange-600 hover:text-orange-700 font-medium">
+              <Link to="/login" className="text-blue-600 hover:text-blue-700 font-medium">
                 Sign in
               </Link>
             </p>

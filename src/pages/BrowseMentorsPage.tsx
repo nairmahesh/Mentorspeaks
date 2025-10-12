@@ -64,7 +64,7 @@ export function BrowseMentorsPage() {
     return (
       <PublicLayout>
         <div className="flex items-center justify-center min-h-screen">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
         </div>
       </PublicLayout>
     );
@@ -72,11 +72,11 @@ export function BrowseMentorsPage() {
 
   return (
     <PublicLayout>
-      <div className="bg-gradient-to-br from-orange-600 to-orange-800 text-white py-16">
+      <div className="bg-gradient-to-br from-blue-600 to-cyan-600 text-white py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-8">
             <h1 className="text-5xl font-bold mb-4">Browse Expert Mentors</h1>
-            <p className="text-xl text-orange-100 max-w-3xl mx-auto">
+            <p className="text-xl text-blue-100 max-w-3xl mx-auto">
               Connect with industry professionals who can guide your career journey
             </p>
           </div>
@@ -89,7 +89,7 @@ export function BrowseMentorsPage() {
                 placeholder="Search by name, title, expertise..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-12 pr-4 py-4 rounded-xl border-0 text-slate-900 text-lg focus:ring-4 focus:ring-orange-300"
+                className="w-full pl-12 pr-4 py-4 rounded-xl border-0 text-slate-900 text-lg focus:ring-4 focus:ring-blue-300"
               />
             </div>
           </div>
@@ -107,7 +107,7 @@ export function BrowseMentorsPage() {
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as SortOption)}
-              className="px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent bg-white text-slate-900 font-medium"
+              className="px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent bg-white text-slate-900 font-medium"
             >
               <option value="rating">Highest Rated</option>
               <option value="answers">Most Answers</option>
@@ -122,11 +122,11 @@ export function BrowseMentorsPage() {
             {filteredMentors.map((mentor) => (
               <div
                 key={mentor.id}
-                className={`bg-white rounded-2xl p-6 shadow-sm border-2 ${mentor.is_stalwart ? 'border-amber-300 hover:border-amber-400' : 'border-slate-200 hover:border-orange-400'} hover:shadow-xl transition-all group relative`}
+                className={`bg-white rounded-2xl p-6 shadow-sm border-2 ${mentor.is_stalwart ? 'border-amber-300 hover:border-amber-400' : 'border-slate-200 hover:border-cyan-400'} hover:shadow-xl transition-all group relative`}
               >
                 {mentor.is_stalwart && (
                   <div className="absolute top-4 right-4">
-                    <div className="bg-gradient-to-r from-amber-400 to-orange-500 text-white px-2.5 py-1 rounded-lg text-xs font-bold flex items-center space-x-1 shadow-lg">
+                    <div className="bg-gradient-to-r from-amber-400 to-cyan-500 text-white px-2.5 py-1 rounded-lg text-xs font-bold flex items-center space-x-1 shadow-lg">
                       <Award className="w-3 h-3" />
                       <span>TOP VOICE</span>
                     </div>
@@ -137,20 +137,20 @@ export function BrowseMentorsPage() {
                     <img
                       src={mentor.avatar_url}
                       alt={mentor.full_name}
-                      className="w-16 h-16 rounded-full ring-4 ring-slate-100 group-hover:ring-orange-200 transition flex-shrink-0"
+                      className="w-16 h-16 rounded-full ring-4 ring-slate-100 group-hover:ring-blue-200 transition flex-shrink-0"
                     />
                   ) : (
-                    <div className="w-16 h-16 rounded-full bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center ring-4 ring-slate-100 group-hover:ring-orange-200 transition flex-shrink-0">
+                    <div className="w-16 h-16 rounded-full bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center ring-4 ring-slate-100 group-hover:ring-blue-200 transition flex-shrink-0">
                       <span className="text-2xl font-bold text-white">{mentor.full_name.charAt(0)}</span>
                     </div>
                   )}
                   <div className="flex-1 min-w-0">
-                    <h3 className={`text-lg font-bold text-slate-900 mb-1 transition truncate ${mentor.is_stalwart ? 'group-hover:text-amber-600' : 'group-hover:text-orange-600'}`}>
+                    <h3 className={`text-lg font-bold text-slate-900 mb-1 transition truncate ${mentor.is_stalwart ? 'group-hover:text-amber-600' : 'group-hover:text-blue-600'}`}>
                       {mentor.full_name}
                     </h3>
                     {mentor.stalwart_designation && (
                       <div className="mb-1">
-                        <span className="inline-block bg-gradient-to-r from-amber-100 to-orange-100 text-amber-900 px-2 py-0.5 rounded-full text-xs font-bold border border-amber-300">
+                        <span className="inline-block bg-gradient-to-r from-amber-100 to-blue-100 text-amber-900 px-2 py-0.5 rounded-full text-xs font-bold border border-amber-300">
                           {mentor.stalwart_designation}
                         </span>
                       </div>
@@ -163,7 +163,7 @@ export function BrowseMentorsPage() {
                         href={mentor.linkedin_url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center space-x-1 text-xs text-orange-600 hover:text-orange-700 mt-1"
+                        className="inline-flex items-center space-x-1 text-xs text-blue-600 hover:text-blue-700 mt-1"
                       >
                         <Linkedin className="w-3 h-3" />
                         <span>LinkedIn</span>
@@ -196,7 +196,7 @@ export function BrowseMentorsPage() {
                       {mentor.expertise_areas.slice(0, 3).map((area: string, index: number) => (
                         <span
                           key={index}
-                          className="text-xs bg-orange-50 text-orange-700 px-2 py-1 rounded-full font-medium"
+                          className="text-xs bg-blue-50 text-blue-700 px-2 py-1 rounded-full font-medium"
                         >
                           {area}
                         </span>
@@ -211,12 +211,12 @@ export function BrowseMentorsPage() {
                 )}
 
                 <div className="grid grid-cols-2 gap-3 mb-4">
-                  <div className="bg-orange-50 rounded-lg p-3 text-center">
+                  <div className="bg-blue-50 rounded-lg p-3 text-center">
                     <div className="flex items-center justify-center space-x-1 mb-1">
-                      <MessageCircle className="w-4 h-4 text-orange-600" />
+                      <MessageCircle className="w-4 h-4 text-blue-600" />
                       <span className="text-lg font-bold text-blue-900">{mentor.total_answers || 0}</span>
                     </div>
-                    <div className="text-xs text-orange-700 font-medium">Answers</div>
+                    <div className="text-xs text-blue-700 font-medium">Answers</div>
                   </div>
                   <div className="bg-green-50 rounded-lg p-3 text-center">
                     <div className="flex items-center justify-center space-x-1 mb-1">
@@ -228,7 +228,7 @@ export function BrowseMentorsPage() {
                 </div>
 
                 {mentor.offers_consulting && (
-                  <div className="mb-4 px-3 py-2 bg-gradient-to-r from-orange-50 to-red-50 border border-orange-200 text-blue-900 text-xs font-semibold rounded-lg text-center">
+                  <div className="mb-4 px-3 py-2 bg-gradient-to-r from-blue-50 to-cyan-50 border border-blue-200 text-blue-900 text-xs font-semibold rounded-lg text-center">
                     <div className="flex items-center justify-center space-x-1">
                       <TrendingUp className="w-3 h-3" />
                       <span>Offers Consulting</span>
@@ -240,14 +240,14 @@ export function BrowseMentorsPage() {
                       <div className="text-slate-700 mt-1">₹{mentor.consulting_rate_inr}/hr</div>
                     )}
                     {mentor.consulting_type === 'hybrid' && (
-                      <div className="text-orange-700 mt-1">Free & Paid Options</div>
+                      <div className="text-blue-700 mt-1">Free & Paid Options</div>
                     )}
                   </div>
                 )}
 
                 <Link
                   to={`/profile/${mentor.id}`}
-                  className="block w-full text-center bg-orange-600 text-white py-2.5 px-4 rounded-lg font-semibold hover:bg-orange-700 transition"
+                  className="block w-full text-center bg-blue-600 text-white py-2.5 px-4 rounded-lg font-semibold hover:bg-blue-700 transition"
                 >
                   View Profile
                 </Link>
@@ -268,7 +268,7 @@ export function BrowseMentorsPage() {
             {!searchQuery && (
               <Link
                 to="/register"
-                className="inline-block bg-orange-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-orange-700 transition"
+                className="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition"
               >
                 Become a Mentor
               </Link>
@@ -285,7 +285,7 @@ export function BrowseMentorsPage() {
           </p>
           <Link
             to="/mentors"
-            className="inline-flex items-center space-x-2 bg-orange-600 text-white px-8 py-4 rounded-xl font-bold hover:bg-orange-700 transition shadow-lg"
+            className="inline-flex items-center space-x-2 bg-blue-600 text-white px-8 py-4 rounded-xl font-bold hover:bg-blue-700 transition shadow-lg"
           >
             <span>Learn More</span>
           </Link>

@@ -27,19 +27,19 @@ export function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-slate-50 to-slate-100 flex items-center justify-center px-4">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-slate-50 to-slate-100 flex items-center justify-center px-4">
       <div className="max-w-md w-full">
         <Link
           to="/"
-          className="inline-flex items-center space-x-2 text-slate-600 hover:text-orange-600 mb-6 font-medium transition"
+          className="inline-flex items-center space-x-2 text-slate-600 hover:text-blue-600 mb-6 font-medium transition"
         >
           <ArrowLeft className="w-5 h-5" />
           <span>Back to Home</span>
         </Link>
 
         <div className="text-center mb-8">
-          <Link to="/" className="inline-flex items-center space-x-3 text-3xl font-bold text-slate-900 mb-2 hover:text-orange-600 transition">
-            <Video className="w-10 h-10 text-orange-600" />
+          <Link to="/" className="inline-flex items-center space-x-3 text-3xl font-bold text-slate-900 mb-2 hover:text-blue-600 transition">
+            <Video className="w-10 h-10 text-blue-600" />
             <div className="flex flex-col">
               <span>effyMentor</span>
               <span className="text-xs text-slate-500 font-medium italic -mt-1">Where Experience Speaks</span>
@@ -68,7 +68,7 @@ export function LoginPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition"
+                className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition"
                 placeholder="you@example.com"
               />
             </div>
@@ -83,7 +83,7 @@ export function LoginPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition"
+                className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition"
                 placeholder="••••••••"
               />
             </div>
@@ -91,7 +91,7 @@ export function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-orange-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 transition disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2 transition disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? 'Signing in...' : 'Sign In'}
             </button>
@@ -100,7 +100,7 @@ export function LoginPage() {
           <div className="mt-6 text-center">
             <p className="text-slate-600">
               Don't have an account?{' '}
-              <Link to="/register" className="text-orange-600 hover:text-orange-700 font-medium">
+              <Link to="/register" className="text-blue-600 hover:text-blue-700 font-medium">
                 Sign up
               </Link>
             </p>

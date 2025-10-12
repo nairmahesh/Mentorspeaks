@@ -69,7 +69,7 @@ export function MentorDashboardPage() {
     return (
       <Layout>
         <div className="flex items-center justify-center min-h-screen">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
         </div>
       </Layout>
     );
@@ -80,7 +80,7 @@ export function MentorDashboardPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="mb-8">
           <div className="flex items-center space-x-3 mb-2">
-            <BarChart3 className="w-8 h-8 text-orange-600" />
+            <BarChart3 className="w-8 h-8 text-blue-600" />
             <h1 className="text-4xl font-bold text-slate-900">Mentor Dashboard</h1>
           </div>
           <p className="text-slate-600">Track your impact and engagement</p>
@@ -90,7 +90,7 @@ export function MentorDashboardPage() {
           <div className="bg-white rounded-lg shadow-sm border border-slate-200 p-6">
             <div className="flex items-center justify-between mb-2">
               <span className="text-slate-600">Total Answers</span>
-              <Video className="w-5 h-5 text-orange-600" />
+              <Video className="w-5 h-5 text-blue-600" />
             </div>
             <div className="text-3xl font-bold text-slate-900">{stats.totalAnswers}</div>
           </div>
@@ -106,7 +106,7 @@ export function MentorDashboardPage() {
           <div className="bg-white rounded-lg shadow-sm border border-slate-200 p-6">
             <div className="flex items-center justify-between mb-2">
               <span className="text-slate-600">Total Earnings</span>
-              <DollarSign className="w-5 h-5 text-orange-600" />
+              <DollarSign className="w-5 h-5 text-blue-600" />
             </div>
             <div className="text-3xl font-bold text-slate-900">₹{stats.totalEarnings}</div>
           </div>
@@ -124,7 +124,7 @@ export function MentorDashboardPage() {
           <div className="bg-white rounded-lg shadow-sm border border-slate-200 p-6">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-bold text-slate-900">Recent Answers</h2>
-              <Link to="/mentor/answers" className="text-orange-600 hover:text-orange-700 text-sm font-medium">
+              <Link to="/mentor/answers" className="text-blue-600 hover:text-blue-700 text-sm font-medium">
                 View All
               </Link>
             </div>
@@ -134,7 +134,7 @@ export function MentorDashboardPage() {
                 <Link
                   key={answer.id}
                   to={`/questions/${answer.question_id}`}
-                  className="block border border-slate-200 rounded-lg p-4 hover:border-orange-300 transition"
+                  className="block border border-slate-200 rounded-lg p-4 hover:border-blue-300 transition"
                 >
                   <h3 className="font-semibold text-slate-900 mb-2 line-clamp-1">
                     {answer.question.title}
@@ -172,29 +172,29 @@ export function MentorDashboardPage() {
 
           <div className="bg-white rounded-lg shadow-sm border border-slate-200 p-6">
             <div className="flex items-center space-x-2 mb-6">
-              <TrendingUp className="w-6 h-6 text-orange-500" />
+              <TrendingUp className="w-6 h-6 text-cyan-500" />
               <h2 className="text-xl font-bold text-slate-900">Quick Actions</h2>
             </div>
 
             <div className="space-y-3">
               <Link
                 to="/questions"
-                className="block bg-orange-50 border border-orange-200 rounded-lg p-4 hover:bg-orange-100 transition"
+                className="block bg-blue-50 border border-blue-200 rounded-lg p-4 hover:bg-blue-100 transition"
               >
                 <h3 className="font-semibold text-blue-900 mb-1">Browse Questions</h3>
-                <p className="text-sm text-orange-700">Find questions to answer in your expertise areas</p>
+                <p className="text-sm text-blue-700">Find questions to answer in your expertise areas</p>
               </Link>
 
               {isModerator && (
                 <Link
                   to="/podcasts/manage"
-                  className="block bg-gradient-to-r from-orange-50 to-slate-50 border-2 border-orange-300 rounded-lg p-4 hover:from-orange-100 hover:to-slate-100 transition"
+                  className="block bg-gradient-to-r from-blue-50 to-slate-50 border-2 border-blue-300 rounded-lg p-4 hover:from-blue-100 hover:to-slate-100 transition"
                 >
                   <div className="flex items-center space-x-2 mb-1">
-                    <Radio className="w-5 h-5 text-orange-600" />
+                    <Radio className="w-5 h-5 text-blue-600" />
                     <h3 className="font-semibold text-blue-900">Manage Podcasts</h3>
                   </div>
-                  <p className="text-sm text-orange-700">Create and manage podcast episodes as a moderator</p>
+                  <p className="text-sm text-blue-700">Create and manage podcast episodes as a moderator</p>
                 </Link>
               )}
 
@@ -208,10 +208,10 @@ export function MentorDashboardPage() {
 
               <Link
                 to="/mentor/subscription"
-                className="block bg-orange-50 border border-orange-200 rounded-lg p-4 hover:bg-orange-100 transition"
+                className="block bg-blue-50 border border-blue-200 rounded-lg p-4 hover:bg-blue-100 transition"
               >
                 <h3 className="font-semibold text-blue-900 mb-1">Manage Subscription</h3>
-                <p className="text-sm text-orange-700">Upgrade to unlock more features and visibility</p>
+                <p className="text-sm text-blue-700">Upgrade to unlock more features and visibility</p>
               </Link>
 
               <Link

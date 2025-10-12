@@ -149,7 +149,7 @@ export function CommunityManagePage() {
       <Layout>
         <div className="flex items-center justify-center min-h-screen">
           <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600 mx-auto"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
             <p className="mt-4 text-slate-600">Loading...</p>
           </div>
         </div>
@@ -244,7 +244,7 @@ export function CommunityManagePage() {
                 onClick={() => setActiveTab('pending')}
                 className={`px-4 py-2 font-medium transition ${
                   activeTab === 'pending'
-                    ? 'text-orange-600 border-b-2 border-orange-600'
+                    ? 'text-blue-600 border-b-2 border-blue-600'
                     : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
@@ -254,7 +254,7 @@ export function CommunityManagePage() {
                 onClick={() => setActiveTab('approved')}
                 className={`px-4 py-2 font-medium transition ${
                   activeTab === 'approved'
-                    ? 'text-orange-600 border-b-2 border-orange-600'
+                    ? 'text-blue-600 border-b-2 border-blue-600'
                     : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
@@ -264,7 +264,7 @@ export function CommunityManagePage() {
                 onClick={() => setActiveTab('rejected')}
                 className={`px-4 py-2 font-medium transition ${
                   activeTab === 'rejected'
-                    ? 'text-orange-600 border-b-2 border-orange-600'
+                    ? 'text-blue-600 border-b-2 border-blue-600'
                     : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
@@ -279,7 +279,7 @@ export function CommunityManagePage() {
                     <div className="flex-1">
                       <h3 className="text-lg font-semibold text-slate-900">{request.user.full_name}</h3>
                       {request.user.professional_title && (
-                        <p className="text-orange-600 font-medium">{request.user.professional_title}</p>
+                        <p className="text-blue-600 font-medium">{request.user.professional_title}</p>
                       )}
                       {request.chapter && (
                         <p className="text-sm text-slate-500 mt-1">Chapter: {request.chapter.name}</p>

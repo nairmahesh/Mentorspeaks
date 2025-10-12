@@ -76,7 +76,7 @@ export function QuestionsPage() {
           </div>
           <button
             onClick={handleAskQuestion}
-            className="bg-orange-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-orange-700 transition flex items-center space-x-2"
+            className="bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition flex items-center space-x-2"
           >
             <Plus className="w-5 h-5" />
             <span>Ask Question</span>
@@ -92,7 +92,7 @@ export function QuestionsPage() {
                 placeholder="Search questions..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
               />
             </div>
 
@@ -101,7 +101,7 @@ export function QuestionsPage() {
               <select
                 value={selectedIndustry}
                 onChange={(e) => setSelectedIndustry(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent appearance-none bg-white"
+                className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent appearance-none bg-white"
               >
                 <option value="">All Industries</option>
                 {industries.map((industry) => (
@@ -116,7 +116,7 @@ export function QuestionsPage() {
 
         {loading ? (
           <div className="flex justify-center py-12">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
           </div>
         ) : (
           <div className="space-y-4">
@@ -124,7 +124,7 @@ export function QuestionsPage() {
               <Link
                 key={question.id}
                 to={`/questions/${question.id}`}
-                className="block bg-white rounded-lg shadow-sm border border-slate-200 p-6 hover:border-orange-300 hover:shadow-md transition"
+                className="block bg-white rounded-lg shadow-sm border border-slate-200 p-6 hover:border-blue-300 hover:shadow-md transition"
               >
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
@@ -140,7 +140,7 @@ export function QuestionsPage() {
                       {question.tags.map((tag) => (
                         <span
                           key={tag}
-                          className="px-3 py-1 bg-orange-50 text-orange-600 rounded-full text-sm"
+                          className="px-3 py-1 bg-blue-50 text-blue-600 rounded-full text-sm"
                         >
                           {tag}
                         </span>
@@ -153,7 +153,7 @@ export function QuestionsPage() {
                         question.status === 'open'
                           ? 'bg-green-100 text-green-700'
                           : question.status === 'answered'
-                          ? 'bg-orange-100 text-orange-700'
+                          ? 'bg-blue-100 text-blue-700'
                           : 'bg-slate-100 text-slate-700'
                       }`}
                     >

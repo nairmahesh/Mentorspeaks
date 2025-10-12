@@ -4,7 +4,7 @@ import { Users, Target, BookOpen, Heart, Linkedin } from 'lucide-react';
 export function AboutPage() {
   return (
     <PublicLayout>
-      <div className="bg-gradient-to-b from-orange-50 to-white">
+      <div className="bg-gradient-to-b from-blue-50 to-white">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
           <div className="text-center mb-16">
             <h1 className="text-5xl font-bold text-slate-900 mb-6">About effyMentor</h1>
@@ -18,7 +18,7 @@ export function AboutPage() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <section className="mb-20">
           <div className="flex items-center space-x-3 mb-8">
-            <BookOpen className="w-8 h-8 text-orange-600" />
+            <BookOpen className="w-8 h-8 text-blue-600" />
             <h2 className="text-3xl font-bold text-slate-900">Our Story</h2>
           </div>
           <div className="prose prose-lg max-w-none text-slate-700 space-y-6">
@@ -46,9 +46,9 @@ export function AboutPage() {
           </div>
         </section>
 
-        <section className="mb-20 bg-orange-50 rounded-2xl p-12">
+        <section className="mb-20 bg-blue-50 rounded-2xl p-12">
           <div className="flex items-center space-x-3 mb-8">
-            <Target className="w-8 h-8 text-orange-600" />
+            <Target className="w-8 h-8 text-blue-600" />
             <h2 className="text-3xl font-bold text-slate-900">Our Mission</h2>
           </div>
           <p className="text-xl text-slate-700 leading-relaxed mb-6">
@@ -73,11 +73,11 @@ export function AboutPage() {
 
         <section className="mb-20">
           <div className="flex items-center space-x-3 mb-8">
-            <Heart className="w-8 h-8 text-orange-600" />
+            <Heart className="w-8 h-8 text-blue-600" />
             <h2 className="text-3xl font-bold text-slate-900">Our Methodology</h2>
           </div>
           <div className="space-y-8">
-            <div className="border-l-4 border-orange-600 pl-6 py-2">
+            <div className="border-l-4 border-blue-600 pl-6 py-2">
               <h3 className="text-xl font-bold text-slate-900 mb-3">1. Question-Based Learning</h3>
               <p className="text-slate-700 leading-relaxed">
                 We believe the best learning starts with good questions. Our platform allows professionals to ask specific,
@@ -86,7 +86,7 @@ export function AboutPage() {
               </p>
             </div>
 
-            <div className="border-l-4 border-orange-600 pl-6 py-2">
+            <div className="border-l-4 border-blue-600 pl-6 py-2">
               <h3 className="text-xl font-bold text-slate-900 mb-3">2. Industry Corners</h3>
               <p className="text-slate-700 leading-relaxed">
                 Each industry has its unique challenges and unwritten rules. We organize our community into industry-specific
@@ -95,7 +95,7 @@ export function AboutPage() {
               </p>
             </div>
 
-            <div className="border-l-4 border-orange-600 pl-6 py-2">
+            <div className="border-l-4 border-blue-600 pl-6 py-2">
               <h3 className="text-xl font-bold text-slate-900 mb-3">3. Authentic Podcasts</h3>
               <p className="text-slate-700 leading-relaxed">
                 Our podcast series features unscripted conversations with professionals about their career journeys—including
@@ -104,7 +104,7 @@ export function AboutPage() {
               </p>
             </div>
 
-            <div className="border-l-4 border-orange-600 pl-6 py-2">
+            <div className="border-l-4 border-blue-600 pl-6 py-2">
               <h3 className="text-xl font-bold text-slate-900 mb-3">4. Regional Chapters</h3>
               <p className="text-slate-700 leading-relaxed">
                 While we're global in reach, we're local in relevance. Our regional chapters ensure that advice is culturally
@@ -112,7 +112,7 @@ export function AboutPage() {
               </p>
             </div>
 
-            <div className="border-l-4 border-orange-600 pl-6 py-2">
+            <div className="border-l-4 border-blue-600 pl-6 py-2">
               <h3 className="text-xl font-bold text-slate-900 mb-3">5. Quality Over Quantity</h3>
               <p className="text-slate-700 leading-relaxed">
                 We carefully curate our mentor community, prioritizing professionals who genuinely want to give back and have
@@ -124,7 +124,7 @@ export function AboutPage() {
 
         <section className="mb-20">
           <div className="flex items-center space-x-3 mb-8">
-            <Users className="w-8 h-8 text-orange-600" />
+            <Users className="w-8 h-8 text-blue-600" />
             <h2 className="text-3xl font-bold text-slate-900">Advisory Team</h2>
           </div>
           <p className="text-slate-600 text-lg mb-10 max-w-3xl">
@@ -138,7 +138,7 @@ export function AboutPage() {
                   <h3 className="text-lg font-bold text-slate-900">Dr. Rajesh Kumar</h3>
                   <p className="text-slate-600 text-sm">Education & Learning Design</p>
                 </div>
-                <a href="#" className="text-orange-600 hover:text-orange-700">
+                <a href="#" className="text-blue-600 hover:text-blue-700">
                   <Linkedin className="w-5 h-5" />
                 </a>
               </div>
@@ -154,7 +154,7 @@ export function AboutPage() {
                   <h3 className="text-lg font-bold text-slate-900">Lisa Chen</h3>
                   <p className="text-slate-600 text-sm">Technology & Product</p>
                 </div>
-                <a href="#" className="text-orange-600 hover:text-orange-700">
+                <a href="#" className="text-blue-600 hover:text-blue-700">
                   <Linkedin className="w-5 h-5" />
                 </a>
               </div>
@@ -170,7 +170,7 @@ export function AboutPage() {
                   <h3 className="text-lg font-bold text-slate-900">Mohammed Al-Rashid</h3>
                   <p className="text-slate-600 text-sm">Business Strategy & Growth</p>
                 </div>
-                <a href="#" className="text-orange-600 hover:text-orange-700">
+                <a href="#" className="text-blue-600 hover:text-blue-700">
                   <Linkedin className="w-5 h-5" />
                 </a>
               </div>
@@ -186,7 +186,7 @@ export function AboutPage() {
                   <h3 className="text-lg font-bold text-slate-900">Dr. Ananya Desai</h3>
                   <p className="text-slate-600 text-sm">Psychology & Career Development</p>
                 </div>
-                <a href="#" className="text-orange-600 hover:text-orange-700">
+                <a href="#" className="text-blue-600 hover:text-blue-700">
                   <Linkedin className="w-5 h-5" />
                 </a>
               </div>
@@ -198,21 +198,21 @@ export function AboutPage() {
           </div>
         </section>
 
-        <section className="bg-gradient-to-r from-orange-600 to-orange-700 rounded-2xl p-12 text-center text-white">
+        <section className="bg-gradient-to-r from-blue-600 to-blue-700 rounded-2xl p-12 text-center text-white">
           <h2 className="text-3xl font-bold mb-4">Join Our Journey</h2>
-          <p className="text-xl text-orange-100 mb-8 max-w-2xl mx-auto">
+          <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
             Whether you're seeking guidance or ready to share your experience, we'd love to have you in our community.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
               href="/register"
-              className="bg-white text-orange-600 px-8 py-3 rounded-lg font-bold hover:bg-orange-50 transition"
+              className="bg-white text-blue-600 px-8 py-3 rounded-lg font-bold hover:bg-blue-50 transition"
             >
               Get Started
             </a>
             <a
               href="/mentors"
-              className="bg-orange-500 text-white px-8 py-3 rounded-lg font-bold hover:bg-orange-400 transition"
+              className="bg-cyan-500 text-white px-8 py-3 rounded-lg font-bold hover:bg-cyan-400 transition"
             >
               Become a Mentor
             </a>

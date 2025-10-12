@@ -107,7 +107,7 @@ export function SeekOpinionPage() {
     return (
       <Layout>
         <div className="flex items-center justify-center min-h-screen">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
         </div>
       </Layout>
     );
@@ -144,7 +144,7 @@ export function SeekOpinionPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div className="bg-white rounded-lg shadow-sm border border-slate-200 p-6">
             <div className="flex items-center space-x-2 mb-4">
-              <UserPlus className="w-6 h-6 text-orange-600" />
+              <UserPlus className="w-6 h-6 text-blue-600" />
               <h2 className="text-xl font-bold text-slate-900">Invite Platform Mentor</h2>
             </div>
             <p className="text-slate-600 mb-6 text-sm">
@@ -160,7 +160,7 @@ export function SeekOpinionPage() {
                   id="mentor"
                   value={selectedMentor}
                   onChange={(e) => setSelectedMentor(e.target.value)}
-                  className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                  className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
                 >
                   <option value="">Choose a mentor...</option>
                   {mentors.map((mentor) => (
@@ -175,7 +175,7 @@ export function SeekOpinionPage() {
               <button
                 onClick={inviteMentor}
                 disabled={loading || !selectedMentor}
-                className="w-full flex items-center justify-center space-x-2 bg-orange-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full flex items-center justify-center space-x-2 bg-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2 transition disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <Send className="w-5 h-5" />
                 <span>{loading ? 'Sending...' : 'Send Invitation'}</span>
@@ -227,7 +227,7 @@ export function SeekOpinionPage() {
                   </div>
                 </div>
 
-                <div className="bg-orange-50 border border-orange-200 rounded-lg p-4">
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                   <p className="text-sm text-blue-900">
                     <strong>Tip:</strong> Share this link on LinkedIn, WhatsApp, email, or any platform to invite external mentors to answer your question.
                   </p>

@@ -193,7 +193,7 @@ export function CreateEpisodePage() {
               <select
                 value={seriesId}
                 onChange={(e) => setSeriesId(e.target.value)}
-                className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
               >
                 <option value="">Standalone Episode</option>
                 {series.map((s) => (
@@ -213,7 +213,7 @@ export function CreateEpisodePage() {
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 required
-                className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
                 placeholder="e.g., Journey from Developer to CTO"
               />
             </div>
@@ -226,7 +226,7 @@ export function CreateEpisodePage() {
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 rows={3}
-                className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
                 placeholder="Episode description..."
               />
             </div>
@@ -239,7 +239,7 @@ export function CreateEpisodePage() {
                 value={guestId}
                 onChange={(e) => setGuestId(e.target.value)}
                 required
-                className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
               >
                 <option value="">Select a mentor</option>
                 {mentors.map((m) => (
@@ -277,7 +277,7 @@ export function CreateEpisodePage() {
                             href={guest.linkedin_url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-orange-600 hover:text-orange-700 inline-block mt-2"
+                            className="text-blue-600 hover:text-blue-700 inline-block mt-2"
                           >
                             View LinkedIn Profile →
                           </a>
@@ -296,7 +296,7 @@ export function CreateEpisodePage() {
               <select
                 value={moderatorId}
                 onChange={(e) => setModeratorId(e.target.value)}
-                className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
               >
                 <option value="">Me (Current User)</option>
                 {moderators.map((m) => (
@@ -317,7 +317,7 @@ export function CreateEpisodePage() {
                   value={episodeNumber}
                   onChange={(e) => setEpisodeNumber(e.target.value)}
                   min="1"
-                  className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                  className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
                 />
               </div>
 
@@ -328,7 +328,7 @@ export function CreateEpisodePage() {
                 <select
                   value={recordingType}
                   onChange={(e) => setRecordingType(e.target.value as 'video' | 'audio')}
-                  className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                  className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
                 >
                   <option value="video">Video</option>
                   <option value="audio">Audio Only</option>
@@ -343,7 +343,7 @@ export function CreateEpisodePage() {
                   type="datetime-local"
                   value={scheduledAt}
                   onChange={(e) => setScheduledAt(e.target.value)}
-                  className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                  className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
                 />
                 <p className="text-xs text-slate-500 mt-1">Leave empty if not going live</p>
               </div>
@@ -357,7 +357,7 @@ export function CreateEpisodePage() {
                 <button
                   type="button"
                   onClick={generateAIQuestions}
-                  className="flex items-center space-x-2 text-sm bg-gradient-to-r from-orange-600 to-orange-700 text-white px-4 py-2 rounded-lg hover:from-orange-700 hover:to-orange-800 transition"
+                  className="flex items-center space-x-2 text-sm bg-gradient-to-r from-blue-600 to-blue-700 text-white px-4 py-2 rounded-lg hover:from-blue-700 hover:to-cyan-600 transition"
                 >
                   <Sparkles className="w-4 h-4" />
                   <span>Generate AI Questions</span>
@@ -382,7 +382,7 @@ export function CreateEpisodePage() {
                         <label className="block text-sm font-medium text-slate-700 mb-1">
                           Question {index + 1}
                           {q.is_ai_generated && (
-                            <span className="ml-2 text-xs text-orange-600 bg-orange-50 px-2 py-0.5 rounded">
+                            <span className="ml-2 text-xs text-blue-600 bg-blue-50 px-2 py-0.5 rounded">
                               AI Generated
                             </span>
                           )}
@@ -391,7 +391,7 @@ export function CreateEpisodePage() {
                           type="text"
                           value={q.question_text}
                           onChange={(e) => updateQuestion(index, 'question_text', e.target.value)}
-                          className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                          className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
                           placeholder="Enter question..."
                         />
                       </div>
@@ -404,7 +404,7 @@ export function CreateEpisodePage() {
                           value={q.answer_text}
                           onChange={(e) => updateQuestion(index, 'answer_text', e.target.value)}
                           rows={3}
-                          className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                          className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
                           placeholder="Optional: Add answer text that will appear in the teleprompter..."
                         />
                       </div>
@@ -434,7 +434,7 @@ export function CreateEpisodePage() {
             <button
               type="submit"
               disabled={loading}
-              className="flex-1 bg-orange-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-orange-700 transition disabled:opacity-50"
+              className="flex-1 bg-blue-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-blue-700 transition disabled:opacity-50"
             >
               {loading ? 'Creating...' : 'Create Episode'}
             </button>

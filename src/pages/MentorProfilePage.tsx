@@ -67,7 +67,7 @@ export function MentorProfilePage() {
     return (
       <PublicLayout>
         <div className="flex items-center justify-center min-h-screen">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
         </div>
       </PublicLayout>
     );
@@ -81,7 +81,7 @@ export function MentorProfilePage() {
           <p className="text-slate-600 mb-6">The mentor profile you're looking for doesn't exist.</p>
           <Link
             to="/browse-mentors"
-            className="inline-flex items-center space-x-2 text-orange-600 hover:text-orange-700 font-semibold"
+            className="inline-flex items-center space-x-2 text-blue-600 hover:text-blue-700 font-semibold"
           >
             <ArrowLeft className="w-5 h-5" />
             <span>Browse All Mentors</span>
@@ -93,18 +93,18 @@ export function MentorProfilePage() {
 
   return (
     <PublicLayout>
-      <div className="bg-gradient-to-br from-slate-50 to-orange-50 py-8">
+      <div className="bg-gradient-to-br from-slate-50 to-blue-50 py-8">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <Link
             to="/browse-mentors"
-            className="inline-flex items-center space-x-2 text-slate-600 hover:text-orange-600 mb-6 font-medium transition"
+            className="inline-flex items-center space-x-2 text-slate-600 hover:text-blue-600 mb-6 font-medium transition"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>Back to Mentors</span>
           </Link>
 
           <div className="bg-white rounded-3xl shadow-xl overflow-hidden">
-            <div className={`${mentor.is_stalwart ? 'bg-gradient-to-r from-amber-500 via-orange-500 to-red-500' : 'bg-gradient-to-r from-orange-600 to-orange-800'} p-8 text-white relative overflow-hidden`}>
+            <div className={`${mentor.is_stalwart ? 'bg-gradient-to-r from-amber-500 via-cyan-500 to-cyan-500' : 'bg-gradient-to-r from-blue-600 to-cyan-600'} p-8 text-white relative overflow-hidden`}>
               <div className="absolute inset-0 bg-grid-pattern opacity-10"></div>
 
               {mentor.is_stalwart && (
@@ -124,7 +124,7 @@ export function MentorProfilePage() {
                     className="w-32 h-32 rounded-full ring-8 ring-white shadow-2xl"
                   />
                 ) : (
-                  <div className={`w-32 h-32 rounded-full ${mentor.is_stalwart ? 'bg-gradient-to-br from-amber-300 to-orange-400' : 'bg-gradient-to-br from-orange-400 to-orange-600'} flex items-center justify-center ring-8 ring-white shadow-2xl`}>
+                  <div className={`w-32 h-32 rounded-full ${mentor.is_stalwart ? 'bg-gradient-to-br from-amber-300 to-cyan-400' : 'bg-gradient-to-br from-cyan-400 to-blue-600'} flex items-center justify-center ring-8 ring-white shadow-2xl`}>
                     <span className="text-5xl font-bold text-white">{mentor.full_name.charAt(0)}</span>
                   </div>
                 )}
@@ -165,12 +165,12 @@ export function MentorProfilePage() {
 
             <div className="p-8">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                <div className="bg-orange-50 rounded-2xl p-6 text-center border-2 border-orange-100">
+                <div className="bg-blue-50 rounded-2xl p-6 text-center border-2 border-blue-100">
                   <div className="flex items-center justify-center space-x-2 mb-2">
-                    <MessageCircle className="w-6 h-6 text-orange-600" />
+                    <MessageCircle className="w-6 h-6 text-blue-600" />
                     <span className="text-3xl font-bold text-blue-900">{mentor.total_answers || 0}</span>
                   </div>
-                  <div className="text-sm text-orange-700 font-semibold">Total Answers</div>
+                  <div className="text-sm text-blue-700 font-semibold">Total Answers</div>
                 </div>
 
                 <div className="bg-green-50 rounded-2xl p-6 text-center border-2 border-green-100">
@@ -206,7 +206,7 @@ export function MentorProfilePage() {
                     {mentor.expertise_areas.map((area: string, index: number) => (
                       <span
                         key={index}
-                        className={`${mentor.is_stalwart ? 'bg-gradient-to-r from-amber-100 to-orange-100 text-amber-900 border-amber-300' : 'bg-orange-50 text-orange-700 border-orange-200'} px-4 py-2 rounded-full font-semibold text-sm border-2`}
+                        className={`${mentor.is_stalwart ? 'bg-gradient-to-r from-amber-100 to-blue-100 text-amber-900 border-amber-300' : 'bg-blue-50 text-blue-700 border-blue-200'} px-4 py-2 rounded-full font-semibold text-sm border-2`}
                       >
                         {area}
                       </span>
@@ -216,9 +216,9 @@ export function MentorProfilePage() {
               )}
 
               {mentor.offers_consulting && (
-                <div className="mb-8 bg-gradient-to-r from-orange-50 to-red-50 border-2 border-orange-200 rounded-2xl p-6">
+                <div className="mb-8 bg-gradient-to-r from-blue-50 to-cyan-50 border-2 border-blue-200 rounded-2xl p-6">
                   <div className="flex items-start space-x-4">
-                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-orange-400 to-red-500 flex items-center justify-center flex-shrink-0">
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-400 to-cyan-500 flex items-center justify-center flex-shrink-0">
                       <Phone className="w-6 h-6 text-white" />
                     </div>
                     <div className="flex-1">
@@ -233,7 +233,7 @@ export function MentorProfilePage() {
                           </span>
                         )}
                         {mentor.consulting_type === 'paid' && mentor.consulting_rate_inr && (
-                          <span className="bg-orange-100 text-blue-800 px-4 py-2 rounded-lg font-bold">
+                          <span className="bg-blue-100 text-blue-800 px-4 py-2 rounded-lg font-bold">
                             ₹{mentor.consulting_rate_inr}/hour
                           </span>
                         )}
@@ -259,7 +259,7 @@ export function MentorProfilePage() {
                     href={mentor.linkedin_url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center space-x-2 text-orange-600 hover:text-orange-700 font-semibold transition"
+                    className="inline-flex items-center space-x-2 text-blue-600 hover:text-blue-700 font-semibold transition"
                   >
                     <Linkedin className="w-5 h-5" />
                     <span>Connect on LinkedIn</span>
@@ -276,9 +276,9 @@ export function MentorProfilePage() {
                       <Link
                         key={answer.id}
                         to={`/question/${answer.question_id}`}
-                        className="block bg-slate-50 rounded-xl p-6 hover:bg-slate-100 transition border-2 border-slate-200 hover:border-orange-300"
+                        className="block bg-slate-50 rounded-xl p-6 hover:bg-slate-100 transition border-2 border-slate-200 hover:border-blue-300"
                       >
-                        <h3 className="text-lg font-bold text-slate-900 mb-2 hover:text-orange-600 transition">
+                        <h3 className="text-lg font-bold text-slate-900 mb-2 hover:text-blue-600 transition">
                           {answer.question.title}
                         </h3>
                         {answer.summary && (

@@ -188,7 +188,7 @@ export function PersonalizedFeedPage() {
       <Layout>
         <div className="flex items-center justify-center min-h-screen">
           <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600 mx-auto"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
             <p className="mt-4 text-slate-600">Loading your personalized feed...</p>
           </div>
         </div>
@@ -199,14 +199,14 @@ export function PersonalizedFeedPage() {
   return (
     <Layout>
       <div className="min-h-screen bg-slate-50">
-        <div className="bg-gradient-to-br from-orange-600 via-orange-700 to-slate-900 text-white py-8 sm:py-12">
+        <div className="bg-gradient-to-br from-blue-600 via-blue-700 to-slate-900 text-white py-8 sm:py-12">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
               <div>
                 <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2">
                   {getGreeting()}, {profile?.full_name?.split(' ')[0] || 'there'}!
                 </h1>
-                <p className="text-orange-100 text-sm sm:text-base">
+                <p className="text-blue-100 text-sm sm:text-base">
                   Here's what's happening based on your interests
                 </p>
               </div>
@@ -223,17 +223,17 @@ export function PersonalizedFeedPage() {
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
           {!hasCompletedOnboarding && (
-            <div className="bg-gradient-to-r from-orange-500 to-red-600 text-white rounded-xl p-4 sm:p-6 mb-6 sm:mb-8">
+            <div className="bg-gradient-to-r from-cyan-500 to-indigo-700 text-white rounded-xl p-4 sm:p-6 mb-6 sm:mb-8">
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div>
                   <h3 className="text-lg sm:text-xl font-bold mb-2">Complete Your Profile</h3>
-                  <p className="text-orange-100 text-sm sm:text-base">
+                  <p className="text-blue-100 text-sm sm:text-base">
                     Tell us about your interests to get personalized recommendations
                   </p>
                 </div>
                 <Link
                   to="/profile"
-                  className="bg-white text-orange-600 px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-semibold hover:bg-orange-50 transition text-sm sm:text-base whitespace-nowrap"
+                  className="bg-white text-blue-600 px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-semibold hover:bg-blue-50 transition text-sm sm:text-base whitespace-nowrap"
                 >
                   Set Interests
                 </Link>
@@ -242,9 +242,9 @@ export function PersonalizedFeedPage() {
           )}
 
           {recentActivity.length > 0 && (
-            <div className="bg-orange-50 border-l-4 border-orange-500 rounded-lg p-4 sm:p-6 mb-6 sm:mb-8">
+            <div className="bg-blue-50 border-l-4 border-cyan-500 rounded-lg p-4 sm:p-6 mb-6 sm:mb-8">
               <div className="flex items-start space-x-3">
-                <Clock className="w-5 h-5 text-orange-600 mt-0.5 flex-shrink-0" />
+                <Clock className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
                 <div className="flex-1 min-w-0">
                   <h3 className="font-semibold text-slate-900 mb-2 text-sm sm:text-base">Continue where you left off</h3>
                   <p className="text-xs sm:text-sm text-slate-600">
@@ -260,10 +260,10 @@ export function PersonalizedFeedPage() {
               <div>
                 <div className="flex items-center justify-between mb-4 sm:mb-6">
                   <h2 className="text-xl sm:text-2xl font-bold text-slate-900 flex items-center space-x-2">
-                    <TrendingUp className="w-5 h-5 sm:w-6 sm:h-6 text-orange-600" />
+                    <TrendingUp className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600" />
                     <span>Trending Questions</span>
                   </h2>
-                  <Link to="/questions" className="text-orange-600 hover:text-orange-700 font-medium text-sm sm:text-base">
+                  <Link to="/questions" className="text-blue-600 hover:text-blue-700 font-medium text-sm sm:text-base">
                     View all
                   </Link>
                 </div>
@@ -281,7 +281,7 @@ export function PersonalizedFeedPage() {
                           {question.title}
                         </h3>
                         {question.industry && (
-                          <span className="text-xs bg-orange-100 text-orange-700 px-2 py-1 rounded-full whitespace-nowrap flex-shrink-0">
+                          <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full whitespace-nowrap flex-shrink-0">
                             {question.industry.name}
                           </span>
                         )}
@@ -304,10 +304,10 @@ export function PersonalizedFeedPage() {
               <div>
                 <div className="flex items-center justify-between mb-4 sm:mb-6">
                   <h2 className="text-xl sm:text-2xl font-bold text-slate-900 flex items-center space-x-2">
-                    <Headphones className="w-5 h-5 sm:w-6 sm:h-6 text-orange-600" />
+                    <Headphones className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600" />
                     <span>Recent Podcast Answers</span>
                   </h2>
-                  <Link to="/podcasts" className="text-orange-600 hover:text-orange-700 font-medium text-sm sm:text-base">
+                  <Link to="/podcasts" className="text-blue-600 hover:text-blue-700 font-medium text-sm sm:text-base">
                     View all
                   </Link>
                 </div>
@@ -319,7 +319,7 @@ export function PersonalizedFeedPage() {
                       to={`/questions/${answer.question.id}`}
                       className="group bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition border border-slate-200"
                     >
-                      <div className="relative aspect-video bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center">
+                      <div className="relative aspect-video bg-gradient-to-br from-cyan-500 to-indigo-700 flex items-center justify-center">
                         <Play className="w-12 h-12 sm:w-16 sm:h-16 text-white opacity-75 group-hover:opacity-100 transition" />
                         <div className="absolute top-2 right-2 bg-black bg-opacity-70 px-2 py-1 rounded text-white text-xs flex items-center space-x-1">
                           <ThumbsUp className="w-3 h-3" />
@@ -357,10 +357,10 @@ export function PersonalizedFeedPage() {
                         <img
                           src={mentor.avatar_url}
                           alt={mentor.full_name}
-                          className="w-10 h-10 sm:w-12 sm:h-12 rounded-full ring-2 ring-orange-200 flex-shrink-0"
+                          className="w-10 h-10 sm:w-12 sm:h-12 rounded-full ring-2 ring-blue-200 flex-shrink-0"
                         />
                       ) : (
-                        <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center ring-2 ring-orange-200 flex-shrink-0">
+                        <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-cyan-500 to-indigo-700 flex items-center justify-center ring-2 ring-blue-200 flex-shrink-0">
                           <span className="text-white text-sm sm:text-base font-bold">
                             {mentor.full_name.charAt(0)}
                           </span>
@@ -387,14 +387,14 @@ export function PersonalizedFeedPage() {
 
                 <Link
                   to="/mentors"
-                  className="mt-4 w-full flex items-center justify-center space-x-2 bg-orange-600 text-white py-2 sm:py-3 rounded-lg font-medium hover:bg-orange-700 transition text-sm sm:text-base"
+                  className="mt-4 w-full flex items-center justify-center space-x-2 bg-blue-600 text-white py-2 sm:py-3 rounded-lg font-medium hover:bg-blue-700 transition text-sm sm:text-base"
                 >
                   <span>Browse All Mentors</span>
                   <ArrowRight className="w-4 h-4" />
                 </Link>
               </div>
 
-              <div className="bg-gradient-to-br from-orange-600 to-orange-700 text-white rounded-lg p-4 sm:p-6 shadow-sm">
+              <div className="bg-gradient-to-br from-blue-600 to-blue-700 text-white rounded-lg p-4 sm:p-6 shadow-sm">
                 <div className="flex items-center space-x-2 mb-3 sm:mb-4">
                   <MessageSquare className="w-5 h-5" />
                   <h3 className="text-base sm:text-lg font-bold">Quick Actions</h3>
