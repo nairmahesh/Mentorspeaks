@@ -108,14 +108,14 @@ export function HomePage() {
             </div>
 
             <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
-              <span className="block">Listen to effyMentors</span>
+              <span className="block">Conversations That Build</span>
               <span className="block text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-orange-300 to-pink-300">
-                Views & Insights
+                Future Leaders
               </span>
             </h1>
 
             <p className="text-xl md:text-2xl text-blue-100 mb-10 leading-relaxed">
-              Industry experts share their knowledge through podcasts. Ask questions, get answers, and learn from real experience.
+              Ask, listen, and learn from experts across industries and geographies.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
