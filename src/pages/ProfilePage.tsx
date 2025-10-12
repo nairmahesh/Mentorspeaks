@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase, Industry } from '../lib/supabase';
 import { Layout } from '../components/Layout';
-import { User, Briefcase, Save, Linkedin, Heart, DollarSign } from 'lucide-react';
+import { User, Briefcase, Save, Linkedin, Heart, DollarSign, Sparkles, Target } from 'lucide-react';
 import * as LucideIcons from 'lucide-react';
 
 export function ProfilePage() {
@@ -12,6 +12,7 @@ export function ProfilePage() {
   const [professionalTitle, setProfessionalTitle] = useState(profile?.professional_title || '');
   const [country, setCountry] = useState(profile?.country || '');
   const [selectedIndustries, setSelectedIndustries] = useState<string[]>([]);
+  const [userInterestIndustries, setUserInterestIndustries] = useState<string[]>([]);
   const [industries, setIndustries] = useState<Industry[]>([]);
 
   // New mentor fields
@@ -31,6 +32,7 @@ export function ProfilePage() {
     if (profile?.role === 'mentor') {
       loadMentorIndustries();
     }
+    loadUserInterests();
   }, [profile]);
 
   const loadIndustries = async () => {
@@ -50,6 +52,19 @@ export function ProfilePage() {
 
     if (data) {
       setSelectedIndustries(data.map(mi => mi.industry_id));
+    }
+  };
+
+  const loadUserInterests = async () => {
+    const { data } = await supabase
+      .from('user_interests')
+      .select('industry_id')
+      .eq('user_id', user!.id)
+      .eq('interest_type', 'industry')
+      .not('industry_id', 'is', null);
+
+    if (data) {
+      setUserInterestIndustries(data.map((i: any) => i.industry_id));
     }
   };
 
@@ -116,6 +131,35 @@ export function ProfilePage() {
         if (industriesError) throw industriesError;
       }
 
+      // Save user interests for all users
+      if (userInterestIndustries.length > 0) {
+        await supabase
+          .from('user_interests')
+          .delete()
+          .eq('user_id', user!.id)
+          .eq('interest_type', 'industry');
+
+        const { error: interestsError } = await supabase
+          .from('user_interests')
+          .insert(
+            userInterestIndustries.map(industryId => ({
+              user_id: user!.id,
+              industry_id: industryId,
+              interest_type: 'industry'
+            }))
+          );
+
+        if (interestsError) throw interestsError;
+
+        // Mark onboarding as completed
+        await supabase
+          .from('user_feed_preferences')
+          .upsert({
+            user_id: user!.id,
+            onboarding_completed: true
+          });
+      }
+
       setSuccess(true);
       setTimeout(() => setSuccess(false), 3000);
     } catch (err: any) {
@@ -127,6 +171,14 @@ export function ProfilePage() {
 
   const toggleIndustry = (industryId: string) => {
     setSelectedIndustries(prev =>
+      prev.includes(industryId)
+        ? prev.filter(id => id !== industryId)
+        : [...prev, industryId]
+    );
+  };
+
+  const toggleUserInterest = (industryId: string) => {
+    setUserInterestIndustries(prev =>
       prev.includes(industryId)
         ? prev.filter(id => id !== industryId)
         : [...prev, industryId]
@@ -318,6 +370,44 @@ export function ProfilePage() {
               className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               placeholder="Tell us about yourself..."
             />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-slate-700 mb-3">
+              <div className="flex items-center space-x-2">
+                <Target className="w-5 h-5 text-blue-600" />
+                <span>Your Interests</span>
+              </div>
+            </label>
+            <p className="text-sm text-slate-600 mb-4">
+              Select industries you're interested in to get personalized content recommendations
+            </p>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+              {industries.map((industry) => {
+                const IconComponent = industry.icon && (LucideIcons as any)[industry.icon];
+                return (
+                  <button
+                    key={industry.id}
+                    type="button"
+                    onClick={() => toggleUserInterest(industry.id)}
+                    className={`px-4 py-3 rounded-lg border-2 transition text-left ${
+                      userInterestIndustries.includes(industry.id)
+                        ? 'border-blue-600 bg-blue-50 text-blue-700'
+                        : 'border-slate-300 bg-white text-slate-700 hover:border-slate-400'
+                    }`}
+                  >
+                    <div className="flex items-center space-x-2">
+                      {IconComponent ? (
+                        <IconComponent className="w-5 h-5" />
+                      ) : (
+                        <Briefcase className="w-5 h-5" />
+                      )}
+                      <span className="text-sm font-medium">{industry.name}</span>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
           </div>
 
           {profile?.role === 'mentor' && (

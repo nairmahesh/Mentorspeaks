@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { MessageSquareText, LogOut, User, Home, MessageCircle, BarChart3, Radio, Settings, MapPin, Shield } from 'lucide-react';
+import { MessageSquareText, LogOut, User, Home, MessageCircle, BarChart3, Radio, Settings, MapPin, Shield, Sparkles } from 'lucide-react';
 
 type LayoutProps = {
   children: ReactNode;
@@ -38,7 +38,12 @@ export function Layout({ children }: LayoutProps) {
             </Link>
 
             {user && (
-              <div className="flex items-center space-x-6">
+              <div className="hidden lg:flex items-center space-x-6">
+                <Link to="/feed" className="flex items-center space-x-1 text-blue-600 hover:text-blue-700 transition">
+                  <Sparkles className="w-5 h-5" />
+                  <span className="font-medium">My Feed</span>
+                </Link>
+
                 <Link to="/podcasts" className="flex items-center space-x-1 text-orange-600 hover:text-orange-700 transition">
                   <Radio className="w-5 h-5" />
                   <span className="font-medium">Podcasts</span>
@@ -49,9 +54,9 @@ export function Layout({ children }: LayoutProps) {
                   <span className="font-medium">Questions</span>
                 </Link>
 
-                <Link to="/" className="flex items-center space-x-1 text-slate-600 hover:text-slate-900 transition">
+                <Link to="/home" className="flex items-center space-x-1 text-slate-600 hover:text-slate-900 transition">
                   <Home className="w-5 h-5" />
-                  <span className="font-medium">Home</span>
+                  <span className="font-medium">Explore</span>
                 </Link>
 
                 {profile?.role === 'mentor' && (
@@ -76,7 +81,7 @@ export function Layout({ children }: LayoutProps) {
 
                 <Link to="/profile" className="flex items-center space-x-2 text-slate-600 hover:text-slate-900 transition">
                   <User className="w-5 h-5" />
-                  <span className="font-medium">{profile?.full_name}</span>
+                  <span className="font-medium hidden xl:inline">{profile?.full_name}</span>
                 </Link>
 
                 <button
@@ -84,8 +89,22 @@ export function Layout({ children }: LayoutProps) {
                   className="flex items-center space-x-1 text-slate-600 hover:text-red-600 transition"
                 >
                   <LogOut className="w-5 h-5" />
-                  <span className="font-medium">Sign Out</span>
+                  <span className="font-medium hidden xl:inline">Sign Out</span>
                 </button>
+              </div>
+            )}
+
+            {user && (
+              <div className="lg:hidden flex items-center space-x-4">
+                <Link to="/feed" className="text-blue-600 hover:text-blue-700 transition">
+                  <Sparkles className="w-6 h-6" />
+                </Link>
+                <Link to="/questions" className="text-slate-600 hover:text-slate-900 transition">
+                  <MessageCircle className="w-6 h-6" />
+                </Link>
+                <Link to="/profile" className="text-slate-600 hover:text-slate-900 transition">
+                  <User className="w-6 h-6" />
+                </Link>
               </div>
             )}
           </div>

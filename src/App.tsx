@@ -31,9 +31,10 @@ import { CommunityManagePage } from './pages/CommunityManagePage';
 import { ChaptersPage } from './pages/ChaptersPage';
 import { ChapterDetailPage } from './pages/ChapterDetailPage';
 import { AboutPage } from './pages/AboutPage';
+import { PersonalizedFeedPage } from './pages/PersonalizedFeedPage';
 
 function AppRoutes() {
-  const { user, loading } = useAuth();
+  const { user, profile, loading } = useAuth();
 
   if (loading) {
     return (
@@ -47,13 +48,22 @@ function AppRoutes() {
     <Routes>
       <Route
         path="/login"
-        element={user ? <Navigate to="/" /> : <LoginPage />}
+        element={user ? <Navigate to="/feed" /> : <LoginPage />}
       />
       <Route
         path="/register"
-        element={user ? <Navigate to="/" /> : <RegisterPage />}
+        element={user ? <Navigate to="/feed" /> : <RegisterPage />}
       />
-      <Route path="/" element={<HomePage />} />
+      <Route path="/" element={user ? <Navigate to="/feed" /> : <HomePage />} />
+      <Route
+        path="/feed"
+        element={
+          <ProtectedRoute>
+            <PersonalizedFeedPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route path="/home" element={<HomePage />} />
       <Route path="/podcasts" element={<PodcastsPage />} />
       <Route path="/podcasts/episode/:episodeId" element={<EpisodeViewPage />} />
       <Route path="/podcasts/episode/:episodeId/view" element={<EpisodeViewPage />} />
