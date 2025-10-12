@@ -72,10 +72,10 @@ export function CorporateSignupPage() {
               <span className="text-sm font-bold text-blue-900">FOR ENTERPRISES</span>
             </div>
             <h1 className="text-4xl md:text-5xl font-bold text-slate-900 mb-4">
-              Transform Your Corporate Communication
+              Enterprise Knowledge Sharing Platform
             </h1>
             <p className="text-xl text-slate-600 max-w-3xl mx-auto">
-              Empower your leadership voice with AI-powered content creation, multilingual reach, and advanced analytics
+              Connect your employees with industry experts, build internal knowledge hubs, and empower your teams with on-demand mentorship
             </p>
           </div>
 
