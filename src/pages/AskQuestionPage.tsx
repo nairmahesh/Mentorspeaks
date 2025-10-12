@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { supabase, Industry } from '../lib/supabase';
+import { supabase, Industry, Profile } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
 import { Layout } from '../components/Layout';
-import { MessageCircle } from 'lucide-react';
+import { MessageCircle, Users, X } from 'lucide-react';
 
 export function AskQuestionPage() {
   const { user } = useAuth();
@@ -12,14 +12,16 @@ export function AskQuestionPage() {
   const [description, setDescription] = useState('');
   const [industryId, setIndustryId] = useState('');
   const [tags, setTags] = useState('');
-  const [isPaid, setIsPaid] = useState(false);
-  const [amount, setAmount] = useState('');
+  const [targetAllMentors, setTargetAllMentors] = useState(true);
+  const [selectedMentorIds, setSelectedMentorIds] = useState<string[]>([]);
   const [industries, setIndustries] = useState<Industry[]>([]);
+  const [mentors, setMentors] = useState<Profile[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
   useEffect(() => {
     loadIndustries();
+    loadMentors();
   }, []);
 
   const loadIndustries = async () => {
@@ -31,9 +33,32 @@ export function AskQuestionPage() {
     if (data) setIndustries(data);
   };
 
+  const loadMentors = async () => {
+    const { data } = await supabase
+      .from('profiles')
+      .select('id, full_name, professional_title, avatar_url')
+      .eq('role', 'mentor')
+      .order('full_name');
+    if (data) setMentors(data);
+  };
+
+  const toggleMentorSelection = (mentorId: string) => {
+    setSelectedMentorIds((prev) =>
+      prev.includes(mentorId)
+        ? prev.filter((id) => id !== mentorId)
+        : [...prev, mentorId]
+    );
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+
+    if (!targetAllMentors && selectedMentorIds.length === 0) {
+      setError('Please select at least one mentor or choose "All Mentors"');
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -50,8 +75,9 @@ export function AskQuestionPage() {
           description: description || null,
           industry_id: industryId || null,
           tags: tagArray,
-          is_paid: isPaid,
-          amount: isPaid ? parseFloat(amount) : 0,
+          targeted_mentor_ids: targetAllMentors ? null : selectedMentorIds,
+          is_paid: false,
+          amount: 0,
           status: 'open',
         })
         .select()
@@ -75,8 +101,11 @@ export function AskQuestionPage() {
             <MessageCircle className="w-8 h-8 text-blue-600" />
             <h1 className="text-4xl font-bold text-slate-900">Ask a Question</h1>
           </div>
-          <p className="text-slate-600">
-            Get expert insights from industry professionals
+          <p className="text-slate-600 mb-2">
+            Get expert insights from industry professionals - completely free!
+          </p>
+          <p className="text-sm text-blue-600 font-medium">
+            All questions are free. For paid 1-on-1 consultancy, use the "Book a Call" feature on mentor profiles.
           </p>
         </div>
 
@@ -150,35 +179,109 @@ export function AskQuestionPage() {
           </div>
 
           <div className="border-t border-slate-200 pt-6">
-            <div className="flex items-center space-x-3 mb-4">
-              <input
-                id="isPaid"
-                type="checkbox"
-                checked={isPaid}
-                onChange={(e) => setIsPaid(e.target.checked)}
-                className="w-4 h-4 text-blue-600 border-slate-300 rounded focus:ring-cyan-500"
-              />
-              <label htmlFor="isPaid" className="text-sm font-medium text-slate-700">
-                Make this a paid question
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-slate-700 mb-3">
+                <Users className="w-4 h-4 inline mr-2" />
+                Target Audience
               </label>
+
+              <div className="space-y-3">
+                <label className="flex items-center space-x-3 cursor-pointer">
+                  <input
+                    type="radio"
+                    checked={targetAllMentors}
+                    onChange={() => {
+                      setTargetAllMentors(true);
+                      setSelectedMentorIds([]);
+                    }}
+                    className="w-4 h-4 text-blue-600 border-slate-300 focus:ring-cyan-500"
+                  />
+                  <div>
+                    <div className="text-sm font-medium text-slate-900">All Mentors</div>
+                    <div className="text-xs text-slate-500">Question visible to all mentors on the platform</div>
+                  </div>
+                </label>
+
+                <label className="flex items-center space-x-3 cursor-pointer">
+                  <input
+                    type="radio"
+                    checked={!targetAllMentors}
+                    onChange={() => setTargetAllMentors(false)}
+                    className="w-4 h-4 text-blue-600 border-slate-300 focus:ring-cyan-500"
+                  />
+                  <div>
+                    <div className="text-sm font-medium text-slate-900">Specific Mentor(s)</div>
+                    <div className="text-xs text-slate-500">Direct your question to selected mentors</div>
+                  </div>
+                </label>
+              </div>
             </div>
 
-            {isPaid && (
-              <div>
-                <label htmlFor="amount" className="block text-sm font-medium text-slate-700 mb-2">
-                  Amount (INR)
+            {!targetAllMentors && (
+              <div className="mt-4 space-y-3">
+                <label className="block text-sm font-medium text-slate-700">
+                  Select Mentors
                 </label>
-                <input
-                  id="amount"
-                  type="number"
-                  value={amount}
-                  onChange={(e) => setAmount(e.target.value)}
-                  required={isPaid}
-                  min="1"
-                  step="1"
-                  className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
-                  placeholder="Enter amount in INR"
-                />
+
+                {selectedMentorIds.length > 0 && (
+                  <div className="flex flex-wrap gap-2 p-3 bg-blue-50 rounded-lg">
+                    {selectedMentorIds.map((mentorId) => {
+                      const mentor = mentors.find((m) => m.id === mentorId);
+                      return (
+                        <div
+                          key={mentorId}
+                          className="flex items-center space-x-2 bg-white px-3 py-1.5 rounded-full border border-blue-200"
+                        >
+                          <span className="text-sm font-medium text-slate-900">{mentor?.full_name}</span>
+                          <button
+                            type="button"
+                            onClick={() => toggleMentorSelection(mentorId)}
+                            className="text-slate-400 hover:text-red-600 transition"
+                          >
+                            <X className="w-3 h-3" />
+                          </button>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+
+                <div className="max-h-64 overflow-y-auto border border-slate-200 rounded-lg">
+                  {mentors.map((mentor) => (
+                    <button
+                      key={mentor.id}
+                      type="button"
+                      onClick={() => toggleMentorSelection(mentor.id)}
+                      className={`w-full flex items-center space-x-3 p-3 hover:bg-slate-50 transition border-b border-slate-100 last:border-b-0 ${
+                        selectedMentorIds.includes(mentor.id) ? 'bg-blue-50' : ''
+                      }`}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={selectedMentorIds.includes(mentor.id)}
+                        onChange={() => {}}
+                        className="w-4 h-4 text-blue-600 border-slate-300 rounded focus:ring-cyan-500"
+                      />
+                      {mentor.avatar_url ? (
+                        <img
+                          src={mentor.avatar_url}
+                          alt={mentor.full_name}
+                          className="w-10 h-10 rounded-full"
+                        />
+                      ) : (
+                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center">
+                          <span className="text-sm font-bold text-white">{mentor.full_name.charAt(0)}</span>
+                        </div>
+                      )}
+                      <div className="flex-1 text-left">
+                        <div className="text-sm font-semibold text-slate-900">{mentor.full_name}</div>
+                        {mentor.professional_title && (
+                          <div className="text-xs text-slate-500">{mentor.professional_title}</div>
+                        )}
+                      </div>
+                    </button>
+                  ))}
+                </div>
               </div>
             )}
           </div>
