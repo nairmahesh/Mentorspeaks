@@ -22,8 +22,22 @@ type AnswerWithDetails = Answer & {
   mentor: Profile;
 };
 
+interface PodcastEpisode {
+  id: string;
+  title: string;
+  description: string;
+  episode_number: number;
+  recording_type: string;
+  thumbnail_url: string;
+  duration_minutes: number;
+  view_count: number;
+  published_at: string;
+  guest: { full_name: string; professional_title: string; avatar_url: string };
+}
+
 export function PodcastsPage() {
   const [podcasts, setPodcasts] = useState<AnswerWithDetails[]>([]);
+  const [episodes, setEpisodes] = useState<PodcastEpisode[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<'all' | 'trending' | 'recent'>('all');
 
@@ -34,23 +48,22 @@ export function PodcastsPage() {
   const loadPodcasts = async () => {
     setLoading(true);
     try {
-      let query = supabase
-        .from('answers')
-        .select('*, question:questions!answers_question_id_fkey(*), mentor:profiles!answers_mentor_id_fkey(*)')
-        .eq('status', 'published');
+      // Load both old answers and new podcast episodes
+      const [answersResult, episodesResult] = await Promise.all([
+        supabase
+          .from('answers')
+          .select('*, question:questions!answers_question_id_fkey(*), mentor:profiles!answers_mentor_id_fkey(*)')
+          .eq('status', 'published')
+          .order('created_at', { ascending: false }),
+        supabase
+          .from('podcast_episodes')
+          .select('*, guest:guest_id(full_name, professional_title, avatar_url)')
+          .eq('status', 'published')
+          .order('published_at', { ascending: false })
+      ]);
 
-      if (filter === 'trending') {
-        query = query.order('upvote_count', { ascending: false });
-      } else if (filter === 'recent') {
-        query = query.order('created_at', { ascending: false });
-      } else {
-        query = query.order('created_at', { ascending: false });
-      }
-
-      const { data, error } = await query;
-
-      if (error) throw error;
-      if (data) setPodcasts(data as AnswerWithDetails[]);
+      if (answersResult.data) setPodcasts(answersResult.data as AnswerWithDetails[]);
+      if (episodesResult.data) setEpisodes(episodesResult.data as any);
     } catch (error) {
       console.error('Error loading podcasts:', error);
     } finally {
@@ -98,47 +111,122 @@ export function PodcastsPage() {
               <p className="text-slate-600 mt-1">{podcasts.length} podcast episodes available</p>
             </div>
 
-            <div className="flex items-center space-x-2 bg-white rounded-xl shadow-sm border border-slate-200 p-1">
-              <button
-                onClick={() => setFilter('all')}
-                className={`px-4 py-2 rounded-lg text-sm font-semibold transition ${
-                  filter === 'all'
-                    ? 'bg-orange-600 text-white'
-                    : 'text-slate-600 hover:text-slate-900'
-                }`}
-              >
-                All
-              </button>
-              <button
-                onClick={() => setFilter('trending')}
-                className={`px-4 py-2 rounded-lg text-sm font-semibold transition flex items-center space-x-1 ${
-                  filter === 'trending'
-                    ? 'bg-orange-600 text-white'
-                    : 'text-slate-600 hover:text-slate-900'
-                }`}
-              >
-                <TrendingUp className="w-4 h-4" />
-                <span>Trending</span>
-              </button>
-              <button
-                onClick={() => setFilter('recent')}
-                className={`px-4 py-2 rounded-lg text-sm font-semibold transition flex items-center space-x-1 ${
-                  filter === 'recent'
-                    ? 'bg-orange-600 text-white'
-                    : 'text-slate-600 hover:text-slate-900'
-                }`}
-              >
-                <Clock className="w-4 h-4" />
-                <span>Recent</span>
-              </button>
-            </div>
+            <Link
+              to="/podcasts/manage"
+              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition text-sm font-semibold"
+            >
+              Manage Podcasts
+            </Link>
           </div>
 
           {loading ? (
             <div className="flex items-center justify-center py-20">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600"></div>
             </div>
-          ) : podcasts.length > 0 ? (
+          ) : (
+            <>
+              {/* New Podcast Episodes */}
+              {episodes.length > 0 && (
+                <div className="mb-12">
+                  <h3 className="text-xl font-bold text-slate-900 mb-6">Latest Podcast Episodes</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {episodes.map((episode) => (
+                      <div
+                        key={episode.id}
+                        className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all border-2 border-slate-200 hover:border-blue-400 flex flex-col"
+                      >
+                        <div className="relative aspect-video bg-gradient-to-br from-blue-500 via-blue-600 to-slate-700 flex items-center justify-center overflow-hidden group">
+                          {episode.thumbnail_url ? (
+                            <img src={episode.thumbnail_url} alt={episode.title} className="w-full h-full object-cover" />
+                          ) : (
+                            <>
+                              <div className="absolute inset-0 bg-black bg-opacity-20"></div>
+                              <div className="relative z-10 text-center">
+                                <div className="w-20 h-20 rounded-full bg-white bg-opacity-95 flex items-center justify-center group-hover:scale-110 transition shadow-2xl mx-auto mb-3">
+                                  <Play className="w-10 h-10 text-blue-600 ml-1" />
+                                </div>
+                                <Mic className="w-8 h-8 text-white opacity-60 mx-auto" />
+                              </div>
+                            </>
+                          )}
+                          <div className="absolute top-3 left-3">
+                            <div className="bg-blue-600 px-3 py-1.5 rounded-full text-white text-xs font-bold">
+                              EP {episode.episode_number}
+                            </div>
+                          </div>
+                          <div className="absolute top-3 right-3">
+                            <div className="bg-black bg-opacity-80 px-3 py-1.5 rounded-full text-white text-xs font-medium flex items-center space-x-1">
+                              <Eye className="w-3.5 h-3.5" />
+                              <span>{episode.view_count || 0}</span>
+                            </div>
+                          </div>
+                          {episode.duration_minutes && (
+                            <div className="absolute bottom-3 right-3 bg-black bg-opacity-80 px-2 py-1 rounded text-white text-xs font-medium">
+                              {episode.duration_minutes} min
+                            </div>
+                          )}
+                        </div>
+
+                        <div className="p-6 flex-1 flex flex-col">
+                          <div className="flex items-center space-x-3 mb-4">
+                            {episode.guest?.avatar_url ? (
+                              <img
+                                src={episode.guest.avatar_url}
+                                alt={episode.guest.full_name}
+                                className="w-12 h-12 rounded-full ring-2 ring-blue-200"
+                              />
+                            ) : (
+                              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center ring-2 ring-blue-200">
+                                <span className="text-white text-lg font-bold">
+                                  {episode.guest?.full_name?.charAt(0)}
+                                </span>
+                              </div>
+                            )}
+                            <div className="flex-1 min-w-0">
+                              <p className="font-bold text-slate-900">{episode.guest?.full_name}</p>
+                              {episode.guest?.professional_title && (
+                                <p className="text-sm text-slate-600 truncate">{episode.guest.professional_title}</p>
+                              )}
+                            </div>
+                          </div>
+
+                          <div className="flex-1">
+                            <h3 className="font-bold text-slate-900 mb-2 line-clamp-2 text-lg leading-snug">
+                              {episode.title}
+                            </h3>
+                            {episode.description && (
+                              <p className="text-sm text-slate-600 line-clamp-2 leading-relaxed mb-4">
+                                {episode.description}
+                              </p>
+                            )}
+                          </div>
+
+                          <div className="flex items-center justify-between text-xs text-slate-500 mb-4 pt-4 border-t border-slate-100">
+                            <div className="flex items-center space-x-1">
+                              <Calendar className="w-3.5 h-3.5" />
+                              <span>{formatDate(episode.published_at)}</span>
+                            </div>
+                            <div className="flex items-center space-x-1">
+                              <Headphones className="w-3.5 h-3.5" />
+                              <span>{episode.view_count || 0} views</span>
+                            </div>
+                          </div>
+
+                          <button
+                            className="w-full flex items-center justify-center space-x-2 bg-gradient-to-r from-blue-600 to-slate-700 text-white px-4 py-2.5 rounded-xl font-semibold hover:from-blue-700 hover:to-slate-800 transition text-sm"
+                          >
+                            <Play className="w-4 h-4" />
+                            <span>Watch Episode</span>
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Community Q&A Episodes */}
+              {podcasts.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {podcasts.map((podcast) => (
                 <div
@@ -240,12 +328,17 @@ export function PodcastsPage() {
                 </div>
               ))}
             </div>
-          ) : (
-            <div className="text-center py-20 bg-white rounded-3xl border border-slate-200">
-              <Mic className="w-20 h-20 text-slate-400 mx-auto mb-4" />
-              <h3 className="text-2xl font-bold text-slate-900 mb-2">No podcasts yet</h3>
-              <p className="text-slate-600 mb-6">Be the first expert to share your knowledge!</p>
-            </div>
+              ) : null}
+
+              {/* Empty State */}
+              {episodes.length === 0 && podcasts.length === 0 && (
+                <div className="text-center py-20 bg-white rounded-3xl border border-slate-200">
+                  <Mic className="w-20 h-20 text-slate-400 mx-auto mb-4" />
+                  <h3 className="text-2xl font-bold text-slate-900 mb-2">No podcasts yet</h3>
+                  <p className="text-slate-600 mb-6">Be the first expert to share your knowledge!</p>
+                </div>
+              )}
+            </>
           )}
         </div>
 

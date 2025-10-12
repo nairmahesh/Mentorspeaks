@@ -17,6 +17,9 @@ import { MentorsPage } from './pages/MentorsPage';
 import { BrowseMentorsPage } from './pages/BrowseMentorsPage';
 import { MentorProfilePage } from './pages/MentorProfilePage';
 import { PodcastsPage } from './pages/PodcastsPage';
+import { PodcastManagePage } from './pages/PodcastManagePage';
+import { CreateEpisodePage } from './pages/CreateEpisodePage';
+import { PodcastRecordingPage } from './pages/PodcastRecordingPage';
 import { CorporateFeaturesPage } from './pages/CorporateFeaturesPage';
 import { CorporateSignupPage } from './pages/CorporateSignupPage';
 
@@ -43,6 +46,30 @@ function AppRoutes() {
       />
       <Route path="/" element={<HomePage />} />
       <Route path="/podcasts" element={<PodcastsPage />} />
+      <Route
+        path="/podcasts/manage"
+        element={
+          <ProtectedRoute>
+            <PodcastManagePage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/podcasts/episode/new"
+        element={
+          <ProtectedRoute>
+            <CreateEpisodePage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/podcasts/episode/:episodeId/record"
+        element={
+          <ProtectedRoute>
+            <PodcastRecordingPage />
+          </ProtectedRoute>
+        }
+      />
       <Route path="/questions" element={<QuestionsPage />} />
       <Route path="/questions/:id" element={<QuestionDetailPage />} />
       <Route
