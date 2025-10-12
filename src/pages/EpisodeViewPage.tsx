@@ -40,9 +40,11 @@ interface MentorAnswer {
   upvotes: number;
   created_at: string;
   mentor: {
+    id: string;
     full_name: string;
     avatar_url: string | null;
     professional_title: string;
+    is_available_for_consulting: boolean;
   };
   user_has_upvoted?: boolean;
 }
@@ -82,6 +84,7 @@ export function EpisodeViewPage() {
   const [answerText, setAnswerText] = useState('');
   const [submittingAnswer, setSubmittingAnswer] = useState(false);
   const [userProfile, setUserProfile] = useState<any>(null);
+  const [consultingMentor, setConsultingMentor] = useState<{ id: string; name: string } | null>(null);
 
   useEffect(() => {
     loadEpisode();
@@ -149,7 +152,7 @@ export function EpisodeViewPage() {
             .from('episode_question_answers')
             .select(`
               *,
-              mentor:profiles!episode_question_answers_mentor_id_fkey(full_name, avatar_url, professional_title)
+              mentor:profiles!episode_question_answers_mentor_id_fkey(id, full_name, avatar_url, professional_title, is_available_for_consulting)
             `)
             .eq('question_id', q.id)
             .order('upvotes', { ascending: false });
@@ -670,7 +673,17 @@ export function EpisodeViewPage() {
                                             {new Date(answer.created_at).toLocaleDateString()}
                                           </span>
                                         </div>
-                                        <p className="text-slate-700 leading-relaxed">{answer.answer_text}</p>
+                                        <p className="text-slate-700 leading-relaxed mb-3">{answer.answer_text}</p>
+
+                                        {answer.mentor.is_available_for_consulting && (
+                                          <button
+                                            onClick={() => setConsultingMentor({ id: answer.mentor.id, name: answer.mentor.full_name })}
+                                            className="flex items-center gap-1.5 text-sm text-blue-600 hover:text-blue-700 font-semibold bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-lg transition"
+                                          >
+                                            <Phone className="w-3.5 h-3.5" />
+                                            <span>Book Consultation with {answer.mentor.full_name.split(' ')[0]}</span>
+                                          </button>
+                                        )}
                                       </div>
                                     </div>
                                   </div>
@@ -831,6 +844,14 @@ export function EpisodeViewPage() {
         isOpen={isCallModalOpen}
         onClose={() => setIsCallModalOpen(false)}
       />
+
+      {consultingMentor && (
+        <CallBookingModal
+          mentor={{ id: consultingMentor.id, full_name: consultingMentor.name } as any}
+          isOpen={true}
+          onClose={() => setConsultingMentor(null)}
+        />
+      )}
     </PublicLayout>
   );
 }
