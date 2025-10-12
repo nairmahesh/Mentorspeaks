@@ -28,6 +28,7 @@ import { CorporateFeaturesPage } from './pages/CorporateFeaturesPage';
 import { CorporateSignupPage } from './pages/CorporateSignupPage';
 import { CommunityManagePage } from './pages/CommunityManagePage';
 import { ChaptersPage } from './pages/ChaptersPage';
+import { ChapterDetailPage } from './pages/ChapterDetailPage';
 
 function AppRoutes() {
   const { user, loading } = useAuth();
@@ -55,6 +56,7 @@ function AppRoutes() {
       <Route path="/podcasts/episode/:episodeId/view" element={<EpisodeViewPage />} />
       <Route path="/guest/respond/:token" element={<GuestResponsePage />} />
       <Route path="/chapters" element={<ChaptersPage />} />
+      <Route path="/chapters/:slug" element={<ChapterDetailPage />} />
       <Route
         path="/community/manage"
         element={

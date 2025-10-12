@@ -10,6 +10,7 @@ export function ProfilePage() {
   const [fullName, setFullName] = useState(profile?.full_name || '');
   const [bio, setBio] = useState(profile?.bio || '');
   const [professionalTitle, setProfessionalTitle] = useState(profile?.professional_title || '');
+  const [country, setCountry] = useState(profile?.country || '');
   const [selectedIndustries, setSelectedIndustries] = useState<string[]>([]);
   const [industries, setIndustries] = useState<Industry[]>([]);
 
@@ -71,6 +72,7 @@ export function ProfilePage() {
         full_name: fullName,
         bio: bio || null,
         professional_title: professionalTitle || null,
+        country: country || null,
       };
 
       // Add mentor-specific fields
@@ -191,6 +193,51 @@ export function ProfilePage() {
               required
               className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
+          </div>
+
+          <div>
+            <label htmlFor="country" className="block text-sm font-medium text-slate-700 mb-2">
+              Country *
+            </label>
+            <select
+              id="country"
+              value={country}
+              onChange={(e) => setCountry(e.target.value)}
+              required
+              className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            >
+              <option value="">Select your country</option>
+              <option value="India">India</option>
+              <option value="Bangladesh">Bangladesh</option>
+              <option value="Sri Lanka">Sri Lanka</option>
+              <option value="Nepal">Nepal</option>
+              <option value="Pakistan">Pakistan</option>
+              <option value="Bhutan">Bhutan</option>
+              <option value="Maldives">Maldives</option>
+              <option value="United Arab Emirates">United Arab Emirates</option>
+              <option value="Saudi Arabia">Saudi Arabia</option>
+              <option value="Qatar">Qatar</option>
+              <option value="Kuwait">Kuwait</option>
+              <option value="Bahrain">Bahrain</option>
+              <option value="Oman">Oman</option>
+              <option value="Jordan">Jordan</option>
+              <option value="Lebanon">Lebanon</option>
+              <option value="Egypt">Egypt</option>
+              <option value="Turkey">Turkey</option>
+              <option value="Israel">Israel</option>
+              <option value="Singapore">Singapore</option>
+              <option value="Malaysia">Malaysia</option>
+              <option value="Indonesia">Indonesia</option>
+              <option value="Thailand">Thailand</option>
+              <option value="Philippines">Philippines</option>
+              <option value="Vietnam">Vietnam</option>
+              <option value="Myanmar">Myanmar</option>
+              <option value="Cambodia">Cambodia</option>
+              <option value="Laos">Laos</option>
+              <option value="Brunei">Brunei</option>
+              <option value="Timor-Leste">Timor-Leste</option>
+            </select>
+            <p className="text-xs text-slate-500 mt-1">Required to join regional chapters</p>
           </div>
 
           {profile?.role === 'mentor' && (

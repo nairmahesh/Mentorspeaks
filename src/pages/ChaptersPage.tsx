@@ -150,24 +150,13 @@ export function ChaptersPage() {
                   )}
                 </div>
 
-                {!chapter.is_member ? (
-                  <button
-                    onClick={() => joinChapter(chapter.id)}
-                    disabled={joiningChapter === chapter.id || !user}
-                    className="w-full flex items-center justify-center space-x-2 bg-blue-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-blue-700 transition disabled:opacity-50 group-hover:bg-blue-700"
-                  >
-                    <span>{joiningChapter === chapter.id ? 'Joining...' : user ? 'Join Chapter' : 'Login to Join'}</span>
-                    <ArrowRight className="w-5 h-5" />
-                  </button>
-                ) : (
-                  <Link
-                    to={`/chapters/${chapter.slug}`}
-                    className="w-full flex items-center justify-center space-x-2 bg-slate-100 text-slate-700 py-3 px-6 rounded-lg font-medium hover:bg-slate-200 transition"
-                  >
-                    <span>View Chapter</span>
-                    <ArrowRight className="w-5 h-5" />
-                  </Link>
-                )}
+                <Link
+                  to={`/chapters/${chapter.slug}`}
+                  className="w-full flex items-center justify-center space-x-2 bg-blue-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-blue-700 transition group-hover:bg-blue-700"
+                >
+                  <span>View Chapter</span>
+                  <ArrowRight className="w-5 h-5" />
+                </Link>
               </div>
             </div>
           ))}
