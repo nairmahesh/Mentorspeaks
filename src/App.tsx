@@ -55,6 +55,7 @@ function AppRoutes() {
       />
       <Route path="/" element={<HomePage />} />
       <Route path="/podcasts" element={<PodcastsPage />} />
+      <Route path="/podcasts/episode/:episodeId" element={<EpisodeViewPage />} />
       <Route path="/podcasts/episode/:episodeId/view" element={<EpisodeViewPage />} />
       <Route path="/guest/respond/:token" element={<GuestResponsePage />} />
       <Route path="/chapters" element={<ChaptersPage />} />
