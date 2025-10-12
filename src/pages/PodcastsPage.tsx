@@ -14,7 +14,11 @@ import {
   TrendingUp,
   Radio,
   Headphones,
-  Phone
+  Phone,
+  Heart,
+  Share2,
+  Star,
+  Sparkles
 } from 'lucide-react';
 
 type AnswerWithDetails = Answer & {
@@ -40,6 +44,7 @@ export function PodcastsPage() {
   const [episodes, setEpisodes] = useState<PodcastEpisode[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<'all' | 'trending' | 'recent'>('all');
+  const [likedEpisodes, setLikedEpisodes] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     loadPodcasts();
@@ -83,10 +88,42 @@ export function PodcastsPage() {
     return `${mins}:${String(secs).padStart(2, '0')}`;
   };
 
+  const handleLike = (episodeId: string) => {
+    setLikedEpisodes((prev) => {
+      const newLiked = new Set(prev);
+      if (newLiked.has(episodeId)) {
+        newLiked.delete(episodeId);
+      } else {
+        newLiked.add(episodeId);
+      }
+      return newLiked;
+    });
+  };
+
+  const handleShare = async (episode: PodcastEpisode) => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: episode.title,
+          text: episode.description,
+          url: window.location.href,
+        });
+      } catch (err) {
+        console.log('Share cancelled');
+      }
+    } else {
+      navigator.clipboard.writeText(window.location.href);
+      alert('Link copied to clipboard!');
+    }
+  };
+
+  const featuredEpisodes = episodes.filter((_, index) => index < 3);
+  const upcomingEpisodes = episodes.filter((ep) => new Date(ep.published_at) > new Date());
+
   return (
     <Layout>
       <div className="min-h-screen bg-slate-50">
-        <div className="relative bg-gradient-to-br from-orange-600 via-red-600 to-pink-600 text-white py-16">
+        <div className="relative bg-gradient-to-br from-blue-600 via-teal-600 to-cyan-600 text-white py-16">
           <div className="absolute inset-0 bg-black bg-opacity-10"></div>
           <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center">
@@ -97,7 +134,7 @@ export function PodcastsPage() {
               <h1 className="text-5xl md:text-6xl font-bold mb-4">
                 Listen & Learn
               </h1>
-              <p className="text-xl text-orange-100 max-w-3xl mx-auto">
+              <p className="text-xl text-blue-100 max-w-3xl mx-auto">
                 Explore podcast episodes where industry experts share their knowledge and answer community questions
               </p>
             </div>
@@ -121,16 +158,19 @@ export function PodcastsPage() {
 
           {loading ? (
             <div className="flex items-center justify-center py-20">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600"></div>
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
             </div>
           ) : (
             <>
-              {/* New Podcast Episodes */}
-              {episodes.length > 0 && (
+              {/* Featured Episodes */}
+              {featuredEpisodes.length > 0 && (
                 <div className="mb-12">
-                  <h3 className="text-xl font-bold text-slate-900 mb-6">Latest Podcast Episodes</h3>
+                  <div className="flex items-center space-x-2 mb-6">
+                    <Star className="w-6 h-6 text-amber-500 fill-amber-500" />
+                    <h3 className="text-2xl font-bold text-slate-900">Featured Episodes</h3>
+                  </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {episodes.map((episode) => (
+                    {featuredEpisodes.map((episode) => (
                       <div
                         key={episode.id}
                         className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all border-2 border-slate-200 hover:border-blue-400 flex flex-col"
@@ -202,21 +242,127 @@ export function PodcastsPage() {
                           </div>
 
                           <div className="flex items-center justify-between text-xs text-slate-500 mb-4 pt-4 border-t border-slate-100">
-                            <div className="flex items-center space-x-1">
-                              <Calendar className="w-3.5 h-3.5" />
-                              <span>{formatDate(episode.published_at)}</span>
-                            </div>
-                            <div className="flex items-center space-x-1">
-                              <Headphones className="w-3.5 h-3.5" />
-                              <span>{episode.view_count || 0} views</span>
+                            <div className="flex items-center space-x-3">
+                              <div className="flex items-center space-x-1">
+                                <Eye className="w-3.5 h-3.5" />
+                                <span>{episode.view_count || 0}</span>
+                              </div>
+                              <button
+                                onClick={() => handleLike(episode.id)}
+                                className={`flex items-center space-x-1 transition ${
+                                  likedEpisodes.has(episode.id) ? 'text-pink-600' : 'hover:text-pink-600'
+                                }`}
+                              >
+                                <Heart className={`w-3.5 h-3.5 ${likedEpisodes.has(episode.id) ? 'fill-pink-600' : ''}`} />
+                                <span>24</span>
+                              </button>
+                              <button
+                                onClick={() => handleShare(episode)}
+                                className="flex items-center space-x-1 hover:text-blue-600 transition"
+                              >
+                                <Share2 className="w-3.5 h-3.5" />
+                                <span>Share</span>
+                              </button>
                             </div>
                           </div>
 
                           <button
-                            className="w-full flex items-center justify-center space-x-2 bg-gradient-to-r from-blue-600 to-slate-700 text-white px-4 py-2.5 rounded-xl font-semibold hover:from-blue-700 hover:to-slate-800 transition text-sm"
+                            className="w-full flex items-center justify-center space-x-2 bg-gradient-to-r from-blue-600 to-teal-600 text-white px-4 py-2.5 rounded-xl font-semibold hover:from-blue-700 hover:to-teal-700 transition text-sm"
                           >
                             <Play className="w-4 h-4" />
                             <span>Watch Episode</span>
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Upcoming Episodes */}
+              {upcomingEpisodes.length > 0 && (
+                <div className="mb-12">
+                  <div className="flex items-center space-x-2 mb-6">
+                    <Sparkles className="w-6 h-6 text-blue-600" />
+                    <h3 className="text-2xl font-bold text-slate-900">Upcoming Episodes</h3>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {upcomingEpisodes.map((episode) => (
+                      <div
+                        key={episode.id}
+                        className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all border-2 border-blue-200 hover:border-blue-400 flex flex-col"
+                      >
+                        <div className="relative aspect-video bg-gradient-to-br from-blue-500 via-teal-600 to-cyan-600 flex items-center justify-center overflow-hidden group">
+                          {episode.thumbnail_url ? (
+                            <img src={episode.thumbnail_url} alt={episode.title} className="w-full h-full object-cover opacity-80" />
+                          ) : (
+                            <>
+                              <div className="absolute inset-0 bg-black bg-opacity-20"></div>
+                              <div className="relative z-10 text-center">
+                                <div className="w-20 h-20 rounded-full bg-white bg-opacity-95 flex items-center justify-center group-hover:scale-110 transition shadow-2xl mx-auto mb-3">
+                                  <Calendar className="w-10 h-10 text-blue-600" />
+                                </div>
+                                <p className="text-white font-bold text-sm">Coming Soon</p>
+                              </div>
+                            </>
+                          )}
+                          <div className="absolute top-3 left-3">
+                            <div className="bg-blue-600 px-3 py-1.5 rounded-full text-white text-xs font-bold">
+                              EP {episode.episode_number}
+                            </div>
+                          </div>
+                          <div className="absolute top-3 right-3">
+                            <div className="bg-amber-500 px-3 py-1.5 rounded-full text-white text-xs font-bold">
+                              UPCOMING
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="p-6 flex-1 flex flex-col">
+                          <div className="flex items-center space-x-3 mb-4">
+                            {episode.guest?.avatar_url ? (
+                              <img
+                                src={episode.guest.avatar_url}
+                                alt={episode.guest.full_name}
+                                className="w-12 h-12 rounded-full ring-2 ring-blue-200"
+                              />
+                            ) : (
+                              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-teal-600 flex items-center justify-center ring-2 ring-blue-200">
+                                <span className="text-white text-lg font-bold">
+                                  {episode.guest?.full_name?.charAt(0)}
+                                </span>
+                              </div>
+                            )}
+                            <div className="flex-1 min-w-0">
+                              <p className="font-bold text-slate-900">{episode.guest?.full_name}</p>
+                              {episode.guest?.professional_title && (
+                                <p className="text-sm text-slate-600 truncate">{episode.guest.professional_title}</p>
+                              )}
+                            </div>
+                          </div>
+
+                          <div className="flex-1">
+                            <h3 className="font-bold text-slate-900 mb-2 line-clamp-2 text-lg leading-snug">
+                              {episode.title}
+                            </h3>
+                            {episode.description && (
+                              <p className="text-sm text-slate-600 line-clamp-2 leading-relaxed mb-4">
+                                {episode.description}
+                              </p>
+                            )}
+                          </div>
+
+                          <div className="flex items-center justify-center text-sm text-slate-600 mb-4 pt-4 border-t border-slate-100">
+                            <Calendar className="w-4 h-4 mr-2" />
+                            <span className="font-semibold">Releases: {formatDate(episode.published_at)}</span>
+                          </div>
+
+                          <button
+                            className="w-full flex items-center justify-center space-x-2 bg-slate-200 text-slate-700 px-4 py-2.5 rounded-xl font-semibold cursor-not-allowed text-sm"
+                            disabled
+                          >
+                            <Clock className="w-4 h-4" />
+                            <span>Not Available Yet</span>
                           </button>
                         </div>
                       </div>
@@ -231,14 +377,14 @@ export function PodcastsPage() {
               {podcasts.map((podcast) => (
                 <div
                   key={podcast.id}
-                  className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all border-2 border-slate-200 hover:border-orange-400 flex flex-col"
+                  className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all border-2 border-slate-200 hover:border-slate-400 flex flex-col"
                 >
                   <Link to={`/questions/${podcast.question_id}`}>
-                    <div className="relative aspect-video bg-gradient-to-br from-orange-500 via-red-600 to-pink-600 flex items-center justify-center overflow-hidden group">
+                    <div className="relative aspect-video bg-gradient-to-br from-slate-600 via-slate-700 to-slate-800 flex items-center justify-center overflow-hidden group">
                       <div className="absolute inset-0 bg-black bg-opacity-20"></div>
                       <div className="relative z-10 text-center">
                         <div className="w-20 h-20 rounded-full bg-white bg-opacity-95 flex items-center justify-center group-hover:scale-110 transition shadow-2xl mx-auto mb-3">
-                          <Play className="w-10 h-10 text-red-600 ml-1" />
+                          <Play className="w-10 h-10 text-slate-700 ml-1" />
                         </div>
                         <Mic className="w-8 h-8 text-white opacity-60 mx-auto" />
                       </div>
@@ -266,10 +412,10 @@ export function PodcastsPage() {
                         <img
                           src={podcast.mentor.avatar_url}
                           alt={podcast.mentor.full_name}
-                          className="w-12 h-12 rounded-full ring-2 ring-orange-200"
+                          className="w-12 h-12 rounded-full ring-2 ring-slate-200"
                         />
                       ) : (
-                        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center ring-2 ring-orange-200">
+                        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-slate-600 to-slate-700 flex items-center justify-center ring-2 ring-slate-200">
                           <span className="text-white text-lg font-bold">
                             {podcast.mentor?.full_name?.charAt(0)}
                           </span>
@@ -284,7 +430,7 @@ export function PodcastsPage() {
                     </div>
 
                     <Link to={`/questions/${podcast.question_id}`} className="flex-1">
-                      <h3 className="font-bold text-slate-900 mb-2 line-clamp-2 text-lg hover:text-orange-600 transition leading-snug">
+                      <h3 className="font-bold text-slate-900 mb-2 line-clamp-2 text-lg hover:text-blue-600 transition leading-snug">
                         {podcast.question?.title}
                       </h3>
 
@@ -309,7 +455,7 @@ export function PodcastsPage() {
                     <div className="grid grid-cols-2 gap-3">
                       <Link
                         to={`/questions/${podcast.question_id}`}
-                        className="flex items-center justify-center space-x-2 bg-gradient-to-r from-orange-600 to-red-600 text-white px-4 py-2.5 rounded-xl font-semibold hover:from-orange-700 hover:to-red-700 transition text-sm"
+                        className="flex items-center justify-center space-x-2 bg-gradient-to-r from-slate-700 to-slate-800 text-white px-4 py-2.5 rounded-xl font-semibold hover:from-slate-800 hover:to-slate-900 transition text-sm"
                       >
                         <Play className="w-4 h-4" />
                         <span>Listen</span>
