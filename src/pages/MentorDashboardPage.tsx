@@ -106,7 +106,7 @@ export function MentorDashboardPage() {
           <div className="bg-white rounded-lg shadow-sm border border-slate-200 p-6">
             <div className="flex items-center justify-between mb-2">
               <span className="text-slate-600">Total Earnings</span>
-              <DollarSign className="w-5 h-5 text-orange-600" />
+              <DollarSign className="w-5 h-5 text-blue-600" />
             </div>
             <div className="text-3xl font-bold text-slate-900">₹{stats.totalEarnings}</div>
           </div>
@@ -172,7 +172,7 @@ export function MentorDashboardPage() {
 
           <div className="bg-white rounded-lg shadow-sm border border-slate-200 p-6">
             <div className="flex items-center space-x-2 mb-6">
-              <TrendingUp className="w-6 h-6 text-orange-500" />
+              <TrendingUp className="w-6 h-6 text-blue-500" />
               <h2 className="text-xl font-bold text-slate-900">Quick Actions</h2>
             </div>
 
@@ -208,10 +208,10 @@ export function MentorDashboardPage() {
 
               <Link
                 to="/mentor/subscription"
-                className="block bg-orange-50 border border-orange-200 rounded-lg p-4 hover:bg-orange-100 transition"
+                className="block bg-blue-50 border border-blue-200 rounded-lg p-4 hover:bg-blue-100 transition"
               >
-                <h3 className="font-semibold text-orange-900 mb-1">Manage Subscription</h3>
-                <p className="text-sm text-orange-700">Upgrade to unlock more features and visibility</p>
+                <h3 className="font-semibold text-blue-900 mb-1">Manage Subscription</h3>
+                <p className="text-sm text-blue-700">Upgrade to unlock more features and visibility</p>
               </Link>
 
               <Link

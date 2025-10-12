@@ -310,7 +310,7 @@ export function ModeratorManagePage() {
                 <div className="flex items-start justify-between">
                   <div className="flex items-start space-x-4">
                     <div className={`w-12 h-12 rounded-full flex items-center justify-center ${
-                      mod.is_admin ? 'bg-gradient-to-br from-yellow-400 to-orange-500' : 'bg-blue-100'
+                      mod.is_admin ? 'bg-gradient-to-br from-yellow-400 to-blue-500' : 'bg-blue-100'
                     }`}>
                       {mod.is_admin ? (
                         <Crown className="w-6 h-6 text-white" />
@@ -323,7 +323,7 @@ export function ModeratorManagePage() {
                       <div className="flex items-center space-x-2">
                         <h3 className="font-bold text-slate-900">{mod.user?.full_name}</h3>
                         {mod.is_admin && (
-                          <span className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white text-xs px-2 py-1 rounded-full font-semibold">
+                          <span className="bg-gradient-to-r from-yellow-400 to-blue-500 text-white text-xs px-2 py-1 rounded-full font-semibold">
                             ADMIN
                           </span>
                         )}
@@ -346,7 +346,7 @@ export function ModeratorManagePage() {
                       onClick={() => toggleAdminStatus(mod.id, mod.is_admin)}
                       className={`px-3 py-1 rounded-lg text-sm font-medium transition ${
                         mod.is_admin
-                          ? 'bg-orange-100 text-orange-700 hover:bg-orange-200'
+                          ? 'bg-blue-100 text-blue-700 hover:bg-blue-200'
                           : 'bg-blue-100 text-blue-700 hover:bg-blue-200'
                       }`}
                     >
@@ -378,7 +378,7 @@ export function ModeratorManagePage() {
           <h3 className="font-semibold text-blue-900 mb-2">Moderator Hierarchy</h3>
           <ul className="text-sm text-blue-800 space-y-2">
             <li className="flex items-start space-x-2">
-              <Crown className="w-4 h-4 mt-0.5 text-orange-500" />
+              <Crown className="w-4 h-4 mt-0.5 text-blue-500" />
               <span><strong>Admin Moderators:</strong> Can create podcasts, manage episodes, and add/remove other moderators</span>
             </li>
             <li className="flex items-start space-x-2">

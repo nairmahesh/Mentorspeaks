@@ -44,7 +44,7 @@ export function Layout({ children }: LayoutProps) {
                   <span className="font-medium">My Feed</span>
                 </Link>
 
-                <Link to="/podcasts" className="flex items-center space-x-1 text-orange-600 hover:text-orange-700 transition">
+                <Link to="/podcasts" className="flex items-center space-x-1 text-blue-600 hover:text-blue-700 transition">
                   <Radio className="w-5 h-5" />
                   <span className="font-medium">Podcasts</span>
                 </Link>

@@ -150,7 +150,7 @@ export function CorporateFeaturesPage() {
               const colorClasses = {
                 blue: 'bg-blue-100 text-blue-600',
                 green: 'bg-green-100 text-green-600',
-                orange: 'bg-orange-100 text-orange-600',
+                orange: 'bg-blue-100 text-blue-600',
                 purple: 'bg-purple-100 text-purple-600',
                 cyan: 'bg-cyan-100 text-cyan-600'
               };
@@ -235,8 +235,8 @@ export function CorporateFeaturesPage() {
                   </div>
 
                   <div className="flex items-start space-x-4">
-                    <div className="bg-orange-100 rounded-lg p-3">
-                      <Video className="w-6 h-6 text-orange-600" />
+                    <div className="bg-blue-100 rounded-lg p-3">
+                      <Video className="w-6 h-6 text-blue-600" />
                     </div>
                     <div>
                       <h3 className="font-bold text-slate-900 mb-1">Video-First Platform</h3>

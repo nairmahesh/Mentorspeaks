@@ -94,8 +94,8 @@ export function MentorsPage() {
               </p>
             </div>
 
-            <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-2xl p-8 border border-orange-200">
-              <div className="w-14 h-14 bg-orange-600 rounded-xl flex items-center justify-center mb-6">
+            <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-8 border border-blue-200">
+              <div className="w-14 h-14 bg-blue-600 rounded-xl flex items-center justify-center mb-6">
                 <Globe className="w-7 h-7 text-white" />
               </div>
               <h3 className="text-2xl font-bold text-slate-900 mb-3">Global Impact</h3>
@@ -137,11 +137,11 @@ export function MentorsPage() {
         </div>
       </div>
 
-      <div className="py-20 bg-gradient-to-br from-amber-50 via-orange-50 to-rose-50">
+      <div className="py-20 bg-gradient-to-br from-amber-50 via-blue-50 to-rose-50">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-white rounded-3xl p-12 shadow-xl border border-orange-100">
+          <div className="bg-white rounded-3xl p-12 shadow-xl border border-blue-100">
             <div className="text-center mb-12">
-              <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-rose-500 to-orange-500 rounded-full mb-6">
+              <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-rose-500 to-blue-500 rounded-full mb-6">
                 <Heart className="w-10 h-10 text-white" fill="white" />
               </div>
               <h2 className="text-4xl font-bold text-slate-900 mb-4">Make a Difference That Matters</h2>

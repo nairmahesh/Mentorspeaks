@@ -109,7 +109,7 @@ export function HomePage() {
 
             <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold mb-6 leading-tight">
               <span className="block">Conversations That Build</span>
-              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-orange-300 to-pink-300">
+              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-blue-300 to-pink-300">
                 Future Leaders
               </span>
             </h1>
@@ -160,7 +160,7 @@ export function HomePage() {
       <div className="bg-slate-50 py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-orange-100 to-red-100 px-4 py-2 rounded-full mb-4">
+            <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-blue-100 to-red-100 px-4 py-2 rounded-full mb-4">
               <Radio className="w-4 h-4 text-red-600 animate-pulse" />
               <span className="text-sm font-bold text-red-900">FEATURED PODCASTS</span>
             </div>
@@ -178,11 +178,11 @@ export function HomePage() {
                 <Link
                   key={mentor.id}
                   to={`/mentor/${mentor.id}`}
-                  className="group bg-white rounded-2xl p-3 sm:p-6 shadow-lg hover:shadow-2xl transition-all border-2 border-slate-200 hover:border-orange-400 relative"
+                  className="group bg-white rounded-2xl p-3 sm:p-6 shadow-lg hover:shadow-2xl transition-all border-2 border-slate-200 hover:border-blue-400 relative"
                 >
                   {mentor.is_stalwart && (
                     <div className="absolute top-2 right-2 sm:top-3 sm:right-3 z-10">
-                      <div className="bg-gradient-to-r from-amber-400 to-orange-500 text-white px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-lg text-[10px] sm:text-xs font-bold flex items-center space-x-0.5 sm:space-x-1 shadow-lg">
+                      <div className="bg-gradient-to-r from-amber-400 to-blue-500 text-white px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-lg text-[10px] sm:text-xs font-bold flex items-center space-x-0.5 sm:space-x-1 shadow-lg">
                         <Star className="w-2.5 h-2.5 sm:w-3 sm:h-3 fill-white" />
                         <span className="hidden sm:inline">TOP VOICE</span>
                       </div>
@@ -193,24 +193,24 @@ export function HomePage() {
                       <img
                         src={mentor.avatar_url}
                         alt={mentor.full_name}
-                        className={`w-16 h-16 sm:w-24 sm:h-24 rounded-full mx-auto ring-2 sm:ring-4 ${mentor.is_stalwart ? 'ring-amber-300 group-hover:ring-amber-400' : 'ring-orange-100 group-hover:ring-orange-300'} transition`}
+                        className={`w-16 h-16 sm:w-24 sm:h-24 rounded-full mx-auto ring-2 sm:ring-4 ${mentor.is_stalwart ? 'ring-amber-300 group-hover:ring-amber-400' : 'ring-blue-100 group-hover:ring-blue-300'} transition`}
                       />
                     ) : (
-                      <div className={`w-16 h-16 sm:w-24 sm:h-24 rounded-full bg-gradient-to-br ${mentor.is_stalwart ? 'from-amber-400 to-orange-500' : 'from-orange-400 to-red-600'} flex items-center justify-center mx-auto ring-2 sm:ring-4 ${mentor.is_stalwart ? 'ring-amber-300 group-hover:ring-amber-400' : 'ring-orange-100 group-hover:ring-orange-300'} transition`}>
+                      <div className={`w-16 h-16 sm:w-24 sm:h-24 rounded-full bg-gradient-to-br ${mentor.is_stalwart ? 'from-amber-400 to-blue-500' : 'from-blue-400 to-red-600'} flex items-center justify-center mx-auto ring-2 sm:ring-4 ${mentor.is_stalwart ? 'ring-amber-300 group-hover:ring-amber-400' : 'ring-blue-100 group-hover:ring-blue-300'} transition`}>
                         <span className="text-xl sm:text-3xl font-bold text-white">{mentor.full_name.charAt(0)}</span>
                       </div>
                     )}
-                    <div className="absolute -bottom-1 sm:-bottom-2 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-orange-500 to-red-600 text-white px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-bold flex items-center space-x-0.5 sm:space-x-1 shadow-lg">
+                    <div className="absolute -bottom-1 sm:-bottom-2 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-blue-500 to-red-600 text-white px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-bold flex items-center space-x-0.5 sm:space-x-1 shadow-lg">
                       <Mic className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
                       <span>LIVE</span>
                     </div>
                   </div>
-                  <h3 className="font-bold text-slate-900 text-center mb-1 group-hover:text-orange-600 transition text-sm sm:text-lg line-clamp-2">
+                  <h3 className="font-bold text-slate-900 text-center mb-1 group-hover:text-blue-600 transition text-sm sm:text-lg line-clamp-2">
                     {mentor.full_name}
                   </h3>
                   {mentor.stalwart_designation && (
                     <div className="text-center mb-2">
-                      <span className="inline-block bg-gradient-to-r from-amber-100 to-orange-100 text-amber-900 px-2 sm:px-3 py-0.5 rounded-full text-[10px] sm:text-xs font-bold border border-amber-300 line-clamp-1">
+                      <span className="inline-block bg-gradient-to-r from-amber-100 to-blue-100 text-amber-900 px-2 sm:px-3 py-0.5 rounded-full text-[10px] sm:text-xs font-bold border border-amber-300 line-clamp-1">
                         {mentor.stalwart_designation}
                       </span>
                     </div>
@@ -218,12 +218,12 @@ export function HomePage() {
                   {mentor.professional_title && (
                     <p className="text-xs sm:text-sm text-slate-600 text-center mb-2 sm:mb-3 line-clamp-1 font-medium hidden sm:block">{mentor.professional_title}</p>
                   )}
-                  <div className={`bg-gradient-to-r ${mentor.is_stalwart ? 'from-amber-50 to-orange-50 border-l-4 border-amber-400' : 'from-orange-50 to-red-50 border-l-4 border-orange-500'} rounded-xl p-2 sm:p-3 mb-2 sm:mb-4 hidden sm:block`}>
+                  <div className={`bg-gradient-to-r ${mentor.is_stalwart ? 'from-amber-50 to-blue-50 border-l-4 border-amber-400' : 'from-blue-50 to-red-50 border-l-4 border-blue-500'} rounded-xl p-2 sm:p-3 mb-2 sm:mb-4 hidden sm:block`}>
                     <p className="text-xs text-slate-700 italic leading-relaxed line-clamp-3">
                       "{mentor.bio || 'Sharing insights and expertise through engaging podcast discussions'}"
                     </p>
                   </div>
-                  <div className="flex items-center justify-center space-x-1 sm:space-x-2 text-orange-600 group-hover:text-orange-700 font-bold text-xs sm:text-sm">
+                  <div className="flex items-center justify-center space-x-1 sm:space-x-2 text-blue-600 group-hover:text-blue-700 font-bold text-xs sm:text-sm">
                     <Headphones className="w-3 h-3 sm:w-4 sm:h-4" />
                     <span>Listen Now</span>
                   </div>
@@ -262,7 +262,7 @@ export function HomePage() {
                   to={`/questions/${answer.question_id}`}
                   className="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 border-2 border-slate-200 hover:border-blue-400"
                 >
-                  <div className="relative aspect-video bg-gradient-to-br from-orange-500 via-red-600 to-pink-600 flex items-center justify-center overflow-hidden">
+                  <div className="relative aspect-video bg-gradient-to-br from-blue-500 via-red-600 to-pink-600 flex items-center justify-center overflow-hidden">
                     <div className="absolute inset-0 bg-black bg-opacity-20"></div>
                     <div className="relative z-10 text-center">
                       <div className="w-20 h-20 rounded-full bg-white bg-opacity-95 flex items-center justify-center group-hover:scale-110 transition shadow-2xl mx-auto mb-3">
@@ -293,10 +293,10 @@ export function HomePage() {
                         <img
                           src={answer.mentor.avatar_url}
                           alt={answer.mentor.full_name}
-                          className="w-12 h-12 rounded-full ring-2 ring-orange-200"
+                          className="w-12 h-12 rounded-full ring-2 ring-blue-200"
                         />
                       ) : (
-                        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center ring-2 ring-orange-200">
+                        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-red-600 flex items-center justify-center ring-2 ring-blue-200">
                           <span className="text-white text-lg font-bold">
                             {answer.mentor?.full_name?.charAt(0)}
                           </span>
@@ -327,7 +327,7 @@ export function HomePage() {
             <div className="text-center">
               <Link
                 to="/podcasts"
-                className="inline-flex items-center space-x-3 bg-gradient-to-r from-orange-600 to-red-600 text-white px-10 py-5 rounded-2xl font-bold hover:from-orange-700 hover:to-red-700 transition shadow-xl text-lg"
+                className="inline-flex items-center space-x-3 bg-gradient-to-r from-blue-600 to-red-600 text-white px-10 py-5 rounded-2xl font-bold hover:from-blue-700 hover:to-red-700 transition shadow-xl text-lg"
               >
                 <Headphones className="w-6 h-6" />
                 <span>Explore All Expert Responses</span>
@@ -378,7 +378,7 @@ export function HomePage() {
             </div>
 
             <div className="bg-white bg-opacity-5 backdrop-blur-sm rounded-2xl p-8 border border-white border-opacity-10">
-              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-orange-400 to-red-600 flex items-center justify-center mb-6">
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-400 to-red-600 flex items-center justify-center mb-6">
                 <Mic className="w-8 h-8 text-white" />
               </div>
               <h3 className="text-2xl font-bold text-white mb-3">2. Experts Respond</h3>
@@ -415,7 +415,7 @@ export function HomePage() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
             <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-lg transition group">
-              <div className="h-32 bg-gradient-to-br from-orange-500 to-red-600 relative">
+              <div className="h-32 bg-gradient-to-br from-blue-500 to-red-600 relative">
                 <div className="absolute inset-0 flex items-center justify-center">
                   <MapPin className="w-16 h-16 text-white opacity-50" />
                 </div>
@@ -484,18 +484,18 @@ export function HomePage() {
         </div>
       </div>
 
-      <div className="bg-gradient-to-r from-orange-600 via-red-600 to-pink-600 py-20">
+      <div className="bg-gradient-to-r from-blue-600 via-red-600 to-pink-600 py-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
             Ready to Learn from Experts?
           </h2>
-          <p className="text-xl text-orange-100 mb-10 leading-relaxed">
+          <p className="text-xl text-blue-100 mb-10 leading-relaxed">
             Join thousands of professionals getting answers from industry experts through podcast-style responses
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               to="/podcasts"
-              className="bg-white text-orange-600 px-10 py-5 rounded-xl font-bold hover:bg-orange-50 transition shadow-xl text-lg inline-flex items-center justify-center space-x-2"
+              className="bg-white text-blue-600 px-10 py-5 rounded-xl font-bold hover:bg-blue-50 transition shadow-xl text-lg inline-flex items-center justify-center space-x-2"
             >
               <Headphones className="w-6 h-6" />
               <span>Browse Podcasts</span>

@@ -126,7 +126,7 @@ export function BrowseMentorsPage() {
               >
                 {mentor.is_stalwart && (
                   <div className="absolute top-4 right-4">
-                    <div className="bg-gradient-to-r from-amber-400 to-orange-500 text-white px-2.5 py-1 rounded-lg text-xs font-bold flex items-center space-x-1 shadow-lg">
+                    <div className="bg-gradient-to-r from-amber-400 to-blue-500 text-white px-2.5 py-1 rounded-lg text-xs font-bold flex items-center space-x-1 shadow-lg">
                       <Award className="w-3 h-3" />
                       <span>TOP VOICE</span>
                     </div>
@@ -150,7 +150,7 @@ export function BrowseMentorsPage() {
                     </h3>
                     {mentor.stalwart_designation && (
                       <div className="mb-1">
-                        <span className="inline-block bg-gradient-to-r from-amber-100 to-orange-100 text-amber-900 px-2 py-0.5 rounded-full text-xs font-bold border border-amber-300">
+                        <span className="inline-block bg-gradient-to-r from-amber-100 to-blue-100 text-amber-900 px-2 py-0.5 rounded-full text-xs font-bold border border-amber-300">
                           {mentor.stalwart_designation}
                         </span>
                       </div>
@@ -228,7 +228,7 @@ export function BrowseMentorsPage() {
                 </div>
 
                 {mentor.offers_consulting && (
-                  <div className="mb-4 px-3 py-2 bg-gradient-to-r from-orange-50 to-red-50 border border-orange-200 text-orange-900 text-xs font-semibold rounded-lg text-center">
+                  <div className="mb-4 px-3 py-2 bg-gradient-to-r from-blue-50 to-red-50 border border-blue-200 text-blue-900 text-xs font-semibold rounded-lg text-center">
                     <div className="flex items-center justify-center space-x-1">
                       <TrendingUp className="w-3 h-3" />
                       <span>Offers Consulting</span>

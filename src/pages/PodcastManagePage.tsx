@@ -141,7 +141,7 @@ export function PodcastManagePage() {
             {isAdmin && (
               <Link
                 to="/moderators/manage"
-                className="flex items-center space-x-2 bg-gradient-to-r from-orange-500 to-orange-600 text-white px-4 py-2 rounded-lg hover:from-orange-600 hover:to-orange-700 transition"
+                className="flex items-center space-x-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white px-4 py-2 rounded-lg hover:from-blue-600 hover:to-blue-700 transition"
               >
                 <Shield className="w-5 h-5" />
                 <span>Manage Moderators</span>
@@ -218,7 +218,7 @@ export function PodcastManagePage() {
                   <div className="text-sm text-slate-600">Today</div>
                 </div>
                 <div className="bg-white rounded-lg border border-slate-200 p-4">
-                  <div className="text-2xl font-bold text-orange-600">{stats.future}</div>
+                  <div className="text-2xl font-bold text-blue-600">{stats.future}</div>
                   <div className="text-sm text-slate-600">Upcoming</div>
                 </div>
                 <div className="bg-white rounded-lg border border-slate-200 p-4">

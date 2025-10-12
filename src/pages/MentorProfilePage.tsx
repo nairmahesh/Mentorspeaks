@@ -104,7 +104,7 @@ export function MentorProfilePage() {
           </Link>
 
           <div className="bg-white rounded-3xl shadow-xl overflow-hidden">
-            <div className={`${mentor.is_stalwart ? 'bg-gradient-to-r from-amber-500 via-orange-500 to-red-500' : 'bg-gradient-to-r from-blue-600 to-blue-800'} p-8 text-white relative overflow-hidden`}>
+            <div className={`${mentor.is_stalwart ? 'bg-gradient-to-r from-amber-500 via-blue-500 to-red-500' : 'bg-gradient-to-r from-blue-600 to-blue-800'} p-8 text-white relative overflow-hidden`}>
               <div className="absolute inset-0 bg-grid-pattern opacity-10"></div>
 
               {mentor.is_stalwart && (
@@ -124,7 +124,7 @@ export function MentorProfilePage() {
                     className="w-32 h-32 rounded-full ring-8 ring-white shadow-2xl"
                   />
                 ) : (
-                  <div className={`w-32 h-32 rounded-full ${mentor.is_stalwart ? 'bg-gradient-to-br from-amber-300 to-orange-400' : 'bg-gradient-to-br from-blue-400 to-blue-600'} flex items-center justify-center ring-8 ring-white shadow-2xl`}>
+                  <div className={`w-32 h-32 rounded-full ${mentor.is_stalwart ? 'bg-gradient-to-br from-amber-300 to-blue-400' : 'bg-gradient-to-br from-blue-400 to-blue-600'} flex items-center justify-center ring-8 ring-white shadow-2xl`}>
                     <span className="text-5xl font-bold text-white">{mentor.full_name.charAt(0)}</span>
                   </div>
                 )}
@@ -206,7 +206,7 @@ export function MentorProfilePage() {
                     {mentor.expertise_areas.map((area: string, index: number) => (
                       <span
                         key={index}
-                        className={`${mentor.is_stalwart ? 'bg-gradient-to-r from-amber-100 to-orange-100 text-amber-900 border-amber-300' : 'bg-blue-50 text-blue-700 border-blue-200'} px-4 py-2 rounded-full font-semibold text-sm border-2`}
+                        className={`${mentor.is_stalwart ? 'bg-gradient-to-r from-amber-100 to-blue-100 text-amber-900 border-amber-300' : 'bg-blue-50 text-blue-700 border-blue-200'} px-4 py-2 rounded-full font-semibold text-sm border-2`}
                       >
                         {area}
                       </span>
@@ -216,9 +216,9 @@ export function MentorProfilePage() {
               )}
 
               {mentor.offers_consulting && (
-                <div className="mb-8 bg-gradient-to-r from-orange-50 to-red-50 border-2 border-orange-200 rounded-2xl p-6">
+                <div className="mb-8 bg-gradient-to-r from-blue-50 to-red-50 border-2 border-blue-200 rounded-2xl p-6">
                   <div className="flex items-start space-x-4">
-                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-orange-400 to-red-500 flex items-center justify-center flex-shrink-0">
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-400 to-red-500 flex items-center justify-center flex-shrink-0">
                       <Phone className="w-6 h-6 text-white" />
                     </div>
                     <div className="flex-1">
