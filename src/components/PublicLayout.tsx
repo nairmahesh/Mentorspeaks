@@ -27,6 +27,9 @@ export function PublicLayout({ children }: PublicLayoutProps) {
             </Link>
 
             <div className="flex items-center space-x-6">
+              <Link to="/podcasts" className="text-slate-700 hover:text-slate-900 font-medium transition">
+                Podcasts
+              </Link>
               <Link to="/about" className="text-slate-700 hover:text-slate-900 font-medium transition">
                 About
               </Link>
