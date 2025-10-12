@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { Video } from 'lucide-react';
+import { Video, ArrowLeft } from 'lucide-react';
 
 export function LoginPage() {
   const [email, setEmail] = useState('');
@@ -29,8 +29,16 @@ export function LoginPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-slate-50 to-slate-100 flex items-center justify-center px-4">
       <div className="max-w-md w-full">
+        <Link
+          to="/"
+          className="inline-flex items-center space-x-2 text-slate-600 hover:text-blue-600 mb-6 font-medium transition"
+        >
+          <ArrowLeft className="w-5 h-5" />
+          <span>Back to Home</span>
+        </Link>
+
         <div className="text-center mb-8">
-          <Link to="/" className="inline-flex items-center space-x-3 text-3xl font-bold text-slate-900 mb-2">
+          <Link to="/" className="inline-flex items-center space-x-3 text-3xl font-bold text-slate-900 mb-2 hover:text-blue-600 transition">
             <Video className="w-10 h-10 text-blue-600" />
             <div className="flex flex-col">
               <span>effyMentor</span>
