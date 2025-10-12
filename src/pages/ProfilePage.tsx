@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase, Industry } from '../lib/supabase';
 import { Layout } from '../components/Layout';
-import { User, Briefcase, Save } from 'lucide-react';
+import { User, Briefcase, Save, Linkedin, Heart, DollarSign } from 'lucide-react';
+import * as LucideIcons from 'lucide-react';
 
 export function ProfilePage() {
   const { user, profile } = useAuth();
@@ -11,6 +12,15 @@ export function ProfilePage() {
   const [professionalTitle, setProfessionalTitle] = useState(profile?.professional_title || '');
   const [selectedIndustries, setSelectedIndustries] = useState<string[]>([]);
   const [industries, setIndustries] = useState<Industry[]>([]);
+
+  // New mentor fields
+  const [linkedinUrl, setLinkedinUrl] = useState(profile?.linkedin_url || '');
+  const [yearsOfExperience, setYearsOfExperience] = useState(profile?.years_of_experience?.toString() || '');
+  const [willingToMentor, setWillingToMentor] = useState<string[]>(profile?.willing_to_mentor || []);
+  const [mentoringRateType, setMentoringRateType] = useState<'free' | 'paid' | 'both'>(profile?.mentoring_rate_type || 'paid');
+  const [freeHoursPerWeek, setFreeHoursPerWeek] = useState(profile?.free_hours_per_week?.toString() || '');
+  const [hourlyRate, setHourlyRate] = useState(profile?.hourly_rate?.toString() || '');
+
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
@@ -42,6 +52,14 @@ export function ProfilePage() {
     }
   };
 
+  const toggleMenteeType = (type: string) => {
+    setWillingToMentor(prev =>
+      prev.includes(type)
+        ? prev.filter(t => t !== type)
+        : [...prev, type]
+    );
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
@@ -49,13 +67,31 @@ export function ProfilePage() {
     setLoading(true);
 
     try {
+      const updateData: any = {
+        full_name: fullName,
+        bio: bio || null,
+        professional_title: professionalTitle || null,
+      };
+
+      // Add mentor-specific fields
+      if (profile?.role === 'mentor') {
+        updateData.linkedin_url = linkedinUrl || null;
+        updateData.years_of_experience = yearsOfExperience ? parseInt(yearsOfExperience) : null;
+        updateData.willing_to_mentor = willingToMentor;
+        updateData.mentoring_rate_type = mentoringRateType;
+
+        if (mentoringRateType === 'free' || mentoringRateType === 'both') {
+          updateData.free_hours_per_week = freeHoursPerWeek ? parseInt(freeHoursPerWeek) : null;
+        }
+
+        if (mentoringRateType === 'paid' || mentoringRateType === 'both') {
+          updateData.hourly_rate = hourlyRate ? parseFloat(hourlyRate) : null;
+        }
+      }
+
       const { error: profileError } = await supabase
         .from('profiles')
-        .update({
-          full_name: fullName,
-          bio: bio || null,
-          professional_title: professionalTitle || null,
-        })
+        .update(updateData)
         .eq('id', user!.id);
 
       if (profileError) throw profileError;
@@ -158,19 +194,54 @@ export function ProfilePage() {
           </div>
 
           {profile?.role === 'mentor' && (
-            <div>
-              <label htmlFor="professionalTitle" className="block text-sm font-medium text-slate-700 mb-2">
-                Professional Title
-              </label>
-              <input
-                id="professionalTitle"
-                type="text"
-                value={professionalTitle}
-                onChange={(e) => setProfessionalTitle(e.target.value)}
-                className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="e.g., Senior Software Engineer at Google"
-              />
-            </div>
+            <>
+              <div>
+                <label htmlFor="professionalTitle" className="block text-sm font-medium text-slate-700 mb-2">
+                  Professional Title
+                </label>
+                <input
+                  id="professionalTitle"
+                  type="text"
+                  value={professionalTitle}
+                  onChange={(e) => setProfessionalTitle(e.target.value)}
+                  className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="e.g., Senior Software Engineer at Google"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="linkedinUrl" className="block text-sm font-medium text-slate-700 mb-2">
+                  <div className="flex items-center space-x-2">
+                    <Linkedin className="w-4 h-4" />
+                    <span>LinkedIn Profile URL</span>
+                  </div>
+                </label>
+                <input
+                  id="linkedinUrl"
+                  type="url"
+                  value={linkedinUrl}
+                  onChange={(e) => setLinkedinUrl(e.target.value)}
+                  className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="https://linkedin.com/in/yourprofile"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="yearsOfExperience" className="block text-sm font-medium text-slate-700 mb-2">
+                  Years of Professional Experience
+                </label>
+                <input
+                  id="yearsOfExperience"
+                  type="number"
+                  min="0"
+                  max="70"
+                  value={yearsOfExperience}
+                  onChange={(e) => setYearsOfExperience(e.target.value)}
+                  className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="10"
+                />
+              </div>
+            </>
           )}
 
           <div>
@@ -196,23 +267,145 @@ export function ProfilePage() {
                 </div>
               </label>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                {industries.map((industry) => (
+                {industries.map((industry) => {
+                  const IconComponent = industry.icon && (LucideIcons as any)[industry.icon];
+                  return (
+                    <button
+                      key={industry.id}
+                      type="button"
+                      onClick={() => toggleIndustry(industry.id)}
+                      className={`px-4 py-3 rounded-lg border-2 transition text-left ${
+                        selectedIndustries.includes(industry.id)
+                          ? 'border-blue-600 bg-blue-50 text-blue-700'
+                          : 'border-slate-300 bg-white text-slate-700 hover:border-slate-400'
+                      }`}
+                    >
+                      <div className="flex items-center space-x-2">
+                        {IconComponent ? (
+                          <IconComponent className="w-5 h-5" />
+                        ) : (
+                          <Briefcase className="w-5 h-5" />
+                        )}
+                        <span className="text-sm font-medium">{industry.name}</span>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+
+              <div className="mt-6">
+                <label className="block text-sm font-medium text-slate-700 mb-3">
+                  Willing to Mentor
+                </label>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                  {[
+                    { value: 'students', label: 'Students' },
+                    { value: 'entry_level', label: 'Entry Level' },
+                    { value: 'mid_level', label: 'Mid Level' },
+                    { value: 'senior_level', label: 'Senior Level' },
+                    { value: 'anyone', label: 'Anyone' }
+                  ].map((type) => (
+                    <button
+                      key={type.value}
+                      type="button"
+                      onClick={() => toggleMenteeType(type.value)}
+                      className={`px-3 py-2 rounded-lg border-2 transition text-sm ${
+                        willingToMentor.includes(type.value)
+                          ? 'border-blue-600 bg-blue-50 text-blue-700'
+                          : 'border-slate-300 bg-white text-slate-700 hover:border-slate-400'
+                      }`}
+                    >
+                      {type.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="mt-6">
+                <label className="block text-sm font-medium text-slate-700 mb-3">
+                  Mentoring Rate
+                </label>
+                <div className="grid grid-cols-3 gap-3 mb-4">
                   <button
-                    key={industry.id}
                     type="button"
-                    onClick={() => toggleIndustry(industry.id)}
-                    className={`px-4 py-3 rounded-lg border-2 transition text-left ${
-                      selectedIndustries.includes(industry.id)
+                    onClick={() => setMentoringRateType('free')}
+                    className={`px-4 py-3 rounded-lg border-2 transition text-center ${
+                      mentoringRateType === 'free'
+                        ? 'border-green-600 bg-green-50 text-green-700'
+                        : 'border-slate-300 bg-white text-slate-700 hover:border-slate-400'
+                    }`}
+                  >
+                    <Heart className="w-5 h-5 mx-auto mb-1" />
+                    <div className="font-medium text-sm">Free</div>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setMentoringRateType('paid')}
+                    className={`px-4 py-3 rounded-lg border-2 transition text-center ${
+                      mentoringRateType === 'paid'
                         ? 'border-blue-600 bg-blue-50 text-blue-700'
                         : 'border-slate-300 bg-white text-slate-700 hover:border-slate-400'
                     }`}
                   >
-                    <div className="flex items-center space-x-2">
-                      <span>{industry.icon || '📁'}</span>
-                      <span className="text-sm font-medium">{industry.name}</span>
-                    </div>
+                    <DollarSign className="w-5 h-5 mx-auto mb-1" />
+                    <div className="font-medium text-sm">Paid</div>
                   </button>
-                ))}
+
+                  <button
+                    type="button"
+                    onClick={() => setMentoringRateType('both')}
+                    className={`px-4 py-3 rounded-lg border-2 transition text-center ${
+                      mentoringRateType === 'both'
+                        ? 'border-blue-600 bg-blue-50 text-blue-700'
+                        : 'border-slate-300 bg-white text-slate-700 hover:border-slate-400'
+                    }`}
+                  >
+                    <div className="flex items-center justify-center mb-1">
+                      <Heart className="w-4 h-4" />
+                      <DollarSign className="w-4 h-4" />
+                    </div>
+                    <div className="font-medium text-sm">Both</div>
+                  </button>
+                </div>
+
+                <div className="space-y-4">
+                  {(mentoringRateType === 'free' || mentoringRateType === 'both') && (
+                    <div>
+                      <label htmlFor="freeHoursPerWeek" className="block text-sm font-medium text-slate-700 mb-2">
+                        Free Hours Per Week
+                      </label>
+                      <input
+                        id="freeHoursPerWeek"
+                        type="number"
+                        min="1"
+                        max="168"
+                        value={freeHoursPerWeek}
+                        onChange={(e) => setFreeHoursPerWeek(e.target.value)}
+                        className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        placeholder="5"
+                      />
+                    </div>
+                  )}
+
+                  {(mentoringRateType === 'paid' || mentoringRateType === 'both') && (
+                    <div>
+                      <label htmlFor="hourlyRate" className="block text-sm font-medium text-slate-700 mb-2">
+                        Hourly Rate (USD)
+                      </label>
+                      <input
+                        id="hourlyRate"
+                        type="number"
+                        min="1"
+                        step="0.01"
+                        value={hourlyRate}
+                        onChange={(e) => setHourlyRate(e.target.value)}
+                        className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        placeholder="100"
+                      />
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           )}
