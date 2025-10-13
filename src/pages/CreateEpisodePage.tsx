@@ -1446,6 +1446,41 @@ Looking forward to hearing from you!`;
                 </div>
               )}
             </div>
+
+            {questions.length > 0 && (
+              <div className="mt-6 p-4 bg-gradient-to-r from-cyan-50 to-blue-50 border border-cyan-200 rounded-lg">
+                <h3 className="text-sm font-semibold text-slate-900 mb-3">Estimated Podcast Length</h3>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="bg-white rounded-lg p-3 border border-cyan-100">
+                    <p className="text-xs text-slate-600 mb-1">Based on Questions</p>
+                    <p className="text-2xl font-bold text-slate-900">{questions.length}</p>
+                    <p className="text-xs text-slate-500 mt-1">
+                      ~{Math.round(questions.length * 3)}-{Math.round(questions.length * 5)} mins
+                    </p>
+                    <p className="text-xs text-slate-400 mt-1">
+                      (3-5 mins per question)
+                    </p>
+                  </div>
+                  <div className="bg-white rounded-lg p-3 border border-cyan-100">
+                    <p className="text-xs text-slate-600 mb-1">Total Estimated Time</p>
+                    <p className="text-2xl font-bold text-blue-600">
+                      {Math.round((questions.length * 3 + questions.length * 5) / 2)} mins
+                    </p>
+                    <p className="text-xs text-slate-500 mt-1">
+                      ≈ {Math.floor((questions.length * 3 + questions.length * 5) / 2 / 60)}h {Math.round(((questions.length * 3 + questions.length * 5) / 2) % 60)}m
+                    </p>
+                    <p className="text-xs text-slate-400 mt-1">
+                      Average estimate
+                    </p>
+                  </div>
+                </div>
+                <div className="mt-3 p-2 bg-white/50 rounded border border-cyan-100">
+                  <p className="text-xs text-slate-600">
+                    💡 <span className="font-medium">Pro tip:</span> Add introduction, transitions, and closing (~5-10 mins) to your estimate
+                  </p>
+                </div>
+              </div>
+            )}
           </div>
 
           <div className="flex space-x-4">
