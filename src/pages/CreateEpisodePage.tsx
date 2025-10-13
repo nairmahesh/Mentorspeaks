@@ -634,6 +634,23 @@ export function CreateEpisodePage() {
                             <div className="flex flex-wrap items-center gap-2 mt-3">
                               <button
                                 type="button"
+                                onClick={() => copyInvitationLink(externalGuests[0].id)}
+                                className="flex items-center space-x-1 text-xs bg-slate-700 text-white px-3 py-1.5 rounded hover:bg-slate-800 transition"
+                              >
+                                {copiedInviteId === `${externalGuests[0].id}-link` ? (
+                                  <>
+                                    <Check className="w-3 h-3" />
+                                    <span>Copied!</span>
+                                  </>
+                                ) : (
+                                  <>
+                                    <Copy className="w-3 h-3" />
+                                    <span>Link</span>
+                                  </>
+                                )}
+                              </button>
+                              <button
+                                type="button"
                                 onClick={() => copyInvitationMessage(externalGuests[0].id, 'email')}
                                 className="flex items-center space-x-1 text-xs bg-blue-600 text-white px-3 py-1.5 rounded hover:bg-blue-700 transition"
                               >
@@ -645,7 +662,7 @@ export function CreateEpisodePage() {
                                 ) : (
                                   <>
                                     <Mail className="w-3 h-3" />
-                                    <span>Copy Email</span>
+                                    <span>Email</span>
                                   </>
                                 )}
                               </button>
@@ -663,28 +680,11 @@ export function CreateEpisodePage() {
                                   ) : (
                                     <>
                                       <MessageCircle className="w-3 h-3" />
-                                      <span>Copy WhatsApp</span>
+                                      <span>WhatsApp</span>
                                     </>
                                   )}
                                 </button>
                               )}
-                              <button
-                                type="button"
-                                onClick={() => copyInvitationLink(externalGuests[0].id)}
-                                className="flex items-center space-x-1 text-xs bg-slate-700 text-white px-3 py-1.5 rounded hover:bg-slate-800 transition"
-                              >
-                                {copiedInviteId === `${externalGuests[0].id}-link` ? (
-                                  <>
-                                    <Check className="w-3 h-3" />
-                                    <span>Copied!</span>
-                                  </>
-                                ) : (
-                                  <>
-                                    <Copy className="w-3 h-3" />
-                                    <span>Copy Link</span>
-                                  </>
-                                )}
-                              </button>
                             </div>
                           </div>
                           <button
@@ -944,6 +944,23 @@ export function CreateEpisodePage() {
                                   <div className="flex flex-wrap items-center gap-2 mt-3">
                                     <button
                                       type="button"
+                                      onClick={() => copyInvitationLink(guest.id)}
+                                      className="flex items-center space-x-1 text-xs bg-slate-700 text-white px-2 py-1 rounded hover:bg-slate-800 transition"
+                                    >
+                                      {copiedInviteId === `${guest.id}-link` ? (
+                                        <>
+                                          <Check className="w-3 h-3" />
+                                          <span>Copied!</span>
+                                        </>
+                                      ) : (
+                                        <>
+                                          <Copy className="w-3 h-3" />
+                                          <span>Link</span>
+                                        </>
+                                      )}
+                                    </button>
+                                    <button
+                                      type="button"
                                       onClick={() => copyInvitationMessage(guest.id, 'email')}
                                       className="flex items-center space-x-1 text-xs bg-blue-600 text-white px-2 py-1 rounded hover:bg-blue-700 transition"
                                     >
@@ -978,23 +995,6 @@ export function CreateEpisodePage() {
                                         )}
                                       </button>
                                     )}
-                                    <button
-                                      type="button"
-                                      onClick={() => copyInvitationLink(guest.id)}
-                                      className="flex items-center space-x-1 text-xs bg-slate-700 text-white px-2 py-1 rounded hover:bg-slate-800 transition"
-                                    >
-                                      {copiedInviteId === `${guest.id}-link` ? (
-                                        <>
-                                          <Check className="w-3 h-3" />
-                                          <span>Copied!</span>
-                                        </>
-                                      ) : (
-                                        <>
-                                          <Copy className="w-3 h-3" />
-                                          <span>Link</span>
-                                        </>
-                                      )}
-                                    </button>
                                   </div>
                                 </div>
                                 <div className="flex flex-col items-end space-y-2">
