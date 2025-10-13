@@ -41,6 +41,7 @@ import { AnalyticsHubPage } from './pages/AnalyticsHubPage';
 import { MentorAnalyticsPage } from './pages/MentorAnalyticsPage';
 import { CRMHubPage } from './pages/CRMHubPage';
 import { MenteeCRMPage } from './pages/MenteeCRMPage';
+import { MenteeDetailPage } from './pages/MenteeDetailPage';
 
 function AppRoutes() {
   const { user, profile, loading } = useAuth();
@@ -255,6 +256,14 @@ function AppRoutes() {
         element={
           <ProtectedRoute requiredRole="mentor">
             <MenteeCRMPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/mentor/crm/mentee/:id"
+        element={
+          <ProtectedRoute requiredRole="mentor">
+            <MenteeDetailPage />
           </ProtectedRoute>
         }
       />

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Layout } from '../components/Layout';
+import { BrandLayout } from '../components/BrandLayout';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../lib/supabase';
 import {
@@ -218,20 +218,20 @@ export function MentorBrandDashboardPage() {
 
   if (loading) {
     return (
-      <Layout>
+      <BrandLayout>
         <div className="flex items-center justify-center min-h-[60vh]">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
             <p className="mt-4 text-slate-600">Loading dashboard...</p>
           </div>
         </div>
-      </Layout>
+      </BrandLayout>
     );
   }
 
   return (
-    <Layout>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <BrandLayout>
+      <div className="max-w-6xl">
         <div className="mb-8">
           <div className="flex items-center space-x-3 mb-2">
             <Sparkles className="w-8 h-8 text-blue-600" />
@@ -379,6 +379,6 @@ export function MentorBrandDashboardPage() {
           </div>
         </div>
       </div>
-    </Layout>
+    </BrandLayout>
   );
 }

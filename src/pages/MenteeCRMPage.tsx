@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Layout } from '../components/Layout';
+import { BrandLayout } from '../components/BrandLayout';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../lib/supabase';
 import {
@@ -201,20 +201,20 @@ export function MenteeCRMPage() {
 
   if (loading) {
     return (
-      <Layout>
+      <BrandLayout>
         <div className="flex items-center justify-center min-h-[60vh]">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
             <p className="mt-4 text-slate-600">Loading mentees...</p>
           </div>
         </div>
-      </Layout>
+      </BrandLayout>
     );
   }
 
   return (
-    <Layout>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <BrandLayout>
+      <div className="max-w-6xl">
         <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-3xl font-bold text-slate-900 mb-2">Mentee Relationships</h1>
@@ -279,7 +279,7 @@ export function MenteeCRMPage() {
                 </thead>
                 <tbody className="bg-white divide-y divide-slate-200">
                   {filteredMentees.map(mentee => (
-                    <tr key={mentee.id} className="hover:bg-slate-50 transition">
+                    <tr key={mentee.id} className="hover:bg-slate-50 transition cursor-pointer" onClick={() => window.location.href = `/mentor/crm/mentee/${mentee.id}`}>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div>
                           <div className="font-semibold text-slate-900">{mentee.mentee_name}</div>
@@ -486,6 +486,6 @@ export function MenteeCRMPage() {
           </div>
         )}
       </div>
-    </Layout>
+    </BrandLayout>
   );
 }
