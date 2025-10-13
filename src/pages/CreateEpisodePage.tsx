@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Layout } from '../components/Layout';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../lib/supabase';
-import { Sparkles, Plus, Trash2, ArrowLeft, Users, User, UserPlus, Mail, MessageCircle } from 'lucide-react';
+import { Sparkles, Plus, Trash2, ArrowLeft, Users, User, UserPlus, Mail, MessageCircle, Copy, Check } from 'lucide-react';
 
 interface Series {
   id: string;
@@ -56,6 +56,7 @@ export function CreateEpisodePage() {
     professional_title: '',
     invitation_method: 'email' as 'email' | 'whatsapp' | 'both'
   });
+  const [copiedInviteId, setCopiedInviteId] = useState<string | null>(null);
   const [moderatorId, setModeratorId] = useState('');
   const [episodeNumber, setEpisodeNumber] = useState('1');
   const [recordingType, setRecordingType] = useState<'video' | 'audio'>('video');
@@ -208,21 +209,40 @@ export function CreateEpisodePage() {
     }
   };
 
+  const copyInvitationMessage = async (guestId: string, method: 'email' | 'whatsapp') => {
+    const guest = externalGuests.find(g => g.id === guestId);
+    if (!guest) return;
+
+    // Get invitation message from database function
+    const { data: message } = await supabase.rpc('get_invitation_message', {
+      episode_title: title || 'Podcast Episode',
+      episode_description: description,
+      moderator_name: moderators.find(m => m.id === moderatorId)?.full_name || 'Our Team',
+      invitation_token: 'will-be-generated',
+      message_type: method
+    });
+
+    if (message) {
+      await navigator.clipboard.writeText(message);
+      setCopiedInviteId(guestId);
+      setTimeout(() => setCopiedInviteId(null), 2000);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     setLoading(true);
 
     try {
-      // For single guest mode, use the old guest_id field
-      // For multiple guests, leave guest_id null and use the junction table
+      // Create episode
       const { data: episode, error: episodeError } = await supabase
         .from('podcast_episodes')
         .insert({
           series_id: seriesId || null,
           title,
           description,
-          guest_id: guestMode === 'single' ? guestId : null,
+          guest_id: (guestMode === 'single' && guestId) ? guestId : null,
           moderator_id: moderatorId || user!.id,
           episode_number: parseInt(episodeNumber),
           recording_type: recordingType,
@@ -233,6 +253,58 @@ export function CreateEpisodePage() {
         .single();
 
       if (episodeError) throw episodeError;
+
+      // Handle single guest mode with external guest
+      if (guestMode === 'single' && externalGuests.length > 0 && episode) {
+        const extGuest = externalGuests[0];
+
+        // Create external guest record
+        const { data: externalGuestData, error: externalError } = await supabase
+          .from('podcast_external_guests')
+          .insert({
+            full_name: extGuest.full_name,
+            email: extGuest.email,
+            phone: extGuest.phone || null,
+            professional_title: extGuest.professional_title || null
+          })
+          .select()
+          .single();
+
+        if (externalError) throw externalError;
+
+        // Add to guests table
+        const { error: guestError } = await supabase
+          .from('podcast_episode_guests')
+          .insert({
+            episode_id: episode.id,
+            guest_id: null,
+            external_guest_id: externalGuestData.id,
+            guest_order: 1,
+            is_primary_guest: true
+          });
+
+        if (guestError) throw guestError;
+
+        // Create invitation
+        const { data: invitation, error: inviteError } = await supabase
+          .from('podcast_guest_invitations')
+          .insert({
+            episode_id: episode.id,
+            external_guest_id: externalGuestData.id,
+            invitation_method: extGuest.invitation_method,
+            guest_order: 1,
+            is_primary_guest: true
+          })
+          .select()
+          .single();
+
+        if (inviteError) throw inviteError;
+
+        // Send invitation
+        if (invitation) {
+          sendInvitation(extGuest.id, extGuest.invitation_method);
+        }
+      }
 
       // If multiple guests, insert into podcast_episode_guests
       if (guestMode === 'multiple' && (selectedGuests.length > 0 || externalGuests.length > 0) && episode) {
@@ -439,61 +511,283 @@ export function CreateEpisodePage() {
 
               {guestMode === 'single' ? (
                 <>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">
-                    Select Guest (Mentor) *
-                  </label>
-                  <select
-                    value={guestId}
-                    onChange={(e) => setGuestId(e.target.value)}
-                    required
-                    className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
-                  >
-                    <option value="">Select a mentor</option>
-                    {mentors.map((m) => (
-                      <option key={m.id} value={m.id}>
-                        {m.full_name} {m.professional_title && `- ${m.professional_title}`}
-                      </option>
-                    ))}
-                  </select>
-
-                  {guestId && mentors.find(m => m.id === guestId) && (
-                    <div className="mt-4 p-4 bg-slate-50 rounded-lg border border-slate-200">
-                      <h3 className="font-semibold text-slate-900 mb-2">Guest Profile</h3>
-                      {(() => {
-                        const guest = mentors.find(m => m.id === guestId);
-                        return guest ? (
-                          <div className="space-y-2 text-sm">
-                            <p className="text-slate-700">
-                              <span className="font-medium">Name:</span> {guest.full_name}
-                            </p>
-                            {guest.professional_title && (
-                              <p className="text-slate-700">
-                                <span className="font-medium">Title:</span> {guest.professional_title}
-                              </p>
-                            )}
-                            {guest.years_of_experience && (
-                              <p className="text-slate-700">
-                                <span className="font-medium">Experience:</span> {guest.years_of_experience} years
-                              </p>
-                            )}
-                            {guest.bio && (
-                              <p className="text-slate-600 mt-2">{guest.bio}</p>
-                            )}
-                            {guest.linkedin_url && (
-                              <a
-                                href={guest.linkedin_url}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-blue-600 hover:text-blue-700 inline-block mt-2"
-                              >
-                                View LinkedIn Profile →
-                              </a>
-                            )}
-                          </div>
-                        ) : null;
-                      })()}
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <label className="block text-sm font-medium text-slate-700">
+                        Select Guest *
+                      </label>
+                      <button
+                        type="button"
+                        onClick={() => setShowExternalGuestForm(true)}
+                        className="flex items-center space-x-2 text-sm text-blue-600 hover:text-blue-700"
+                      >
+                        <UserPlus className="w-4 h-4" />
+                        <span>Invite External Guest</span>
+                      </button>
                     </div>
-                  )}
+
+                    {externalGuests.length === 0 ? (
+                      <>
+                        <select
+                          value={guestId}
+                          onChange={(e) => setGuestId(e.target.value)}
+                          required={externalGuests.length === 0}
+                          className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
+                        >
+                          <option value="">Select a mentor</option>
+                          {mentors.map((m) => (
+                            <option key={m.id} value={m.id}>
+                              {m.full_name} {m.professional_title && `- ${m.professional_title}`}
+                            </option>
+                          ))}
+                        </select>
+
+                        {guestId && mentors.find(m => m.id === guestId) && (
+                          <div className="mt-4 p-4 bg-slate-50 rounded-lg border border-slate-200">
+                            <h3 className="font-semibold text-slate-900 mb-2">Guest Profile</h3>
+                            {(() => {
+                              const guest = mentors.find(m => m.id === guestId);
+                              return guest ? (
+                                <div className="space-y-2 text-sm">
+                                  <p className="text-slate-700">
+                                    <span className="font-medium">Name:</span> {guest.full_name}
+                                  </p>
+                                  {guest.professional_title && (
+                                    <p className="text-slate-700">
+                                      <span className="font-medium">Title:</span> {guest.professional_title}
+                                    </p>
+                                  )}
+                                  {guest.years_of_experience && (
+                                    <p className="text-slate-700">
+                                      <span className="font-medium">Experience:</span> {guest.years_of_experience} years
+                                    </p>
+                                  )}
+                                  {guest.bio && (
+                                    <p className="text-slate-600 mt-2">{guest.bio}</p>
+                                  )}
+                                  {guest.linkedin_url && (
+                                    <a
+                                      href={guest.linkedin_url}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="text-blue-600 hover:text-blue-700 inline-block mt-2"
+                                    >
+                                      View LinkedIn Profile →
+                                    </a>
+                                  )}
+                                </div>
+                              ) : null;
+                            })()}
+                          </div>
+                        )}
+                      </>
+                    ) : (
+                      <div className="p-4 rounded-lg border-2 border-green-200 bg-green-50">
+                        <div className="flex items-start justify-between">
+                          <div className="flex-1">
+                            <div className="flex items-center space-x-2 mb-2">
+                              <span className="font-medium text-slate-900">{externalGuests[0].full_name}</span>
+                              <span className="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded">
+                                External Guest
+                              </span>
+                            </div>
+                            <p className="text-sm text-slate-600">{externalGuests[0].email}</p>
+                            {externalGuests[0].professional_title && (
+                              <p className="text-sm text-slate-600">{externalGuests[0].professional_title}</p>
+                            )}
+                            <div className="flex items-center space-x-2 mt-3">
+                              <span className="text-xs text-slate-500">Will be invited via:</span>
+                              {externalGuests[0].invitation_method === 'email' && (
+                                <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded flex items-center space-x-1">
+                                  <Mail className="w-3 h-3" />
+                                  <span>Email</span>
+                                </span>
+                              )}
+                              {externalGuests[0].invitation_method === 'whatsapp' && (
+                                <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded flex items-center space-x-1">
+                                  <MessageCircle className="w-3 h-3" />
+                                  <span>WhatsApp</span>
+                                </span>
+                              )}
+                              {externalGuests[0].invitation_method === 'both' && (
+                                <>
+                                  <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded flex items-center space-x-1">
+                                    <Mail className="w-3 h-3" />
+                                    <span>Email</span>
+                                  </span>
+                                  <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded flex items-center space-x-1">
+                                    <MessageCircle className="w-3 h-3" />
+                                    <span>WhatsApp</span>
+                                  </span>
+                                </>
+                              )}
+                            </div>
+                            <div className="flex items-center space-x-2 mt-3">
+                              <button
+                                type="button"
+                                onClick={() => copyInvitationMessage(externalGuests[0].id, 'email')}
+                                className="flex items-center space-x-1 text-xs bg-blue-600 text-white px-3 py-1.5 rounded hover:bg-blue-700 transition"
+                              >
+                                {copiedInviteId === externalGuests[0].id ? (
+                                  <>
+                                    <Check className="w-3 h-3" />
+                                    <span>Copied!</span>
+                                  </>
+                                ) : (
+                                  <>
+                                    <Copy className="w-3 h-3" />
+                                    <span>Copy Email Message</span>
+                                  </>
+                                )}
+                              </button>
+                              {externalGuests[0].phone && (
+                                <button
+                                  type="button"
+                                  onClick={() => copyInvitationMessage(externalGuests[0].id, 'whatsapp')}
+                                  className="flex items-center space-x-1 text-xs bg-green-600 text-white px-3 py-1.5 rounded hover:bg-green-700 transition"
+                                >
+                                  {copiedInviteId === `${externalGuests[0].id}-wa` ? (
+                                    <>
+                                      <Check className="w-3 h-3" />
+                                      <span>Copied!</span>
+                                    </>
+                                  ) : (
+                                    <>
+                                      <Copy className="w-3 h-3" />
+                                      <span>Copy WhatsApp Message</span>
+                                    </>
+                                  )}
+                                </button>
+                              )}
+                            </div>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => setExternalGuests([])}
+                            className="text-red-600 hover:text-red-700 p-1 ml-2"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* External Guest Form Modal - same as multiple mode */}
+                    {showExternalGuestForm && (
+                      <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+                        <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+                          <h3 className="text-lg font-semibold text-slate-900 mb-4">Invite External Guest</h3>
+                          <div className="space-y-4">
+                            <div>
+                              <label className="block text-sm font-medium text-slate-700 mb-1">
+                                Full Name *
+                              </label>
+                              <input
+                                type="text"
+                                value={externalGuestForm.full_name}
+                                onChange={(e) => setExternalGuestForm({ ...externalGuestForm, full_name: e.target.value })}
+                                className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                placeholder="John Doe"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium text-slate-700 mb-1">
+                                Email *
+                              </label>
+                              <input
+                                type="email"
+                                value={externalGuestForm.email}
+                                onChange={(e) => setExternalGuestForm({ ...externalGuestForm, email: e.target.value })}
+                                className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                placeholder="john@example.com"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium text-slate-700 mb-1">
+                                Phone (Optional, for WhatsApp)
+                              </label>
+                              <input
+                                type="tel"
+                                value={externalGuestForm.phone}
+                                onChange={(e) => setExternalGuestForm({ ...externalGuestForm, phone: e.target.value })}
+                                className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                placeholder="+1234567890"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium text-slate-700 mb-1">
+                                Professional Title (Optional)
+                              </label>
+                              <input
+                                type="text"
+                                value={externalGuestForm.professional_title}
+                                onChange={(e) => setExternalGuestForm({ ...externalGuestForm, professional_title: e.target.value })}
+                                className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                placeholder="CEO, Tech Company"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium text-slate-700 mb-1">
+                                Send Invitation Via
+                              </label>
+                              <div className="space-y-2">
+                                <label className="flex items-center space-x-2">
+                                  <input
+                                    type="radio"
+                                    checked={externalGuestForm.invitation_method === 'email'}
+                                    onChange={() => setExternalGuestForm({ ...externalGuestForm, invitation_method: 'email' })}
+                                    className="text-blue-600"
+                                  />
+                                  <Mail className="w-4 h-4 text-slate-600" />
+                                  <span className="text-sm">Email Only</span>
+                                </label>
+                                <label className="flex items-center space-x-2">
+                                  <input
+                                    type="radio"
+                                    checked={externalGuestForm.invitation_method === 'whatsapp'}
+                                    onChange={() => setExternalGuestForm({ ...externalGuestForm, invitation_method: 'whatsapp' })}
+                                    className="text-blue-600"
+                                  />
+                                  <MessageCircle className="w-4 h-4 text-slate-600" />
+                                  <span className="text-sm">WhatsApp Only</span>
+                                </label>
+                                <label className="flex items-center space-x-2">
+                                  <input
+                                    type="radio"
+                                    checked={externalGuestForm.invitation_method === 'both'}
+                                    onChange={() => setExternalGuestForm({ ...externalGuestForm, invitation_method: 'both' })}
+                                    className="text-blue-600"
+                                  />
+                                  <span className="text-sm">Both Email & WhatsApp</span>
+                                </label>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="flex space-x-3 mt-6">
+                            <button
+                              type="button"
+                              onClick={() => {
+                                addExternalGuest();
+                                if (guestMode === 'single') {
+                                  setGuestId(''); // Clear internal guest selection
+                                }
+                              }}
+                              className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition"
+                            >
+                              Add Guest
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => setShowExternalGuestForm(false)}
+                              className="px-4 py-2 border border-slate-300 rounded-lg hover:bg-slate-50 transition"
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 </>
               ) : (
                 <>
@@ -621,8 +915,46 @@ export function CreateEpisodePage() {
                                       </>
                                     )}
                                   </div>
+                                  <div className="flex items-center space-x-2 mt-3">
+                                    <button
+                                      type="button"
+                                      onClick={() => copyInvitationMessage(guest.id, 'email')}
+                                      className="flex items-center space-x-1 text-xs bg-blue-600 text-white px-2 py-1 rounded hover:bg-blue-700 transition"
+                                    >
+                                      {copiedInviteId === guest.id ? (
+                                        <>
+                                          <Check className="w-3 h-3" />
+                                          <span>Copied!</span>
+                                        </>
+                                      ) : (
+                                        <>
+                                          <Copy className="w-3 h-3" />
+                                          <span>Copy Email</span>
+                                        </>
+                                      )}
+                                    </button>
+                                    {guest.phone && (
+                                      <button
+                                        type="button"
+                                        onClick={() => copyInvitationMessage(guest.id, 'whatsapp')}
+                                        className="flex items-center space-x-1 text-xs bg-green-600 text-white px-2 py-1 rounded hover:bg-green-700 transition"
+                                      >
+                                        {copiedInviteId === `${guest.id}-wa` ? (
+                                          <>
+                                            <Check className="w-3 h-3" />
+                                            <span>Copied!</span>
+                                          </>
+                                        ) : (
+                                          <>
+                                            <Copy className="w-3 h-3" />
+                                            <span>Copy WhatsApp</span>
+                                          </>
+                                        )}
+                                      </button>
+                                    )}
+                                  </div>
                                 </div>
-                                <div className="flex items-center space-x-2">
+                                <div className="flex flex-col items-end space-y-2">
                                   {primaryGuestId !== guest.id && (
                                     <button
                                       type="button"
