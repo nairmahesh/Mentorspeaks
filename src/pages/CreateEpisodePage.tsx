@@ -694,24 +694,78 @@ export function CreateEpisodePage() {
                                 </button>
                               )}
                             </div>
-                            {visibleInviteLink && (
-                              <div className="mt-3 p-3 bg-slate-50 border border-slate-200 rounded-lg">
-                                <p className="text-xs font-semibold text-slate-700 mb-1">Invitation Link:</p>
-                                <div className="flex items-center space-x-2">
+                            {externalGuests.length > 0 && (
+                              <div className="mt-4 space-y-3">
+                                {/* Invitation Link Box */}
+                                <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                                  <div className="flex items-center justify-between mb-2">
+                                    <p className="text-sm font-semibold text-blue-900">Invitation Link</p>
+                                    <button
+                                      type="button"
+                                      onClick={() => {
+                                        const url = `https://effymentor.com/podcasts/invitation/will-be-generated-${externalGuests[0].id}`;
+                                        navigator.clipboard.writeText(url);
+                                        setCopiedInviteId('main-link');
+                                        setTimeout(() => setCopiedInviteId(null), 2000);
+                                      }}
+                                      className="flex items-center space-x-1 text-xs bg-blue-600 text-white px-3 py-1.5 rounded hover:bg-blue-700 transition"
+                                    >
+                                      {copiedInviteId === 'main-link' ? (
+                                        <>
+                                          <Check className="w-3 h-3" />
+                                          <span>Copied!</span>
+                                        </>
+                                      ) : (
+                                        <>
+                                          <Copy className="w-3 h-3" />
+                                          <span>Copy Link</span>
+                                        </>
+                                      )}
+                                    </button>
+                                  </div>
                                   <input
                                     type="text"
-                                    value={visibleInviteLink}
+                                    value={`https://effymentor.com/podcasts/invitation/will-be-generated-${externalGuests[0].id}`}
                                     readOnly
-                                    className="flex-1 text-xs px-2 py-1 bg-white border border-slate-300 rounded font-mono text-slate-600"
+                                    className="w-full text-sm px-3 py-2 bg-white border border-blue-300 rounded font-mono text-slate-700"
                                     onClick={(e) => e.currentTarget.select()}
                                   />
-                                  <button
-                                    type="button"
-                                    onClick={() => copyInvitationLink(externalGuests[0].id)}
-                                    className="text-xs bg-slate-700 text-white px-2 py-1 rounded hover:bg-slate-800 transition"
-                                  >
-                                    Copy
-                                  </button>
+                                </div>
+
+                                {/* Invitation Message Box */}
+                                <div className="p-4 bg-slate-50 border border-slate-200 rounded-lg">
+                                  <div className="flex items-center justify-between mb-2">
+                                    <p className="text-sm font-semibold text-slate-900">Invitation Message</p>
+                                    <button
+                                      type="button"
+                                      onClick={() => {
+                                        const message = `Hi ${externalGuests[0].full_name},\n\nYou've been invited to join an upcoming podcast episode on effyMentor!\n\nPlease use this link to respond to the invitation and share your availability:\n\nhttps://effymentor.com/podcasts/invitation/will-be-generated-${externalGuests[0].id}\n\nLooking forward to having you on the show!\n\nBest regards,\neffyMentor Team`;
+                                        navigator.clipboard.writeText(message);
+                                        setCopiedInviteId('main-message');
+                                        setTimeout(() => setCopiedInviteId(null), 2000);
+                                      }}
+                                      className="flex items-center space-x-1 text-xs bg-slate-700 text-white px-3 py-1.5 rounded hover:bg-slate-800 transition"
+                                    >
+                                      {copiedInviteId === 'main-message' ? (
+                                        <>
+                                          <Check className="w-3 h-3" />
+                                          <span>Copied!</span>
+                                        </>
+                                      ) : (
+                                        <>
+                                          <Copy className="w-3 h-3" />
+                                          <span>Copy Message</span>
+                                        </>
+                                      )}
+                                    </button>
+                                  </div>
+                                  <textarea
+                                    value={`Hi ${externalGuests[0].full_name},\n\nYou've been invited to join an upcoming podcast episode on effyMentor!\n\nPlease use this link to respond to the invitation and share your availability:\n\nhttps://effymentor.com/podcasts/invitation/will-be-generated-${externalGuests[0].id}\n\nLooking forward to having you on the show!\n\nBest regards,\neffyMentor Team`}
+                                    readOnly
+                                    rows={10}
+                                    className="w-full text-sm px-3 py-2 bg-white border border-slate-300 rounded text-slate-700 resize-none"
+                                    onClick={(e) => e.currentTarget.select()}
+                                  />
                                 </div>
                               </div>
                             )}
@@ -1042,27 +1096,81 @@ export function CreateEpisodePage() {
                                       </button>
                                     )}
                                   </div>
-                                  {visibleInviteLink && (
-                                    <div className="mt-3 p-3 bg-slate-50 border border-slate-200 rounded-lg">
-                                      <p className="text-xs font-semibold text-slate-700 mb-1">Invitation Link:</p>
-                                      <div className="flex items-center space-x-2">
-                                        <input
-                                          type="text"
-                                          value={visibleInviteLink}
-                                          readOnly
-                                          className="flex-1 text-xs px-2 py-1 bg-white border border-slate-300 rounded font-mono text-slate-600"
-                                          onClick={(e) => e.currentTarget.select()}
-                                        />
+
+                                  {/* Invitation Link and Message Boxes for each guest */}
+                                  <div className="mt-4 space-y-3">
+                                    {/* Invitation Link Box */}
+                                    <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                                      <div className="flex items-center justify-between mb-2">
+                                        <p className="text-xs font-semibold text-blue-900">Invitation Link</p>
                                         <button
                                           type="button"
-                                          onClick={() => copyInvitationLink(guest.id)}
-                                          className="text-xs bg-slate-700 text-white px-2 py-1 rounded hover:bg-slate-800 transition"
+                                          onClick={() => {
+                                            const url = `https://effymentor.com/podcasts/invitation/will-be-generated-${guest.id}`;
+                                            navigator.clipboard.writeText(url);
+                                            setCopiedInviteId(`${guest.id}-main-link`);
+                                            setTimeout(() => setCopiedInviteId(null), 2000);
+                                          }}
+                                          className="flex items-center space-x-1 text-xs bg-blue-600 text-white px-2 py-1 rounded hover:bg-blue-700 transition"
                                         >
-                                          Copy
+                                          {copiedInviteId === `${guest.id}-main-link` ? (
+                                            <>
+                                              <Check className="w-3 h-3" />
+                                              <span>Copied!</span>
+                                            </>
+                                          ) : (
+                                            <>
+                                              <Copy className="w-3 h-3" />
+                                              <span>Copy Link</span>
+                                            </>
+                                          )}
                                         </button>
                                       </div>
+                                      <input
+                                        type="text"
+                                        value={`https://effymentor.com/podcasts/invitation/will-be-generated-${guest.id}`}
+                                        readOnly
+                                        className="w-full text-xs px-2 py-1.5 bg-white border border-blue-300 rounded font-mono text-slate-700"
+                                        onClick={(e) => e.currentTarget.select()}
+                                      />
                                     </div>
-                                  )}
+
+                                    {/* Invitation Message Box */}
+                                    <div className="p-3 bg-slate-50 border border-slate-200 rounded-lg">
+                                      <div className="flex items-center justify-between mb-2">
+                                        <p className="text-xs font-semibold text-slate-900">Invitation Message</p>
+                                        <button
+                                          type="button"
+                                          onClick={() => {
+                                            const message = `Hi ${guest.full_name},\n\nYou've been invited to join an upcoming podcast episode on effyMentor!\n\nPlease use this link to respond to the invitation and share your availability:\n\nhttps://effymentor.com/podcasts/invitation/will-be-generated-${guest.id}\n\nLooking forward to having you on the show!\n\nBest regards,\neffyMentor Team`;
+                                            navigator.clipboard.writeText(message);
+                                            setCopiedInviteId(`${guest.id}-main-message`);
+                                            setTimeout(() => setCopiedInviteId(null), 2000);
+                                          }}
+                                          className="flex items-center space-x-1 text-xs bg-slate-700 text-white px-2 py-1 rounded hover:bg-slate-800 transition"
+                                        >
+                                          {copiedInviteId === `${guest.id}-main-message` ? (
+                                            <>
+                                              <Check className="w-3 h-3" />
+                                              <span>Copied!</span>
+                                            </>
+                                          ) : (
+                                            <>
+                                              <Copy className="w-3 h-3" />
+                                              <span>Copy Message</span>
+                                            </>
+                                          )}
+                                        </button>
+                                      </div>
+                                      <textarea
+                                        value={`Hi ${guest.full_name},\n\nYou've been invited to join an upcoming podcast episode on effyMentor!\n\nPlease use this link to respond to the invitation and share your availability:\n\nhttps://effymentor.com/podcasts/invitation/will-be-generated-${guest.id}\n\nLooking forward to having you on the show!\n\nBest regards,\neffyMentor Team`}
+                                        readOnly
+                                        rows={8}
+                                        className="w-full text-xs px-2 py-1.5 bg-white border border-slate-300 rounded text-slate-700 resize-none"
+                                        onClick={(e) => e.currentTarget.select()}
+                                      />
+                                    </div>
+                                  </div>
                                 </div>
                                 <div className="flex flex-col items-end space-y-2">
                                   {primaryGuestId !== guest.id && (
