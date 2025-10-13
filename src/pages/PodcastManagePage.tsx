@@ -34,6 +34,7 @@ export function PodcastManagePage() {
   const [loading, setLoading] = useState(true);
   const [isModerator, setIsModerator] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [mainTab, setMainTab] = useState<'episodes' | 'series'>('episodes');
   const [activeTab, setActiveTab] = useState<'today' | 'past' | 'future'>('today');
   const [stats, setStats] = useState({ total: 0, past: 0, today: 0, future: 0 });
 
@@ -164,10 +165,45 @@ export function PodcastManagePage() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="mb-8 border-b border-slate-200">
+          <div className="flex space-x-1">
+            <button
+              onClick={() => setMainTab('episodes')}
+              className={`px-6 py-3 font-semibold transition relative ${
+                mainTab === 'episodes'
+                  ? 'text-blue-600 border-b-2 border-blue-600'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              Episodes
+              <span className="ml-2 px-2 py-0.5 text-xs rounded-full bg-blue-100 text-blue-700">
+                {stats.total}
+              </span>
+            </button>
+            <button
+              onClick={() => setMainTab('series')}
+              className={`px-6 py-3 font-semibold transition relative ${
+                mainTab === 'series'
+                  ? 'text-blue-600 border-b-2 border-blue-600'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              Series
+              <span className="ml-2 px-2 py-0.5 text-xs rounded-full bg-slate-100 text-slate-700">
+                {series.length}
+              </span>
+            </button>
+          </div>
+        </div>
+
+        {mainTab === 'series' && (
           <div>
-            <h2 className="text-xl font-bold text-slate-900 mb-4">Podcast Series</h2>
-            <div className="space-y-3">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-bold text-slate-900">Your Podcast Series</h2>
+              <p className="text-slate-600">Organize episodes into series for better content structure</p>
+            </div>
+
+            <div className="space-y-4">
               {series.map((s) => (
                 <div
                   key={s.id}
@@ -199,13 +235,23 @@ export function PodcastManagePage() {
                 </div>
               ))}
               {series.length === 0 && (
-                <div className="text-center py-12 bg-slate-50 rounded-lg border-2 border-dashed border-slate-300">
-                  <p className="text-slate-600">No series yet. Create your first one!</p>
+                <div className="text-center py-16 bg-slate-50 rounded-lg border-2 border-dashed border-slate-300">
+                  <h3 className="text-lg font-semibold text-slate-900 mb-2">No Series Yet</h3>
+                  <p className="text-slate-600 mb-6">Create your first podcast series to organize your episodes</p>
+                  <Link
+                    to="/podcasts/series/new"
+                    className="inline-flex items-center space-x-2 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition"
+                  >
+                    <Plus className="w-5 h-5" />
+                    <span>Create First Series</span>
+                  </Link>
                 </div>
               )}
             </div>
           </div>
+        )}
 
+        {mainTab === 'episodes' && (
           <div>
             <div className="mb-6">
               <div className="grid grid-cols-4 gap-4 mb-6">
@@ -341,14 +387,42 @@ export function PodcastManagePage() {
                   </div>
                 </div>
               ))}
-              {episodes.length === 0 && (
-                <div className="text-center py-12 bg-slate-50 rounded-lg border-2 border-dashed border-slate-300">
-                  <p className="text-slate-600">No episodes yet. Create your first one!</p>
+              {episodes.filter(ep => {
+                if (!ep.scheduled_at) return activeTab === 'today';
+                const now = new Date();
+                const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+                const endOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+                const epDate = new Date(ep.scheduled_at);
+
+                if (activeTab === 'today') return epDate >= startOfDay && epDate < endOfDay;
+                if (activeTab === 'past') return epDate < startOfDay;
+                if (activeTab === 'future') return epDate >= endOfDay;
+                return false;
+              }).length === 0 && (
+                <div className="text-center py-16 bg-slate-50 rounded-lg border-2 border-dashed border-slate-300">
+                  <h3 className="text-lg font-semibold text-slate-900 mb-2">
+                    No {activeTab === 'today' ? 'episodes today' : activeTab === 'future' ? 'upcoming episodes' : 'past episodes'}
+                  </h3>
+                  <p className="text-slate-600 mb-6">
+                    {episodes.length === 0
+                      ? 'Create your first podcast episode to get started'
+                      : `Schedule an episode for ${activeTab === 'today' ? 'today' : activeTab === 'future' ? 'the future' : 'viewing past recordings'}`
+                    }
+                  </p>
+                  {episodes.length === 0 && (
+                    <Link
+                      to="/podcasts/episode/new"
+                      className="inline-flex items-center space-x-2 bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition"
+                    >
+                      <Video className="w-5 h-5" />
+                      <span>Create First Episode</span>
+                    </Link>
+                  )}
                 </div>
               )}
             </div>
           </div>
-        </div>
+        )}
       </div>
     </Layout>
   );
