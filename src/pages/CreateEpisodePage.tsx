@@ -81,7 +81,7 @@ export function CreateEpisodePage() {
 
   const loadData = async () => {
     const [seriesResult, mentorsResult, moderatorsResult] = await Promise.all([
-      supabase.from('podcast_series').select('id, title').eq('status', 'active'),
+      supabase.from('podcast_series').select('id, title').in('status', ['draft', 'active']).order('created_at', { ascending: false }),
       supabase.from('profiles').select('id, full_name, professional_title, bio, linkedin_url, years_of_experience').eq('role', 'mentor'),
       supabase
         .from('podcast_moderators')
