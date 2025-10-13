@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { MessageSquareText, LogOut, LogIn, User, UserPlus, Home, MessageCircle, BarChart3, Radio, Settings, Shield } from 'lucide-react';
+import { MessageSquareText, LogOut, LogIn, User, UserPlus, Home, MessageCircle, BarChart3, Radio, Settings, Shield, Sparkles } from 'lucide-react';
 
 type LayoutProps = {
   children: ReactNode;
@@ -53,10 +53,16 @@ export function Layout({ children }: LayoutProps) {
                     <span className="hidden md:inline">Questions</span>
                   </Link>
                   {profile?.role === 'mentor' && (
-                    <Link to="/mentor/dashboard" className="flex items-center space-x-1 text-slate-700 hover:text-slate-900 font-medium transition text-sm">
-                      <BarChart3 className="w-4 h-4" />
-                      <span className="hidden md:inline">Dashboard</span>
-                    </Link>
+                    <>
+                      <Link to="/mentor/dashboard" className="flex items-center space-x-1 text-slate-700 hover:text-slate-900 font-medium transition text-sm">
+                        <BarChart3 className="w-4 h-4" />
+                        <span className="hidden md:inline">Dashboard</span>
+                      </Link>
+                      <Link to="/mentor/brand" className="flex items-center space-x-1 text-slate-700 hover:text-slate-900 font-medium transition text-sm">
+                        <Sparkles className="w-4 h-4" />
+                        <span className="hidden md:inline">Brand Hub</span>
+                      </Link>
+                    </>
                   )}
                   {isModerator && (
                     <>
