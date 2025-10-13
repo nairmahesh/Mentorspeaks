@@ -178,6 +178,14 @@ export function MentorDashboardPage() {
 
             <div className="space-y-3">
               <Link
+                to="/questions"
+                className="block bg-blue-50 border border-blue-200 rounded-lg p-4 hover:bg-blue-100 transition"
+              >
+                <h3 className="font-semibold text-blue-900 mb-1">Browse Questions</h3>
+                <p className="text-sm text-blue-700">Find questions to answer in your expertise areas</p>
+              </Link>
+
+              <Link
                 to="/mentor/brand"
                 className="block bg-gradient-to-r from-blue-50 to-purple-50 border-2 border-blue-300 rounded-lg p-4 hover:from-blue-100 hover:to-purple-100 transition"
               >
@@ -186,36 +194,6 @@ export function MentorDashboardPage() {
                   <h3 className="font-semibold text-blue-900">Brand Hub</h3>
                 </div>
                 <p className="text-sm text-blue-700">Manage your personal brand and social media presence</p>
-              </Link>
-
-              <Link
-                to="/mentor/social-media"
-                className="block bg-cyan-50 border border-cyan-200 rounded-lg p-4 hover:bg-cyan-100 transition"
-              >
-                <div className="flex items-center space-x-2 mb-1">
-                  <FileText className="w-5 h-5 text-cyan-600" />
-                  <h3 className="font-semibold text-cyan-900">Social Media Manager</h3>
-                </div>
-                <p className="text-sm text-cyan-700">Create and schedule posts across platforms</p>
-              </Link>
-
-              <Link
-                to="/mentor/crm"
-                className="block bg-orange-50 border border-orange-200 rounded-lg p-4 hover:bg-orange-100 transition"
-              >
-                <div className="flex items-center space-x-2 mb-1">
-                  <Users className="w-5 h-5 text-orange-600" />
-                  <h3 className="font-semibold text-orange-900">Mentee CRM</h3>
-                </div>
-                <p className="text-sm text-orange-700">Track relationships and follow-ups with mentees</p>
-              </Link>
-
-              <Link
-                to="/questions"
-                className="block bg-blue-50 border border-blue-200 rounded-lg p-4 hover:bg-blue-100 transition"
-              >
-                <h3 className="font-semibold text-blue-900 mb-1">Browse Questions</h3>
-                <p className="text-sm text-blue-700">Find questions to answer in your expertise areas</p>
               </Link>
 
               {isModerator && (
@@ -230,14 +208,6 @@ export function MentorDashboardPage() {
                   <p className="text-sm text-blue-700">Create and manage podcast episodes as a moderator</p>
                 </Link>
               )}
-
-              <Link
-                to="/mentor/analytics"
-                className="block bg-purple-50 border border-purple-200 rounded-lg p-4 hover:bg-purple-100 transition"
-              >
-                <h3 className="font-semibold text-purple-900 mb-1">View Analytics</h3>
-                <p className="text-sm text-purple-700">Track your performance and engagement metrics</p>
-              </Link>
             </div>
           </div>
         </div>
