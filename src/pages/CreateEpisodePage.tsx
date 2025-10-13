@@ -113,33 +113,108 @@ export function CreateEpisodePage() {
   };
 
   const generateAIQuestions = async () => {
-    const aiQuestions: Question[] = [
-      {
-        question_text: 'Can you tell us about your professional journey and what led you to your current role?',
-        answer_text: '',
-        is_ai_generated: true
-      },
-      {
-        question_text: 'What are some of the biggest challenges you\'ve faced in your career, and how did you overcome them?',
-        answer_text: '',
-        is_ai_generated: true
-      },
-      {
-        question_text: 'What advice would you give to someone just starting out in your industry?',
-        answer_text: '',
-        is_ai_generated: true
-      },
-      {
-        question_text: 'How do you stay current with the latest trends and developments in your field?',
-        answer_text: '',
-        is_ai_generated: true
-      },
-      {
-        question_text: 'What do you think is the most important skill for success in your profession?',
-        answer_text: '',
-        is_ai_generated: true
+    // Get guest information
+    let guestInfo = '';
+    if (guestMode === 'single') {
+      if (guestId) {
+        const guest = mentors.find(m => m.id === guestId);
+        guestInfo = guest ? `Guest: ${guest.full_name}${guest.professional_title ? ' - ' + guest.professional_title : ''}` : '';
+      } else if (externalGuests.length > 0) {
+        const guest = externalGuests[0];
+        guestInfo = `Guest: ${guest.full_name}${guest.professional_title ? ' - ' + guest.professional_title : ''}`;
       }
-    ];
+    } else if (guestMode === 'multiple') {
+      const internalGuestNames = selectedGuests.map(id => {
+        const guest = mentors.find(m => m.id === id);
+        return guest ? guest.full_name : '';
+      }).filter(Boolean);
+      const externalGuestNames = externalGuests.map(g => g.full_name);
+      const allGuests = [...internalGuestNames, ...externalGuestNames];
+      if (allGuests.length > 0) {
+        guestInfo = `Guests: ${allGuests.join(', ')}`;
+      }
+    }
+
+    // Generate contextual questions based on topic
+    const context = `
+Episode: ${title || 'Untitled'}
+${description ? `Topic: ${description}` : ''}
+${guestInfo}
+    `.trim();
+
+    const aiQuestions: Question[] = [];
+
+    if (title || description) {
+      // Topic-specific questions
+      if (description && description.toLowerCase().includes('ai')) {
+        aiQuestions.push({
+          question_text: 'How is AI transforming your industry and what opportunities do you see?',
+          answer_text: '',
+          is_ai_generated: true
+        });
+        aiQuestions.push({
+          question_text: 'What ethical considerations should we keep in mind when implementing AI?',
+          answer_text: '',
+          is_ai_generated: true
+        });
+      } else if (description && description.toLowerCase().includes('startup')) {
+        aiQuestions.push({
+          question_text: 'What were the key factors that contributed to your startup\'s success?',
+          answer_text: '',
+          is_ai_generated: true
+        });
+        aiQuestions.push({
+          question_text: 'What advice would you give to aspiring entrepreneurs?',
+          answer_text: '',
+          is_ai_generated: true
+        });
+      } else if (description && description.toLowerCase().includes('leadership')) {
+        aiQuestions.push({
+          question_text: 'What leadership style do you find most effective and why?',
+          answer_text: '',
+          is_ai_generated: true
+        });
+        aiQuestions.push({
+          question_text: 'How do you build and maintain high-performing teams?',
+          answer_text: '',
+          is_ai_generated: true
+        });
+      } else {
+        // Generic but contextual
+        aiQuestions.push({
+          question_text: `Can you share your insights on ${title || 'this topic'}?`,
+          answer_text: '',
+          is_ai_generated: true
+        });
+      }
+    }
+
+    // Add general questions that are always relevant
+    aiQuestions.push({
+      question_text: 'Can you tell us about your professional journey and what led you to your current role?',
+      answer_text: '',
+      is_ai_generated: true
+    });
+
+    aiQuestions.push({
+      question_text: description
+        ? `What are the biggest challenges in ${description.split(' ').slice(0, 5).join(' ')}?`
+        : 'What are some of the biggest challenges you\'ve faced in your career?',
+      answer_text: '',
+      is_ai_generated: true
+    });
+
+    aiQuestions.push({
+      question_text: 'What advice would you give to someone just starting out in your field?',
+      answer_text: '',
+      is_ai_generated: true
+    });
+
+    aiQuestions.push({
+      question_text: 'What trends do you see shaping the future of your industry?',
+      answer_text: '',
+      is_ai_generated: true
+    });
 
     setQuestions([...questions, ...aiQuestions]);
   };
