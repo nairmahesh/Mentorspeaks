@@ -151,8 +151,20 @@ export function CreateEpisodePage() {
   };
 
   const addExternalGuest = () => {
-    if (!externalGuestForm.full_name || !externalGuestForm.email) {
-      alert('Please provide guest name and email');
+    if (!externalGuestForm.full_name) {
+      alert('Please provide guest name');
+      return;
+    }
+
+    // Only require email if invitation method needs it
+    if (invitationMethod !== 'link' && !externalGuestForm.email) {
+      alert('Please provide guest email');
+      return;
+    }
+
+    // Only require phone if WhatsApp is needed
+    if ((invitationMethod === 'whatsapp' || invitationMethod === 'both') && !externalGuestForm.phone) {
+      alert('Please provide guest phone number for WhatsApp');
       return;
     }
 
