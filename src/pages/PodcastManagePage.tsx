@@ -149,18 +149,11 @@ export function PodcastManagePage() {
               </Link>
             )}
             <Link
-              to="/podcasts/series/new"
-              className="flex items-center space-x-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
+              to="/podcasts/new"
+              className="flex items-center space-x-2 bg-gradient-to-r from-green-600 to-blue-600 text-white px-6 py-2 rounded-lg hover:from-green-700 hover:to-blue-700 transition font-medium"
             >
               <Plus className="w-5 h-5" />
-              <span>New Series</span>
-            </Link>
-            <Link
-              to="/podcasts/episode/new"
-              className="flex items-center space-x-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition"
-            >
-              <Video className="w-5 h-5" />
-              <span>New Episode</span>
+              <span>Create Podcast</span>
             </Link>
           </div>
         </div>
@@ -239,11 +232,11 @@ export function PodcastManagePage() {
                   <h3 className="text-lg font-semibold text-slate-900 mb-2">No Series Yet</h3>
                   <p className="text-slate-600 mb-6">Create your first podcast series to organize your episodes</p>
                   <Link
-                    to="/podcasts/series/new"
-                    className="inline-flex items-center space-x-2 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition"
+                    to="/podcasts/new"
+                    className="inline-flex items-center space-x-2 bg-gradient-to-r from-green-600 to-blue-600 text-white px-6 py-3 rounded-lg hover:from-green-700 hover:to-blue-700 transition font-medium"
                   >
                     <Plus className="w-5 h-5" />
-                    <span>Create First Series</span>
+                    <span>Create Your First Podcast</span>
                   </Link>
                 </div>
               )}
@@ -411,11 +404,11 @@ export function PodcastManagePage() {
                   </p>
                   {episodes.length === 0 && (
                     <Link
-                      to="/podcasts/episode/new"
-                      className="inline-flex items-center space-x-2 bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition"
+                      to="/podcasts/new"
+                      className="inline-flex items-center space-x-2 bg-gradient-to-r from-green-600 to-blue-600 text-white px-6 py-3 rounded-lg hover:from-green-700 hover:to-blue-700 transition font-medium"
                     >
-                      <Video className="w-5 h-5" />
-                      <span>Create First Episode</span>
+                      <Plus className="w-5 h-5" />
+                      <span>Create Your First Podcast</span>
                     </Link>
                   )}
                 </div>
