@@ -105,17 +105,12 @@ export function CreatePodcastPage() {
   };
 
   const handleAddExternalGuest = () => {
-    if (!externalGuestForm.full_name || !externalGuestForm.email) {
-      setError('Name and email are required');
-      return;
-    }
-
     const token = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 
     setGuests([...guests, {
       type: 'external',
       id: token,
-      full_name: externalGuestForm.full_name,
+      full_name: externalGuestForm.full_name || 'Guest',
       email: externalGuestForm.email,
       phone: externalGuestForm.phone,
       professional_title: externalGuestForm.professional_title,
@@ -643,25 +638,27 @@ export function CreatePodcastPage() {
                 <div className="space-y-4">
                   <div>
                     <label className="block text-sm font-medium text-slate-700 mb-2">
-                      Full Name *
+                      Full Name (Optional - for personalized invite)
                     </label>
                     <input
                       type="text"
                       value={externalGuestForm.full_name}
                       onChange={(e) => setExternalGuestForm({ ...externalGuestForm, full_name: e.target.value })}
                       className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      placeholder="e.g., John Doe"
                     />
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium text-slate-700 mb-2">
-                      Email *
+                      Email (Optional)
                     </label>
                     <input
                       type="email"
                       value={externalGuestForm.email}
                       onChange={(e) => setExternalGuestForm({ ...externalGuestForm, email: e.target.value })}
                       className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      placeholder="e.g., john@example.com"
                     />
                   </div>
 
@@ -765,27 +762,60 @@ export function CreatePodcastPage() {
                 </div>
 
                 {selectedInviteGuest.invitation_method === 'link' && (
-                  <div className="p-4 bg-slate-50 rounded-lg border border-slate-200">
-                    <p className="text-sm font-medium text-slate-700 mb-2">Invitation Link:</p>
-                    <div className="flex items-center space-x-2">
-                      <input
-                        type="text"
-                        value={`${window.location.origin}/guest/respond/${selectedInviteGuest.invitation_token}`}
-                        readOnly
-                        className="flex-1 px-3 py-2 text-sm border border-slate-300 rounded bg-white"
-                      />
-                      <button
-                        onClick={() => copyInviteLink(selectedInviteGuest.invitation_token!)}
-                        className="p-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
-                      >
-                        {copiedToken === selectedInviteGuest.invitation_token ? (
-                          <Check className="w-5 h-5" />
-                        ) : (
-                          <Copy className="w-5 h-5" />
-                        )}
-                      </button>
+                  <div className="space-y-4">
+                    <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
+                      <p className="text-sm font-medium text-slate-900 mb-3">Invitation Message:</p>
+                      <div className="p-4 bg-white rounded border border-blue-200 text-sm text-slate-900 whitespace-pre-line">
+                        {selectedInviteGuest.full_name && selectedInviteGuest.full_name !== 'Guest'
+                          ? `Hello ${selectedInviteGuest.full_name},\n\nYou've been invited to join a podcast episode! Please click the link below to respond to the invitation.\n\n${window.location.origin}/guest/respond/${selectedInviteGuest.invitation_token}`
+                          : `Hello,\n\nYou've been invited to join a podcast episode! Please click the link below to respond to the invitation.\n\n${window.location.origin}/guest/respond/${selectedInviteGuest.invitation_token}`
+                        }
+                      </div>
+                      <div className="flex items-center space-x-2 mt-3">
+                        <button
+                          onClick={() => {
+                            const message = selectedInviteGuest.full_name && selectedInviteGuest.full_name !== 'Guest'
+                              ? `Hello ${selectedInviteGuest.full_name},\n\nYou've been invited to join a podcast episode! Please click the link below to respond to the invitation.\n\n${window.location.origin}/guest/respond/${selectedInviteGuest.invitation_token}`
+                              : `Hello,\n\nYou've been invited to join a podcast episode! Please click the link below to respond to the invitation.\n\n${window.location.origin}/guest/respond/${selectedInviteGuest.invitation_token}`;
+                            navigator.clipboard.writeText(message);
+                            setCopiedToken(selectedInviteGuest.invitation_token!);
+                            setTimeout(() => setCopiedToken(null), 2000);
+                          }}
+                          className="flex-1 flex items-center justify-center space-x-2 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
+                        >
+                          {copiedToken === selectedInviteGuest.invitation_token ? (
+                            <>
+                              <Check className="w-4 h-4" />
+                              <span>Copied!</span>
+                            </>
+                          ) : (
+                            <>
+                              <Copy className="w-4 h-4" />
+                              <span>Copy Full Message</span>
+                            </>
+                          )}
+                        </button>
+                      </div>
                     </div>
-                    <p className="text-xs text-slate-500 mt-2">Share this link with your guest</p>
+
+                    <div className="p-4 bg-slate-50 rounded-lg border border-slate-200">
+                      <p className="text-sm font-medium text-slate-700 mb-2">Invitation Link Only:</p>
+                      <div className="flex items-center space-x-2">
+                        <input
+                          type="text"
+                          value={`${window.location.origin}/guest/respond/${selectedInviteGuest.invitation_token}`}
+                          readOnly
+                          className="flex-1 px-3 py-2 text-sm border border-slate-300 rounded bg-white"
+                        />
+                        <button
+                          onClick={() => copyInviteLink(selectedInviteGuest.invitation_token!)}
+                          className="p-2 bg-slate-600 text-white rounded hover:bg-slate-700 transition"
+                        >
+                          <Copy className="w-5 h-5" />
+                        </button>
+                      </div>
+                      <p className="text-xs text-slate-500 mt-2">Copy just the link if needed</p>
+                    </div>
                   </div>
                 )}
 
