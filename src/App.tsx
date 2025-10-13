@@ -34,9 +34,12 @@ import { ChapterDetailPage } from './pages/ChapterDetailPage';
 import { AboutPage } from './pages/AboutPage';
 import { PersonalizedFeedPage } from './pages/PersonalizedFeedPage';
 import { MentorBrandDashboardPage } from './pages/MentorBrandDashboardPage';
+import { SocialMediaHubPage } from './pages/SocialMediaHubPage';
 import { SocialMediaManagerPage } from './pages/SocialMediaManagerPage';
 import { CreatePostPage } from './pages/CreatePostPage';
+import { AnalyticsHubPage } from './pages/AnalyticsHubPage';
 import { MentorAnalyticsPage } from './pages/MentorAnalyticsPage';
+import { CRMHubPage } from './pages/CRMHubPage';
 import { MenteeCRMPage } from './pages/MenteeCRMPage';
 
 function AppRoutes() {
@@ -195,6 +198,14 @@ function AppRoutes() {
         path="/mentor/social-media"
         element={
           <ProtectedRoute requiredRole="mentor">
+            <SocialMediaHubPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/mentor/social-media/manage"
+        element={
+          <ProtectedRoute requiredRole="mentor">
             <SocialMediaManagerPage />
           </ProtectedRoute>
         }
@@ -219,12 +230,28 @@ function AppRoutes() {
         path="/mentor/analytics"
         element={
           <ProtectedRoute requiredRole="mentor">
+            <AnalyticsHubPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/mentor/analytics/overview"
+        element={
+          <ProtectedRoute requiredRole="mentor">
             <MentorAnalyticsPage />
           </ProtectedRoute>
         }
       />
       <Route
         path="/mentor/crm"
+        element={
+          <ProtectedRoute requiredRole="mentor">
+            <CRMHubPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/mentor/crm/all"
         element={
           <ProtectedRoute requiredRole="mentor">
             <MenteeCRMPage />

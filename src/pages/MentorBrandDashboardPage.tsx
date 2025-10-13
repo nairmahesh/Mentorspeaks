@@ -187,32 +187,32 @@ export function MentorBrandDashboardPage() {
 
   const quickActions = [
     {
-      title: 'Create Post',
-      description: 'Draft a new social media post',
+      title: 'Social Media',
+      description: 'Manage posts and content',
       icon: FileText,
       color: 'bg-blue-500',
-      link: '/mentor/social-media/new-post'
-    },
-    {
-      title: 'View Calendar',
-      description: 'See your content schedule',
-      icon: Calendar,
-      color: 'bg-green-500',
-      link: '/mentor/social-media/calendar'
+      link: '/mentor/social-media'
     },
     {
       title: 'Analytics',
-      description: 'Check performance metrics',
+      description: 'View insights and metrics',
       icon: TrendingUp,
       color: 'bg-purple-500',
       link: '/mentor/analytics'
     },
     {
-      title: 'Manage Mentees',
-      description: 'Update relationship notes',
+      title: 'Mentee CRM',
+      description: 'Track relationships',
       icon: Users,
       color: 'bg-orange-500',
       link: '/mentor/crm'
+    },
+    {
+      title: 'Quick Post',
+      description: 'Create a new post',
+      icon: Calendar,
+      color: 'bg-green-500',
+      link: '/mentor/social-media/new-post'
     }
   ];
 
