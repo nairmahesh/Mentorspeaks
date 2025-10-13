@@ -204,6 +204,11 @@ export function CreateEpisodePage() {
     }
   };
 
+  const generateInvitationLink = (guest: { id: string; full_name: string }) => {
+    const nameSlug = guest.full_name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+    return `https://effymentor.com/podcasts/invitation/${nameSlug}-${guest.id.split('-').pop()}`;
+  };
+
   const sendInvitation = async (guestId: string, method: 'email' | 'whatsapp' | 'both') => {
     const guest = externalGuests.find(g => g.id === guestId);
     if (!guest) return;
@@ -234,20 +239,25 @@ export function CreateEpisodePage() {
     const guest = externalGuests.find(g => g.id === guestId);
     if (!guest) return;
 
-    // Get invitation message from database function
-    const { data: message } = await supabase.rpc('get_invitation_message', {
-      episode_title: title || 'Podcast Episode',
-      episode_description: description,
-      moderator_name: moderators.find(m => m.id === moderatorId)?.full_name || 'Our Team',
-      invitation_token: 'will-be-generated',
-      message_type: method
-    });
+    const invitationUrl = generateInvitationLink(guest);
 
-    if (message) {
-      await navigator.clipboard.writeText(message);
-      setCopiedInviteId(`${guestId}-${method}`);
-      setTimeout(() => setCopiedInviteId(null), 2000);
+    let message = '';
+    if (method === 'email') {
+      message = `Hi ${guest.full_name},
+
+We'd love to have you as a guest on our podcast "${title || 'Our Show'}"!
+
+${description ? `About this episode: ${description}\n\n` : ''}Click here to view details and confirm your participation:
+${invitationUrl}
+
+Looking forward to hearing from you!`;
+    } else {
+      message = `Hi ${guest.full_name}! We'd love to have you as a guest on our podcast "${title || 'Our Show'}"! Click here to view details: ${invitationUrl}`;
     }
+
+    await navigator.clipboard.writeText(message);
+    setCopiedInviteId(`${guestId}-${method}`);
+    setTimeout(() => setCopiedInviteId(null), 2000);
   };
 
   const showInvitationModal = (guestId: string) => {
@@ -258,8 +268,10 @@ export function CreateEpisodePage() {
   };
 
   const copyInvitationLink = async (guestId: string) => {
-    // For now, use a placeholder link. In production, this would be the actual invitation token
-    const invitationUrl = `https://effymentor.com/podcasts/invitation/will-be-generated-${guestId}`;
+    const guest = externalGuests.find(g => g.id === guestId);
+    if (!guest) return;
+
+    const invitationUrl = generateInvitationLink(guest);
 
     await navigator.clipboard.writeText(invitationUrl);
     setCopiedInviteId(`${guestId}-link`);
@@ -695,81 +707,6 @@ export function CreateEpisodePage() {
                                 </button>
                               )}
                             </div>
-                            {externalGuests.length > 0 && (
-                              <div className="mt-4 space-y-3">
-                                {/* Invitation Link Box */}
-                                <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                                  <div className="flex items-center justify-between mb-2">
-                                    <p className="text-sm font-semibold text-blue-900">Invitation Link</p>
-                                    <button
-                                      type="button"
-                                      onClick={() => {
-                                        const url = `https://effymentor.com/podcasts/invitation/will-be-generated-${externalGuests[0].id}`;
-                                        navigator.clipboard.writeText(url);
-                                        setCopiedInviteId('main-link');
-                                        setTimeout(() => setCopiedInviteId(null), 2000);
-                                      }}
-                                      className="flex items-center space-x-1 text-xs bg-blue-600 text-white px-3 py-1.5 rounded hover:bg-blue-700 transition"
-                                    >
-                                      {copiedInviteId === 'main-link' ? (
-                                        <>
-                                          <Check className="w-3 h-3" />
-                                          <span>Copied!</span>
-                                        </>
-                                      ) : (
-                                        <>
-                                          <Copy className="w-3 h-3" />
-                                          <span>Copy Link</span>
-                                        </>
-                                      )}
-                                    </button>
-                                  </div>
-                                  <input
-                                    type="text"
-                                    value={`https://effymentor.com/podcasts/invitation/will-be-generated-${externalGuests[0].id}`}
-                                    readOnly
-                                    className="w-full text-sm px-3 py-2 bg-white border border-blue-300 rounded font-mono text-slate-700"
-                                    onClick={(e) => e.currentTarget.select()}
-                                  />
-                                </div>
-
-                                {/* Invitation Message Box */}
-                                <div className="p-4 bg-slate-50 border border-slate-200 rounded-lg">
-                                  <div className="flex items-center justify-between mb-2">
-                                    <p className="text-sm font-semibold text-slate-900">Invitation Message</p>
-                                    <button
-                                      type="button"
-                                      onClick={() => {
-                                        const message = `Hi ${externalGuests[0].full_name},\n\nYou've been invited to join an upcoming podcast episode on effyMentor!\n\nPlease use this link to respond to the invitation and share your availability:\n\nhttps://effymentor.com/podcasts/invitation/will-be-generated-${externalGuests[0].id}\n\nLooking forward to having you on the show!\n\nBest regards,\neffyMentor Team`;
-                                        navigator.clipboard.writeText(message);
-                                        setCopiedInviteId('main-message');
-                                        setTimeout(() => setCopiedInviteId(null), 2000);
-                                      }}
-                                      className="flex items-center space-x-1 text-xs bg-slate-700 text-white px-3 py-1.5 rounded hover:bg-slate-800 transition"
-                                    >
-                                      {copiedInviteId === 'main-message' ? (
-                                        <>
-                                          <Check className="w-3 h-3" />
-                                          <span>Copied!</span>
-                                        </>
-                                      ) : (
-                                        <>
-                                          <Copy className="w-3 h-3" />
-                                          <span>Copy Message</span>
-                                        </>
-                                      )}
-                                    </button>
-                                  </div>
-                                  <textarea
-                                    value={`Hi ${externalGuests[0].full_name},\n\nYou've been invited to join an upcoming podcast episode on effyMentor!\n\nPlease use this link to respond to the invitation and share your availability:\n\nhttps://effymentor.com/podcasts/invitation/will-be-generated-${externalGuests[0].id}\n\nLooking forward to having you on the show!\n\nBest regards,\neffyMentor Team`}
-                                    readOnly
-                                    rows={10}
-                                    className="w-full text-sm px-3 py-2 bg-white border border-slate-300 rounded text-slate-700 resize-none"
-                                    onClick={(e) => e.currentTarget.select()}
-                                  />
-                                </div>
-                              </div>
-                            )}
                           </div>
                           <button
                             type="button"
@@ -1480,7 +1417,7 @@ export function CreateEpisodePage() {
                     <button
                       type="button"
                       onClick={() => {
-                        const url = `https://effymentor.com/podcasts/invitation/will-be-generated-${invitationModalGuest.id}`;
+                        const url = generateInvitationLink(invitationModalGuest);
                         navigator.clipboard.writeText(url);
                         setCopiedInviteId('modal-link');
                         setTimeout(() => setCopiedInviteId(null), 2000);
@@ -1501,7 +1438,7 @@ export function CreateEpisodePage() {
                     </button>
                   </div>
                   <p className="text-sm text-blue-800 break-all font-mono bg-white p-2 rounded border border-blue-300">
-                    https://effymentor.com/podcasts/invitation/will-be-generated-{invitationModalGuest.id}
+                    {generateInvitationLink(invitationModalGuest)}
                   </p>
                 </div>
 
@@ -1533,7 +1470,7 @@ export function CreateEpisodePage() {
 We'd love to have you as a guest on our podcast "{title || 'Our Show'}"!
 
 {description && `About this episode: ${description}\n\n`}Click here to view details and confirm your participation:
-https://effymentor.com/podcasts/invitation/will-be-generated-{invitationModalGuest.id}
+{generateInvitationLink(invitationModalGuest)}
 
 Looking forward to hearing from you!
                   </div>
@@ -1563,7 +1500,7 @@ Looking forward to hearing from you!
                       </button>
                     </div>
                     <div className="text-sm text-green-800 bg-white p-3 rounded border border-green-300 whitespace-pre-wrap">
-                      Hi {invitationModalGuest.full_name}! We'd love to have you as a guest on our podcast "{title || 'Our Show'}"! Click here to view details: https://effymentor.com/podcasts/invitation/will-be-generated-{invitationModalGuest.id}
+                      Hi {invitationModalGuest.full_name}! We'd love to have you as a guest on our podcast "{title || 'Our Show'}"! Click here to view details: {generateInvitationLink(invitationModalGuest)}
                     </div>
                   </div>
                 )}
