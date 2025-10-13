@@ -57,6 +57,7 @@ export function CreateEpisodePage() {
     invitation_method: 'email' as 'email' | 'whatsapp' | 'both'
   });
   const [copiedInviteId, setCopiedInviteId] = useState<string | null>(null);
+  const [visibleInviteLink, setVisibleInviteLink] = useState<string | null>(null);
   const [moderatorId, setModeratorId] = useState('');
   const [episodeNumber, setEpisodeNumber] = useState('1');
   const [recordingType, setRecordingType] = useState<'video' | 'audio'>('video');
@@ -235,6 +236,7 @@ export function CreateEpisodePage() {
 
     await navigator.clipboard.writeText(invitationUrl);
     setCopiedInviteId(`${guestId}-link`);
+    setVisibleInviteLink(invitationUrl);
     setTimeout(() => setCopiedInviteId(null), 2000);
   };
 
@@ -692,6 +694,27 @@ export function CreateEpisodePage() {
                                 </button>
                               )}
                             </div>
+                            {visibleInviteLink && (
+                              <div className="mt-3 p-3 bg-slate-50 border border-slate-200 rounded-lg">
+                                <p className="text-xs font-semibold text-slate-700 mb-1">Invitation Link:</p>
+                                <div className="flex items-center space-x-2">
+                                  <input
+                                    type="text"
+                                    value={visibleInviteLink}
+                                    readOnly
+                                    className="flex-1 text-xs px-2 py-1 bg-white border border-slate-300 rounded font-mono text-slate-600"
+                                    onClick={(e) => e.currentTarget.select()}
+                                  />
+                                  <button
+                                    type="button"
+                                    onClick={() => copyInvitationLink(externalGuests[0].id)}
+                                    className="text-xs bg-slate-700 text-white px-2 py-1 rounded hover:bg-slate-800 transition"
+                                  >
+                                    Copy
+                                  </button>
+                                </div>
+                              </div>
+                            )}
                           </div>
                           <button
                             type="button"
@@ -1019,6 +1042,27 @@ export function CreateEpisodePage() {
                                       </button>
                                     )}
                                   </div>
+                                  {visibleInviteLink && (
+                                    <div className="mt-3 p-3 bg-slate-50 border border-slate-200 rounded-lg">
+                                      <p className="text-xs font-semibold text-slate-700 mb-1">Invitation Link:</p>
+                                      <div className="flex items-center space-x-2">
+                                        <input
+                                          type="text"
+                                          value={visibleInviteLink}
+                                          readOnly
+                                          className="flex-1 text-xs px-2 py-1 bg-white border border-slate-300 rounded font-mono text-slate-600"
+                                          onClick={(e) => e.currentTarget.select()}
+                                        />
+                                        <button
+                                          type="button"
+                                          onClick={() => copyInvitationLink(guest.id)}
+                                          className="text-xs bg-slate-700 text-white px-2 py-1 rounded hover:bg-slate-800 transition"
+                                        >
+                                          Copy
+                                        </button>
+                                      </div>
+                                    </div>
+                                  )}
                                 </div>
                                 <div className="flex flex-col items-end space-y-2">
                                   {primaryGuestId !== guest.id && (
