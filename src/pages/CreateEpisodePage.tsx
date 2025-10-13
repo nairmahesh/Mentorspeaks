@@ -224,9 +224,18 @@ export function CreateEpisodePage() {
 
     if (message) {
       await navigator.clipboard.writeText(message);
-      setCopiedInviteId(guestId);
+      setCopiedInviteId(`${guestId}-${method}`);
       setTimeout(() => setCopiedInviteId(null), 2000);
     }
+  };
+
+  const copyInvitationLink = async (guestId: string) => {
+    // For now, use a placeholder link. In production, this would be the actual invitation token
+    const invitationUrl = `https://effymentor.com/podcasts/invitation/will-be-generated-${guestId}`;
+
+    await navigator.clipboard.writeText(invitationUrl);
+    setCopiedInviteId(`${guestId}-link`);
+    setTimeout(() => setCopiedInviteId(null), 2000);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -622,21 +631,21 @@ export function CreateEpisodePage() {
                                 </>
                               )}
                             </div>
-                            <div className="flex items-center space-x-2 mt-3">
+                            <div className="flex flex-wrap items-center gap-2 mt-3">
                               <button
                                 type="button"
                                 onClick={() => copyInvitationMessage(externalGuests[0].id, 'email')}
                                 className="flex items-center space-x-1 text-xs bg-blue-600 text-white px-3 py-1.5 rounded hover:bg-blue-700 transition"
                               >
-                                {copiedInviteId === externalGuests[0].id ? (
+                                {copiedInviteId === `${externalGuests[0].id}-email` ? (
                                   <>
                                     <Check className="w-3 h-3" />
                                     <span>Copied!</span>
                                   </>
                                 ) : (
                                   <>
-                                    <Copy className="w-3 h-3" />
-                                    <span>Copy Email Message</span>
+                                    <Mail className="w-3 h-3" />
+                                    <span>Copy Email</span>
                                   </>
                                 )}
                               </button>
@@ -646,19 +655,36 @@ export function CreateEpisodePage() {
                                   onClick={() => copyInvitationMessage(externalGuests[0].id, 'whatsapp')}
                                   className="flex items-center space-x-1 text-xs bg-green-600 text-white px-3 py-1.5 rounded hover:bg-green-700 transition"
                                 >
-                                  {copiedInviteId === `${externalGuests[0].id}-wa` ? (
+                                  {copiedInviteId === `${externalGuests[0].id}-whatsapp` ? (
                                     <>
                                       <Check className="w-3 h-3" />
                                       <span>Copied!</span>
                                     </>
                                   ) : (
                                     <>
-                                      <Copy className="w-3 h-3" />
-                                      <span>Copy WhatsApp Message</span>
+                                      <MessageCircle className="w-3 h-3" />
+                                      <span>Copy WhatsApp</span>
                                     </>
                                   )}
                                 </button>
                               )}
+                              <button
+                                type="button"
+                                onClick={() => copyInvitationLink(externalGuests[0].id)}
+                                className="flex items-center space-x-1 text-xs bg-slate-700 text-white px-3 py-1.5 rounded hover:bg-slate-800 transition"
+                              >
+                                {copiedInviteId === `${externalGuests[0].id}-link` ? (
+                                  <>
+                                    <Check className="w-3 h-3" />
+                                    <span>Copied!</span>
+                                  </>
+                                ) : (
+                                  <>
+                                    <Copy className="w-3 h-3" />
+                                    <span>Copy Link</span>
+                                  </>
+                                )}
+                              </button>
                             </div>
                           </div>
                           <button
@@ -915,21 +941,21 @@ export function CreateEpisodePage() {
                                       </>
                                     )}
                                   </div>
-                                  <div className="flex items-center space-x-2 mt-3">
+                                  <div className="flex flex-wrap items-center gap-2 mt-3">
                                     <button
                                       type="button"
                                       onClick={() => copyInvitationMessage(guest.id, 'email')}
                                       className="flex items-center space-x-1 text-xs bg-blue-600 text-white px-2 py-1 rounded hover:bg-blue-700 transition"
                                     >
-                                      {copiedInviteId === guest.id ? (
+                                      {copiedInviteId === `${guest.id}-email` ? (
                                         <>
                                           <Check className="w-3 h-3" />
                                           <span>Copied!</span>
                                         </>
                                       ) : (
                                         <>
-                                          <Copy className="w-3 h-3" />
-                                          <span>Copy Email</span>
+                                          <Mail className="w-3 h-3" />
+                                          <span>Email</span>
                                         </>
                                       )}
                                     </button>
@@ -939,19 +965,36 @@ export function CreateEpisodePage() {
                                         onClick={() => copyInvitationMessage(guest.id, 'whatsapp')}
                                         className="flex items-center space-x-1 text-xs bg-green-600 text-white px-2 py-1 rounded hover:bg-green-700 transition"
                                       >
-                                        {copiedInviteId === `${guest.id}-wa` ? (
+                                        {copiedInviteId === `${guest.id}-whatsapp` ? (
                                           <>
                                             <Check className="w-3 h-3" />
                                             <span>Copied!</span>
                                           </>
                                         ) : (
                                           <>
-                                            <Copy className="w-3 h-3" />
-                                            <span>Copy WhatsApp</span>
+                                            <MessageCircle className="w-3 h-3" />
+                                            <span>WhatsApp</span>
                                           </>
                                         )}
                                       </button>
                                     )}
+                                    <button
+                                      type="button"
+                                      onClick={() => copyInvitationLink(guest.id)}
+                                      className="flex items-center space-x-1 text-xs bg-slate-700 text-white px-2 py-1 rounded hover:bg-slate-800 transition"
+                                    >
+                                      {copiedInviteId === `${guest.id}-link` ? (
+                                        <>
+                                          <Check className="w-3 h-3" />
+                                          <span>Copied!</span>
+                                        </>
+                                      ) : (
+                                        <>
+                                          <Copy className="w-3 h-3" />
+                                          <span>Link</span>
+                                        </>
+                                      )}
+                                    </button>
                                   </div>
                                 </div>
                                 <div className="flex flex-col items-end space-y-2">
