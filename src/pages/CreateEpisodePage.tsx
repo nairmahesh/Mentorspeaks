@@ -767,6 +767,16 @@ export function CreateEpisodePage() {
                                 <label className="flex items-center space-x-2">
                                   <input
                                     type="radio"
+                                    checked={externalGuestForm.invitation_method === 'link'}
+                                    onChange={() => setExternalGuestForm({ ...externalGuestForm, invitation_method: 'link' })}
+                                    className="text-blue-600"
+                                  />
+                                  <Link className="w-4 h-4 text-slate-600" />
+                                  <span className="text-sm">Link Only (No contact needed)</span>
+                                </label>
+                                <label className="flex items-center space-x-2">
+                                  <input
+                                    type="radio"
                                     checked={externalGuestForm.invitation_method === 'email'}
                                     onChange={() => setExternalGuestForm({ ...externalGuestForm, invitation_method: 'email' })}
                                     className="text-blue-600"
@@ -1095,6 +1105,16 @@ export function CreateEpisodePage() {
                                 Send Invitation Via
                               </label>
                               <div className="space-y-2">
+                                <label className="flex items-center space-x-2">
+                                  <input
+                                    type="radio"
+                                    checked={externalGuestForm.invitation_method === 'link'}
+                                    onChange={() => setExternalGuestForm({ ...externalGuestForm, invitation_method: 'link' })}
+                                    className="text-blue-600"
+                                  />
+                                  <Link className="w-4 h-4 text-slate-600" />
+                                  <span className="text-sm">Link Only (No contact needed)</span>
+                                </label>
                                 <label className="flex items-center space-x-2">
                                   <input
                                     type="radio"
