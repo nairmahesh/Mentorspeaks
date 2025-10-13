@@ -157,13 +157,13 @@ export function CreateEpisodePage() {
     }
 
     // Only require email if invitation method needs it
-    if (invitationMethod !== 'link' && !externalGuestForm.email) {
+    if (externalGuestForm.invitation_method !== 'link' && !externalGuestForm.email) {
       alert('Please provide guest email');
       return;
     }
 
     // Only require phone if WhatsApp is needed
-    if ((invitationMethod === 'whatsapp' || invitationMethod === 'both') && !externalGuestForm.phone) {
+    if ((externalGuestForm.invitation_method === 'whatsapp' || externalGuestForm.invitation_method === 'both') && !externalGuestForm.phone) {
       alert('Please provide guest phone number for WhatsApp');
       return;
     }
