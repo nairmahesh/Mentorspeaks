@@ -33,6 +33,11 @@ import { ChaptersPage } from './pages/ChaptersPage';
 import { ChapterDetailPage } from './pages/ChapterDetailPage';
 import { AboutPage } from './pages/AboutPage';
 import { PersonalizedFeedPage } from './pages/PersonalizedFeedPage';
+import { MentorBrandDashboardPage } from './pages/MentorBrandDashboardPage';
+import { SocialMediaManagerPage } from './pages/SocialMediaManagerPage';
+import { CreatePostPage } from './pages/CreatePostPage';
+import { MentorAnalyticsPage } from './pages/MentorAnalyticsPage';
+import { MenteeCRMPage } from './pages/MenteeCRMPage';
 
 function AppRoutes() {
   const { user, profile, loading } = useAuth();
@@ -175,6 +180,54 @@ function AppRoutes() {
         element={
           <ProtectedRoute requiredRole="mentor">
             <MentorDashboardPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/mentor/brand"
+        element={
+          <ProtectedRoute requiredRole="mentor">
+            <MentorBrandDashboardPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/mentor/social-media"
+        element={
+          <ProtectedRoute requiredRole="mentor">
+            <SocialMediaManagerPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/mentor/social-media/new-post"
+        element={
+          <ProtectedRoute requiredRole="mentor">
+            <CreatePostPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/mentor/social-media/edit/:postId"
+        element={
+          <ProtectedRoute requiredRole="mentor">
+            <CreatePostPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/mentor/analytics"
+        element={
+          <ProtectedRoute requiredRole="mentor">
+            <MentorAnalyticsPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/mentor/crm"
+        element={
+          <ProtectedRoute requiredRole="mentor">
+            <MenteeCRMPage />
           </ProtectedRoute>
         }
       />
