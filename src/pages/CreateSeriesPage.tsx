@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Layout } from '../components/Layout';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../lib/supabase';
@@ -8,6 +8,8 @@ import { ArrowLeft, Save } from 'lucide-react';
 export function CreateSeriesPage() {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const { seriesId } = useParams<{ seriesId: string }>();
+  const isEditing = !!seriesId;
 
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -15,7 +17,37 @@ export function CreateSeriesPage() {
   const [status, setStatus] = useState<'draft' | 'active' | 'archived'>('draft');
 
   const [loading, setLoading] = useState(false);
+  const [loadingData, setLoadingData] = useState(isEditing);
   const [error, setError] = useState('');
+
+  useEffect(() => {
+    if (isEditing) {
+      loadSeries();
+    }
+  }, [seriesId]);
+
+  const loadSeries = async () => {
+    try {
+      const { data, error: loadError } = await supabase
+        .from('podcast_series')
+        .select('*')
+        .eq('id', seriesId)
+        .single();
+
+      if (loadError) throw loadError;
+
+      if (data) {
+        setTitle(data.title);
+        setDescription(data.description);
+        setCoverImageUrl(data.cover_image_url || '');
+        setStatus(data.status);
+      }
+    } catch (err: any) {
+      setError(err.message || 'Failed to load series');
+    } finally {
+      setLoadingData(false);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -23,19 +55,33 @@ export function CreateSeriesPage() {
     setLoading(true);
 
     try {
-      const { data: series, error: seriesError } = await supabase
-        .from('podcast_series')
-        .insert({
-          title,
-          description,
-          cover_image_url: coverImageUrl || null,
-          status,
-          created_by: user!.id
-        })
-        .select()
-        .single();
+      if (isEditing) {
+        const { error: updateError } = await supabase
+          .from('podcast_series')
+          .update({
+            title,
+            description,
+            cover_image_url: coverImageUrl || null,
+            status
+          })
+          .eq('id', seriesId);
 
-      if (seriesError) throw seriesError;
+        if (updateError) throw updateError;
+      } else {
+        const { data: series, error: seriesError } = await supabase
+          .from('podcast_series')
+          .insert({
+            title,
+            description,
+            cover_image_url: coverImageUrl || null,
+            status,
+            created_by: user!.id
+          })
+          .select()
+          .single();
+
+        if (seriesError) throw seriesError;
+      }
 
       navigate('/podcasts/manage');
     } catch (err: any) {
@@ -56,7 +102,13 @@ export function CreateSeriesPage() {
           <span>Back to Podcast Management</span>
         </button>
 
-        <h1 className="text-3xl font-bold text-slate-900 mb-8">Create New Podcast Series</h1>
+        <h1 className="text-3xl font-bold text-slate-900 mb-8">{isEditing ? 'Edit Podcast Series' : 'Create New Podcast Series'}</h1>
+
+        {loadingData && (
+          <div className="bg-blue-50 border border-blue-200 text-blue-700 px-4 py-3 rounded-lg mb-6">
+            Loading series data...
+          </div>
+        )}
 
         {error && (
           <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-6">
@@ -131,7 +183,7 @@ export function CreateSeriesPage() {
               className="flex items-center space-x-2 bg-blue-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-blue-700 transition disabled:opacity-50"
             >
               <Save className="w-5 h-5" />
-              <span>{loading ? 'Creating...' : 'Create Series'}</span>
+              <span>{loading ? (isEditing ? 'Updating...' : 'Creating...') : (isEditing ? 'Update Series' : 'Create Series')}</span>
             </button>
             <button
               type="button"

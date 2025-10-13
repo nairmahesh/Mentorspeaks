@@ -104,6 +104,14 @@ function AppRoutes() {
         }
       />
       <Route
+        path="/podcasts/series/:seriesId/edit"
+        element={
+          <ProtectedRoute>
+            <CreateSeriesPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
         path="/podcasts/episode/:episodeId/share"
         element={
           <ProtectedRoute>
