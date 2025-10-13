@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Layout } from '../components/Layout';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../lib/supabase';
-import { Sparkles, Plus, Trash2, ArrowLeft, Users, User } from 'lucide-react';
+import { Sparkles, Plus, Trash2, ArrowLeft, Users, User, UserPlus, Mail, MessageCircle } from 'lucide-react';
 
 interface Series {
   id: string;
@@ -39,7 +39,23 @@ export function CreateEpisodePage() {
   const [guestMode, setGuestMode] = useState<'single' | 'multiple'>('single');
   const [guestId, setGuestId] = useState('');
   const [selectedGuests, setSelectedGuests] = useState<string[]>([]);
+  const [externalGuests, setExternalGuests] = useState<Array<{
+    id: string;
+    full_name: string;
+    email: string;
+    phone?: string;
+    professional_title?: string;
+    invitation_method: 'email' | 'whatsapp' | 'both';
+  }>>([]);
   const [primaryGuestId, setPrimaryGuestId] = useState('');
+  const [showExternalGuestForm, setShowExternalGuestForm] = useState(false);
+  const [externalGuestForm, setExternalGuestForm] = useState({
+    full_name: '',
+    email: '',
+    phone: '',
+    professional_title: '',
+    invitation_method: 'email' as 'email' | 'whatsapp' | 'both'
+  });
   const [moderatorId, setModeratorId] = useState('');
   const [episodeNumber, setEpisodeNumber] = useState('1');
   const [recordingType, setRecordingType] = useState<'video' | 'audio'>('video');
@@ -132,6 +148,66 @@ export function CreateEpisodePage() {
     }
   };
 
+  const addExternalGuest = () => {
+    if (!externalGuestForm.full_name || !externalGuestForm.email) {
+      alert('Please provide guest name and email');
+      return;
+    }
+
+    const newGuest = {
+      id: `temp-${Date.now()}`,
+      ...externalGuestForm
+    };
+
+    setExternalGuests([...externalGuests, newGuest]);
+    setExternalGuestForm({
+      full_name: '',
+      email: '',
+      phone: '',
+      professional_title: '',
+      invitation_method: 'email'
+    });
+    setShowExternalGuestForm(false);
+
+    // Set as primary if first guest
+    if (!primaryGuestId && selectedGuests.length === 0) {
+      setPrimaryGuestId(newGuest.id);
+    }
+  };
+
+  const removeExternalGuest = (guestId: string) => {
+    setExternalGuests(externalGuests.filter(g => g.id !== guestId));
+    if (primaryGuestId === guestId) {
+      setPrimaryGuestId('');
+    }
+  };
+
+  const sendInvitation = async (guestId: string, method: 'email' | 'whatsapp' | 'both') => {
+    const guest = externalGuests.find(g => g.id === guestId);
+    if (!guest) return;
+
+    // Get invitation message from database function
+    const { data: message } = await supabase.rpc('get_invitation_message', {
+      episode_title: title || 'Podcast Episode',
+      episode_description: description,
+      moderator_name: moderators.find(m => m.id === moderatorId)?.full_name || 'Our Team',
+      invitation_token: 'will-be-generated',
+      message_type: method === 'email' ? 'email' : 'whatsapp'
+    });
+
+    if (method === 'email' || method === 'both') {
+      const subject = encodeURIComponent(`Podcast Invitation: ${title || 'Our Show'}`);
+      const body = encodeURIComponent(message || '');
+      window.open(`mailto:${guest.email}?subject=${subject}&body=${body}`, '_blank');
+    }
+
+    if (method === 'whatsapp' || method === 'both') {
+      const whatsappMessage = encodeURIComponent(message || '');
+      const phone = guest.phone?.replace(/\D/g, '') || '';
+      window.open(`https://wa.me/${phone}?text=${whatsappMessage}`, '_blank');
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
@@ -159,19 +235,74 @@ export function CreateEpisodePage() {
       if (episodeError) throw episodeError;
 
       // If multiple guests, insert into podcast_episode_guests
-      if (guestMode === 'multiple' && selectedGuests.length > 0 && episode) {
-        const guestsData = selectedGuests.map((gId, index) => ({
-          episode_id: episode.id,
-          guest_id: gId,
-          guest_order: index + 1,
-          is_primary_guest: gId === primaryGuestId
-        }));
+      if (guestMode === 'multiple' && (selectedGuests.length > 0 || externalGuests.length > 0) && episode) {
+        let guestOrder = 1;
+        const guestsData = [];
 
-        const { error: guestsError } = await supabase
-          .from('podcast_episode_guests')
-          .insert(guestsData);
+        // Add internal guests
+        for (const gId of selectedGuests) {
+          guestsData.push({
+            episode_id: episode.id,
+            guest_id: gId,
+            external_guest_id: null,
+            guest_order: guestOrder++,
+            is_primary_guest: gId === primaryGuestId
+          });
+        }
 
-        if (guestsError) throw guestsError;
+        // Add external guests
+        for (const extGuest of externalGuests) {
+          // Create external guest record
+          const { data: externalGuestData, error: externalError } = await supabase
+            .from('podcast_external_guests')
+            .insert({
+              full_name: extGuest.full_name,
+              email: extGuest.email,
+              phone: extGuest.phone || null,
+              professional_title: extGuest.professional_title || null
+            })
+            .select()
+            .single();
+
+          if (externalError) throw externalError;
+
+          // Add to guests list
+          guestsData.push({
+            episode_id: episode.id,
+            guest_id: null,
+            external_guest_id: externalGuestData.id,
+            guest_order: guestOrder++,
+            is_primary_guest: extGuest.id === primaryGuestId
+          });
+
+          // Create invitation
+          const { data: invitation, error: inviteError } = await supabase
+            .from('podcast_guest_invitations')
+            .insert({
+              episode_id: episode.id,
+              external_guest_id: externalGuestData.id,
+              invitation_method: extGuest.invitation_method,
+              guest_order: guestOrder - 1,
+              is_primary_guest: extGuest.id === primaryGuestId
+            })
+            .select()
+            .single();
+
+          if (inviteError) throw inviteError;
+
+          // Send invitation
+          if (invitation) {
+            sendInvitation(extGuest.id, extGuest.invitation_method);
+          }
+        }
+
+        if (guestsData.length > 0) {
+          const { error: guestsError } = await supabase
+            .from('podcast_episode_guests')
+            .insert(guestsData);
+
+          if (guestsError) throw guestsError;
+        }
       }
 
       if (questions.length > 0 && episode) {
@@ -366,67 +497,284 @@ export function CreateEpisodePage() {
                 </>
               ) : (
                 <>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">
-                    Select Guests (Mentors) *
-                  </label>
-                  <div className="space-y-2 max-h-96 overflow-y-auto border border-slate-200 rounded-lg p-3">
-                    {mentors.map((mentor) => (
-                      <div
-                        key={mentor.id}
-                        className={`p-3 rounded-lg border-2 cursor-pointer transition ${
-                          selectedGuests.includes(mentor.id)
-                            ? 'border-blue-500 bg-blue-50'
-                            : 'border-slate-200 hover:border-slate-300'
-                        }`}
-                        onClick={() => toggleGuestSelection(mentor.id)}
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <label className="block text-sm font-medium text-slate-700">
+                        Select Guests
+                      </label>
+                      <button
+                        type="button"
+                        onClick={() => setShowExternalGuestForm(true)}
+                        className="flex items-center space-x-2 text-sm text-blue-600 hover:text-blue-700"
                       >
-                        <div className="flex items-start justify-between">
-                          <div className="flex-1">
-                            <div className="flex items-center space-x-2">
-                              <input
-                                type="checkbox"
-                                checked={selectedGuests.includes(mentor.id)}
-                                onChange={() => toggleGuestSelection(mentor.id)}
-                                className="rounded text-blue-600"
-                                onClick={(e) => e.stopPropagation()}
-                              />
-                              <span className="font-medium text-slate-900">{mentor.full_name}</span>
-                              {primaryGuestId === mentor.id && (
-                                <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded">
-                                  Primary
-                                </span>
-                              )}
+                        <UserPlus className="w-4 h-4" />
+                        <span>Invite External Guest</span>
+                      </button>
+                    </div>
+
+                    {/* Internal Guests */}
+                    {mentors.length > 0 && (
+                      <>
+                        <p className="text-xs text-slate-600 font-medium">Platform Mentors</p>
+                        <div className="space-y-2 max-h-64 overflow-y-auto border border-slate-200 rounded-lg p-3">
+                          {mentors.map((mentor) => (
+                            <div
+                              key={mentor.id}
+                              className={`p-3 rounded-lg border-2 cursor-pointer transition ${
+                                selectedGuests.includes(mentor.id)
+                                  ? 'border-blue-500 bg-blue-50'
+                                  : 'border-slate-200 hover:border-slate-300'
+                              }`}
+                              onClick={() => toggleGuestSelection(mentor.id)}
+                            >
+                              <div className="flex items-start justify-between">
+                                <div className="flex-1">
+                                  <div className="flex items-center space-x-2">
+                                    <input
+                                      type="checkbox"
+                                      checked={selectedGuests.includes(mentor.id)}
+                                      onChange={() => toggleGuestSelection(mentor.id)}
+                                      className="rounded text-blue-600"
+                                      onClick={(e) => e.stopPropagation()}
+                                    />
+                                    <span className="font-medium text-slate-900">{mentor.full_name}</span>
+                                    {primaryGuestId === mentor.id && (
+                                      <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded">
+                                        Primary
+                                      </span>
+                                    )}
+                                  </div>
+                                  {mentor.professional_title && (
+                                    <p className="text-sm text-slate-600 ml-6">{mentor.professional_title}</p>
+                                  )}
+                                </div>
+                                {selectedGuests.includes(mentor.id) && primaryGuestId !== mentor.id && (
+                                  <button
+                                    type="button"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      setPrimaryGuestId(mentor.id);
+                                    }}
+                                    className="text-xs text-blue-600 hover:text-blue-700 underline ml-2"
+                                  >
+                                    Set as Primary
+                                  </button>
+                                )}
+                              </div>
                             </div>
-                            {mentor.professional_title && (
-                              <p className="text-sm text-slate-600 ml-6">{mentor.professional_title}</p>
-                            )}
+                          ))}
+                        </div>
+                      </>
+                    )}
+
+                    {/* External Guests */}
+                    {externalGuests.length > 0 && (
+                      <>
+                        <p className="text-xs text-slate-600 font-medium mt-4">External Guests (Will be invited)</p>
+                        <div className="space-y-2">
+                          {externalGuests.map((guest) => (
+                            <div
+                              key={guest.id}
+                              className="p-3 rounded-lg border-2 border-green-200 bg-green-50"
+                            >
+                              <div className="flex items-start justify-between">
+                                <div className="flex-1">
+                                  <div className="flex items-center space-x-2">
+                                    <span className="font-medium text-slate-900">{guest.full_name}</span>
+                                    {primaryGuestId === guest.id && (
+                                      <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded">
+                                        Primary
+                                      </span>
+                                    )}
+                                    <span className="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded">
+                                      External
+                                    </span>
+                                  </div>
+                                  <p className="text-sm text-slate-600 mt-1">{guest.email}</p>
+                                  {guest.professional_title && (
+                                    <p className="text-sm text-slate-600">{guest.professional_title}</p>
+                                  )}
+                                  <div className="flex items-center space-x-2 mt-2">
+                                    <span className="text-xs text-slate-500">Will be invited via:</span>
+                                    {guest.invitation_method === 'email' && (
+                                      <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded flex items-center space-x-1">
+                                        <Mail className="w-3 h-3" />
+                                        <span>Email</span>
+                                      </span>
+                                    )}
+                                    {guest.invitation_method === 'whatsapp' && (
+                                      <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded flex items-center space-x-1">
+                                        <MessageCircle className="w-3 h-3" />
+                                        <span>WhatsApp</span>
+                                      </span>
+                                    )}
+                                    {guest.invitation_method === 'both' && (
+                                      <>
+                                        <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded flex items-center space-x-1">
+                                          <Mail className="w-3 h-3" />
+                                          <span>Email</span>
+                                        </span>
+                                        <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded flex items-center space-x-1">
+                                          <MessageCircle className="w-3 h-3" />
+                                          <span>WhatsApp</span>
+                                        </span>
+                                      </>
+                                    )}
+                                  </div>
+                                </div>
+                                <div className="flex items-center space-x-2">
+                                  {primaryGuestId !== guest.id && (
+                                    <button
+                                      type="button"
+                                      onClick={() => setPrimaryGuestId(guest.id)}
+                                      className="text-xs text-blue-600 hover:text-blue-700 underline"
+                                    >
+                                      Set as Primary
+                                    </button>
+                                  )}
+                                  <button
+                                    type="button"
+                                    onClick={() => removeExternalGuest(guest.id)}
+                                    className="text-red-600 hover:text-red-700 p-1"
+                                  >
+                                    <Trash2 className="w-4 h-4" />
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </>
+                    )}
+
+                    {/* External Guest Form Modal */}
+                    {showExternalGuestForm && (
+                      <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+                        <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+                          <h3 className="text-lg font-semibold text-slate-900 mb-4">Invite External Guest</h3>
+                          <div className="space-y-4">
+                            <div>
+                              <label className="block text-sm font-medium text-slate-700 mb-1">
+                                Full Name *
+                              </label>
+                              <input
+                                type="text"
+                                value={externalGuestForm.full_name}
+                                onChange={(e) => setExternalGuestForm({ ...externalGuestForm, full_name: e.target.value })}
+                                className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                placeholder="John Doe"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium text-slate-700 mb-1">
+                                Email *
+                              </label>
+                              <input
+                                type="email"
+                                value={externalGuestForm.email}
+                                onChange={(e) => setExternalGuestForm({ ...externalGuestForm, email: e.target.value })}
+                                className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                placeholder="john@example.com"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium text-slate-700 mb-1">
+                                Phone (Optional, for WhatsApp)
+                              </label>
+                              <input
+                                type="tel"
+                                value={externalGuestForm.phone}
+                                onChange={(e) => setExternalGuestForm({ ...externalGuestForm, phone: e.target.value })}
+                                className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                placeholder="+1234567890"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium text-slate-700 mb-1">
+                                Professional Title (Optional)
+                              </label>
+                              <input
+                                type="text"
+                                value={externalGuestForm.professional_title}
+                                onChange={(e) => setExternalGuestForm({ ...externalGuestForm, professional_title: e.target.value })}
+                                className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                placeholder="CEO, Tech Company"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium text-slate-700 mb-1">
+                                Send Invitation Via
+                              </label>
+                              <div className="space-y-2">
+                                <label className="flex items-center space-x-2">
+                                  <input
+                                    type="radio"
+                                    checked={externalGuestForm.invitation_method === 'email'}
+                                    onChange={() => setExternalGuestForm({ ...externalGuestForm, invitation_method: 'email' })}
+                                    className="text-blue-600"
+                                  />
+                                  <Mail className="w-4 h-4 text-slate-600" />
+                                  <span className="text-sm">Email Only</span>
+                                </label>
+                                <label className="flex items-center space-x-2">
+                                  <input
+                                    type="radio"
+                                    checked={externalGuestForm.invitation_method === 'whatsapp'}
+                                    onChange={() => setExternalGuestForm({ ...externalGuestForm, invitation_method: 'whatsapp' })}
+                                    className="text-blue-600"
+                                  />
+                                  <MessageCircle className="w-4 h-4 text-slate-600" />
+                                  <span className="text-sm">WhatsApp Only</span>
+                                </label>
+                                <label className="flex items-center space-x-2">
+                                  <input
+                                    type="radio"
+                                    checked={externalGuestForm.invitation_method === 'both'}
+                                    onChange={() => setExternalGuestForm({ ...externalGuestForm, invitation_method: 'both' })}
+                                    className="text-blue-600"
+                                  />
+                                  <span className="text-sm">Both Email & WhatsApp</span>
+                                </label>
+                              </div>
+                            </div>
                           </div>
-                          {selectedGuests.includes(mentor.id) && primaryGuestId !== mentor.id && (
+                          <div className="flex space-x-3 mt-6">
                             <button
                               type="button"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                setPrimaryGuestId(mentor.id);
-                              }}
-                              className="text-xs text-blue-600 hover:text-blue-700 underline ml-2"
+                              onClick={addExternalGuest}
+                              className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition"
                             >
-                              Set as Primary
+                              Add Guest
                             </button>
-                          )}
+                            <button
+                              type="button"
+                              onClick={() => setShowExternalGuestForm(false)}
+                              className="px-4 py-2 border border-slate-300 rounded-lg hover:bg-slate-50 transition"
+                            >
+                              Cancel
+                            </button>
+                          </div>
                         </div>
                       </div>
-                    ))}
+                    )}
+
+                    {(selectedGuests.length > 0 || externalGuests.length > 0) && (
+                      <div className="mt-3 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                        <p className="text-sm text-blue-800">
+                          <span className="font-medium">
+                            {selectedGuests.length + externalGuests.length} guest{selectedGuests.length + externalGuests.length > 1 ? 's' : ''} selected
+                          </span>
+                          {primaryGuestId && (
+                            <span className="text-blue-600">
+                              {' • Primary: '}
+                              {mentors.find(m => m.id === primaryGuestId)?.full_name ||
+                               externalGuests.find(g => g.id === primaryGuestId)?.full_name}
+                            </span>
+                          )}
+                        </p>
+                      </div>
+                    )}
                   </div>
-                  {selectedGuests.length > 0 && (
-                    <div className="mt-3 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-                      <p className="text-sm text-blue-800">
-                        <span className="font-medium">{selectedGuests.length} guest{selectedGuests.length > 1 ? 's' : ''} selected</span>
-                        {primaryGuestId && (
-                          <span className="text-blue-600"> • Primary: {mentors.find(m => m.id === primaryGuestId)?.full_name}</span>
-                        )}
-                      </p>
-                    </div>
-                  )}
                 </>
               )}
             </div>
