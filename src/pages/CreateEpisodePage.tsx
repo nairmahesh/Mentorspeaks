@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Layout } from '../components/Layout';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../lib/supabase';
-import { Sparkles, Plus, Trash2, ArrowLeft } from 'lucide-react';
+import { Sparkles, Plus, Trash2, ArrowLeft, Users, User } from 'lucide-react';
 
 interface Series {
   id: string;
@@ -36,7 +36,10 @@ export function CreateEpisodePage() {
   const [seriesId, setSeriesId] = useState('');
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [guestMode, setGuestMode] = useState<'single' | 'multiple'>('single');
   const [guestId, setGuestId] = useState('');
+  const [selectedGuests, setSelectedGuests] = useState<string[]>([]);
+  const [primaryGuestId, setPrimaryGuestId] = useState('');
   const [moderatorId, setModeratorId] = useState('');
   const [episodeNumber, setEpisodeNumber] = useState('1');
   const [recordingType, setRecordingType] = useState<'video' | 'audio'>('video');
@@ -115,19 +118,35 @@ export function CreateEpisodePage() {
     setQuestions([...questions, ...aiQuestions]);
   };
 
+  const toggleGuestSelection = (guestId: string) => {
+    if (selectedGuests.includes(guestId)) {
+      setSelectedGuests(selectedGuests.filter(id => id !== guestId));
+      if (primaryGuestId === guestId) {
+        setPrimaryGuestId('');
+      }
+    } else {
+      setSelectedGuests([...selectedGuests, guestId]);
+      if (!primaryGuestId) {
+        setPrimaryGuestId(guestId);
+      }
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     setLoading(true);
 
     try {
+      // For single guest mode, use the old guest_id field
+      // For multiple guests, leave guest_id null and use the junction table
       const { data: episode, error: episodeError } = await supabase
         .from('podcast_episodes')
         .insert({
           series_id: seriesId || null,
           title,
           description,
-          guest_id: guestId,
+          guest_id: guestMode === 'single' ? guestId : null,
           moderator_id: moderatorId || user!.id,
           episode_number: parseInt(episodeNumber),
           recording_type: recordingType,
@@ -138,6 +157,22 @@ export function CreateEpisodePage() {
         .single();
 
       if (episodeError) throw episodeError;
+
+      // If multiple guests, insert into podcast_episode_guests
+      if (guestMode === 'multiple' && selectedGuests.length > 0 && episode) {
+        const guestsData = selectedGuests.map((gId, index) => ({
+          episode_id: episode.id,
+          guest_id: gId,
+          guest_order: index + 1,
+          is_primary_guest: gId === primaryGuestId
+        }));
+
+        const { error: guestsError } = await supabase
+          .from('podcast_episode_guests')
+          .insert(guestsData);
+
+        if (guestsError) throw guestsError;
+      }
 
       if (questions.length > 0 && episode) {
         const questionsData = questions.map((q, index) => ({
@@ -232,60 +267,167 @@ export function CreateEpisodePage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
-                Guest (Mentor) *
+              <label className="block text-sm font-medium text-slate-700 mb-3">
+                Podcast Format *
               </label>
-              <select
-                value={guestId}
-                onChange={(e) => setGuestId(e.target.value)}
-                required
-                className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
-              >
-                <option value="">Select a mentor</option>
-                {mentors.map((m) => (
-                  <option key={m.id} value={m.id}>
-                    {m.full_name} {m.professional_title && `- ${m.professional_title}`}
-                  </option>
-                ))}
-              </select>
+              <div className="grid grid-cols-2 gap-4 mb-6">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setGuestMode('single');
+                    setSelectedGuests([]);
+                    setPrimaryGuestId('');
+                  }}
+                  className={`p-4 rounded-xl border-2 transition ${
+                    guestMode === 'single'
+                      ? 'border-blue-500 bg-blue-50'
+                      : 'border-slate-200 hover:border-slate-300'
+                  }`}
+                >
+                  <User className={`w-8 h-8 mx-auto mb-2 ${guestMode === 'single' ? 'text-blue-600' : 'text-slate-400'}`} />
+                  <div className="font-semibold text-slate-900">Single Guest</div>
+                  <div className="text-xs text-slate-600 mt-1">One-on-one interview</div>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setGuestMode('multiple');
+                    setGuestId('');
+                  }}
+                  className={`p-4 rounded-xl border-2 transition ${
+                    guestMode === 'multiple'
+                      ? 'border-blue-500 bg-blue-50'
+                      : 'border-slate-200 hover:border-slate-300'
+                  }`}
+                >
+                  <Users className={`w-8 h-8 mx-auto mb-2 ${guestMode === 'multiple' ? 'text-blue-600' : 'text-slate-400'}`} />
+                  <div className="font-semibold text-slate-900">Multiple Guests</div>
+                  <div className="text-xs text-slate-600 mt-1">Panel discussion</div>
+                </button>
+              </div>
 
-              {guestId && mentors.find(m => m.id === guestId) && (
-                <div className="mt-4 p-4 bg-slate-50 rounded-lg border border-slate-200">
-                  <h3 className="font-semibold text-slate-900 mb-2">Guest Profile</h3>
-                  {(() => {
-                    const guest = mentors.find(m => m.id === guestId);
-                    return guest ? (
-                      <div className="space-y-2 text-sm">
-                        <p className="text-slate-700">
-                          <span className="font-medium">Name:</span> {guest.full_name}
-                        </p>
-                        {guest.professional_title && (
-                          <p className="text-slate-700">
-                            <span className="font-medium">Title:</span> {guest.professional_title}
-                          </p>
-                        )}
-                        {guest.years_of_experience && (
-                          <p className="text-slate-700">
-                            <span className="font-medium">Experience:</span> {guest.years_of_experience} years
-                          </p>
-                        )}
-                        {guest.bio && (
-                          <p className="text-slate-600 mt-2">{guest.bio}</p>
-                        )}
-                        {guest.linkedin_url && (
-                          <a
-                            href={guest.linkedin_url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-blue-600 hover:text-blue-700 inline-block mt-2"
-                          >
-                            View LinkedIn Profile →
-                          </a>
-                        )}
+              {guestMode === 'single' ? (
+                <>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                    Select Guest (Mentor) *
+                  </label>
+                  <select
+                    value={guestId}
+                    onChange={(e) => setGuestId(e.target.value)}
+                    required
+                    className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
+                  >
+                    <option value="">Select a mentor</option>
+                    {mentors.map((m) => (
+                      <option key={m.id} value={m.id}>
+                        {m.full_name} {m.professional_title && `- ${m.professional_title}`}
+                      </option>
+                    ))}
+                  </select>
+
+                  {guestId && mentors.find(m => m.id === guestId) && (
+                    <div className="mt-4 p-4 bg-slate-50 rounded-lg border border-slate-200">
+                      <h3 className="font-semibold text-slate-900 mb-2">Guest Profile</h3>
+                      {(() => {
+                        const guest = mentors.find(m => m.id === guestId);
+                        return guest ? (
+                          <div className="space-y-2 text-sm">
+                            <p className="text-slate-700">
+                              <span className="font-medium">Name:</span> {guest.full_name}
+                            </p>
+                            {guest.professional_title && (
+                              <p className="text-slate-700">
+                                <span className="font-medium">Title:</span> {guest.professional_title}
+                              </p>
+                            )}
+                            {guest.years_of_experience && (
+                              <p className="text-slate-700">
+                                <span className="font-medium">Experience:</span> {guest.years_of_experience} years
+                              </p>
+                            )}
+                            {guest.bio && (
+                              <p className="text-slate-600 mt-2">{guest.bio}</p>
+                            )}
+                            {guest.linkedin_url && (
+                              <a
+                                href={guest.linkedin_url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-blue-600 hover:text-blue-700 inline-block mt-2"
+                              >
+                                View LinkedIn Profile →
+                              </a>
+                            )}
+                          </div>
+                        ) : null;
+                      })()}
+                    </div>
+                  )}
+                </>
+              ) : (
+                <>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                    Select Guests (Mentors) *
+                  </label>
+                  <div className="space-y-2 max-h-96 overflow-y-auto border border-slate-200 rounded-lg p-3">
+                    {mentors.map((mentor) => (
+                      <div
+                        key={mentor.id}
+                        className={`p-3 rounded-lg border-2 cursor-pointer transition ${
+                          selectedGuests.includes(mentor.id)
+                            ? 'border-blue-500 bg-blue-50'
+                            : 'border-slate-200 hover:border-slate-300'
+                        }`}
+                        onClick={() => toggleGuestSelection(mentor.id)}
+                      >
+                        <div className="flex items-start justify-between">
+                          <div className="flex-1">
+                            <div className="flex items-center space-x-2">
+                              <input
+                                type="checkbox"
+                                checked={selectedGuests.includes(mentor.id)}
+                                onChange={() => toggleGuestSelection(mentor.id)}
+                                className="rounded text-blue-600"
+                                onClick={(e) => e.stopPropagation()}
+                              />
+                              <span className="font-medium text-slate-900">{mentor.full_name}</span>
+                              {primaryGuestId === mentor.id && (
+                                <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded">
+                                  Primary
+                                </span>
+                              )}
+                            </div>
+                            {mentor.professional_title && (
+                              <p className="text-sm text-slate-600 ml-6">{mentor.professional_title}</p>
+                            )}
+                          </div>
+                          {selectedGuests.includes(mentor.id) && primaryGuestId !== mentor.id && (
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setPrimaryGuestId(mentor.id);
+                              }}
+                              className="text-xs text-blue-600 hover:text-blue-700 underline ml-2"
+                            >
+                              Set as Primary
+                            </button>
+                          )}
+                        </div>
                       </div>
-                    ) : null;
-                  })()}
-                </div>
+                    ))}
+                  </div>
+                  {selectedGuests.length > 0 && (
+                    <div className="mt-3 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                      <p className="text-sm text-blue-800">
+                        <span className="font-medium">{selectedGuests.length} guest{selectedGuests.length > 1 ? 's' : ''} selected</span>
+                        {primaryGuestId && (
+                          <span className="text-blue-600"> • Primary: {mentors.find(m => m.id === primaryGuestId)?.full_name}</span>
+                        )}
+                      </p>
+                    </div>
+                  )}
+                </>
               )}
             </div>
 

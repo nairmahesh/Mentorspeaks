@@ -29,6 +29,14 @@ type AnswerWithDetails = Answer & {
   mentor: Profile;
 };
 
+interface PodcastGuest {
+  guest_id: string;
+  full_name: string;
+  professional_title: string;
+  avatar_url: string;
+  is_primary: boolean;
+}
+
 interface PodcastEpisode {
   id: string;
   title: string;
@@ -39,8 +47,9 @@ interface PodcastEpisode {
   duration_minutes: number;
   view_count: number;
   published_at: string;
-  guest: { id: string; full_name: string; professional_title: string; avatar_url: string; is_available_for_consulting: boolean };
+  guest: { id: string; full_name: string; professional_title: string; avatar_url: string; is_available_for_consulting: boolean } | null;
   moderator?: { full_name: string; professional_title: string };
+  guests?: PodcastGuest[];
 }
 
 export function PodcastsPage() {
@@ -81,7 +90,17 @@ export function PodcastsPage() {
       ]);
 
       if (answersResult.data) setPodcasts(answersResult.data as AnswerWithDetails[]);
-      if (episodesResult.data) setEpisodes(episodesResult.data as any);
+
+      // Load guests for each episode
+      if (episodesResult.data) {
+        const episodesWithGuests = await Promise.all(
+          episodesResult.data.map(async (ep: any) => {
+            const { data: guests } = await supabase.rpc('get_episode_guests', { episode_uuid: ep.id });
+            return { ...ep, guests: guests && guests.length > 0 ? guests : undefined };
+          })
+        );
+        setEpisodes(episodesWithGuests as any);
+      }
     } catch (error) {
       console.error('Error loading podcasts:', error);
     } finally {

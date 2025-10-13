@@ -6,6 +6,14 @@ import { CallBookingModal } from '../components/CallBookingModal';
 import { Share2, Linkedin, Facebook, Copy, CheckCircle, Code, Heart, Calendar, Play, Phone, MessageCircle, Send, ThumbsUp } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 
+interface EpisodeGuest {
+  guest_id: string;
+  full_name: string;
+  professional_title: string;
+  avatar_url: string;
+  is_primary: boolean;
+}
+
 interface Episode {
   id: string;
   title: string;
@@ -25,7 +33,8 @@ interface Episode {
     linkedin_url: string;
     avatar_url: string;
     is_available_for_consulting: boolean;
-  };
+  } | null;
+  guests?: EpisodeGuest[];
   moderator: {
     full_name: string;
   };
@@ -107,20 +116,28 @@ export function EpisodeViewPage() {
     if (!episodeId) return;
 
     try {
-      const { data: episodeData, error: epError } = await supabase
-        .from('podcast_episodes')
-        .select(`
-          *,
-          guest:profiles!podcast_episodes_guest_id_fkey(id, full_name, professional_title, bio, linkedin_url, avatar_url, is_available_for_consulting),
-          moderator:profiles!podcast_episodes_moderator_id_fkey(full_name),
-          series:podcast_series(title)
-        `)
-        .eq('id', episodeId)
-        .single();
+      const [episodeResult, guestsResult] = await Promise.all([
+        supabase
+          .from('podcast_episodes')
+          .select(`
+            *,
+            guest:profiles!podcast_episodes_guest_id_fkey(id, full_name, professional_title, bio, linkedin_url, avatar_url, is_available_for_consulting),
+            moderator:profiles!podcast_episodes_moderator_id_fkey(full_name),
+            series:podcast_series(title)
+          `)
+          .eq('id', episodeId)
+          .single(),
+        supabase.rpc('get_episode_guests', { episode_uuid: episodeId })
+      ]);
 
-      if (epError) throw epError;
+      if (episodeResult.error) throw episodeResult.error;
 
-      setEpisode(episodeData as any);
+      let episodeData = episodeResult.data as any;
+      if (guestsResult.data && guestsResult.data.length > 0) {
+        episodeData.guests = guestsResult.data;
+      }
+
+      setEpisode(episodeData);
 
       await loadQuestions();
     } catch (err: any) {

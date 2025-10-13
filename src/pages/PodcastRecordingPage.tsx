@@ -3,12 +3,21 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { ChevronLeft, ChevronRight, Video, Mic, Square, Play, ArrowLeft, VideoOff, User } from 'lucide-react';
 
+interface Guest {
+  guest_id: string;
+  full_name: string;
+  avatar_url?: string;
+  is_primary: boolean;
+  guest_order: number;
+}
+
 interface Episode {
   id: string;
   title: string;
   recording_type: string;
-  guest: { full_name: string; id: string; avatar_url?: string };
+  guest: { full_name: string; id: string; avatar_url?: string } | null;
   moderator: { full_name: string };
+  guests?: Guest[];
 }
 
 interface Question {
@@ -51,7 +60,7 @@ export function PodcastRecordingPage() {
   const loadEpisodeData = async () => {
     if (!episodeId) return;
 
-    const [episodeResult, questionsResult] = await Promise.all([
+    const [episodeResult, questionsResult, guestsResult] = await Promise.all([
       supabase
         .from('podcast_episodes')
         .select(`
@@ -65,16 +74,23 @@ export function PodcastRecordingPage() {
         .from('podcast_questions')
         .select('*')
         .eq('episode_id', episodeId)
-        .order('question_order')
+        .order('question_order'),
+      supabase.rpc('get_episode_guests', { episode_uuid: episodeId })
     ]);
 
-    if (episodeResult.data) setEpisode(episodeResult.data as any);
+    let episodeData = episodeResult.data as any;
+
+    if (episodeData && guestsResult.data && guestsResult.data.length > 0) {
+      episodeData.guests = guestsResult.data;
+    }
+
+    if (episodeData) setEpisode(episodeData);
     if (questionsResult.data) setQuestions(questionsResult.data);
 
     setLoading(false);
 
-    if (episodeResult.data) {
-      await initializeMedia(episodeResult.data.recording_type);
+    if (episodeData) {
+      await initializeMedia(episodeData.recording_type);
     }
   };
 
@@ -282,7 +298,15 @@ export function PodcastRecordingPage() {
             <div>
               <h1 className="text-xl font-bold">{episode.title}</h1>
               <p className="text-sm text-slate-400 mt-1">
-                Guest: {episode.guest?.full_name} | Moderator: {episode.moderator?.full_name}
+                {episode.guests && episode.guests.length > 0 ? (
+                  <>
+                    Guests: {episode.guests.map(g => g.full_name).join(', ')} | Moderator: {episode.moderator?.full_name}
+                  </>
+                ) : (
+                  <>
+                    Guest: {episode.guest?.full_name} | Moderator: {episode.moderator?.full_name}
+                  </>
+                )}
               </p>
             </div>
           </div>
@@ -314,9 +338,24 @@ export function PodcastRecordingPage() {
                       muted
                       className="w-full h-full object-cover"
                     />
-                    <div className="absolute bottom-4 left-4 bg-slate-900/90 px-3 py-2 rounded-lg">
-                      <p className="text-sm font-semibold">{episode.guest?.full_name}</p>
-                      <p className="text-xs text-slate-400">Guest</p>
+                    <div className="absolute bottom-4 left-4 right-4">
+                      {episode.guests && episode.guests.length > 0 ? (
+                        <div className="flex flex-wrap gap-2">
+                          {episode.guests.map((guest) => (
+                            <div key={guest.guest_id} className="bg-slate-900/90 px-3 py-2 rounded-lg">
+                              <p className="text-sm font-semibold">{guest.full_name}</p>
+                              <p className="text-xs text-slate-400">
+                                {guest.is_primary ? 'Primary Guest' : 'Guest'}
+                              </p>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <div className="bg-slate-900/90 px-3 py-2 rounded-lg inline-block">
+                          <p className="text-sm font-semibold">{episode.guest?.full_name}</p>
+                          <p className="text-xs text-slate-400">Guest</p>
+                        </div>
+                      )}
                     </div>
                     <button
                       onClick={() => setShowVideo(false)}
@@ -328,28 +367,66 @@ export function PodcastRecordingPage() {
                   </div>
                 ) : (
                   <div className="relative w-full aspect-video bg-slate-800 rounded-lg flex flex-col items-center justify-center">
-                    <div className="relative">
-                      {episode.guest?.avatar_url ? (
-                        <img
-                          src={episode.guest.avatar_url}
-                          alt={episode.guest.full_name}
-                          className="w-32 h-32 rounded-full object-cover"
-                        />
-                      ) : (
-                        <div className="w-32 h-32 rounded-full bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center">
-                          <span className="text-4xl font-bold text-white">
-                            {getInitials(episode.guest?.full_name || 'G')}
-                          </span>
-                        </div>
-                      )}
+                    {episode.guests && episode.guests.length > 0 ? (
+                      <div className="flex items-center justify-center space-x-6 flex-wrap">
+                        {episode.guests.map((guest) => (
+                          <div key={guest.guest_id} className="flex flex-col items-center">
+                            <div className="relative mb-3">
+                              {guest.avatar_url ? (
+                                <img
+                                  src={guest.avatar_url}
+                                  alt={guest.full_name}
+                                  className="w-24 h-24 rounded-full object-cover"
+                                />
+                              ) : (
+                                <div className="w-24 h-24 rounded-full bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center">
+                                  <span className="text-2xl font-bold text-white">
+                                    {getInitials(guest.full_name)}
+                                  </span>
+                                </div>
+                              )}
+                              {isSpeaking && (
+                                <div className="absolute -inset-2 rounded-full border-4 border-green-500 animate-pulse"></div>
+                              )}
+                              {guest.is_primary && (
+                                <div className="absolute -top-1 -right-1 bg-green-500 text-white text-xs px-2 py-0.5 rounded-full font-semibold">
+                                  Primary
+                                </div>
+                              )}
+                            </div>
+                            <p className="text-sm font-semibold">{guest.full_name}</p>
+                            <p className="text-xs text-slate-400">Guest</p>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="relative">
+                        {episode.guest?.avatar_url ? (
+                          <img
+                            src={episode.guest.avatar_url}
+                            alt={episode.guest.full_name}
+                            className="w-32 h-32 rounded-full object-cover"
+                          />
+                        ) : (
+                          <div className="w-32 h-32 rounded-full bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center">
+                            <span className="text-4xl font-bold text-white">
+                              {getInitials(episode.guest?.full_name || 'G')}
+                            </span>
+                          </div>
+                        )}
 
-                      {isSpeaking && (
-                        <div className="absolute -inset-3 rounded-full border-4 border-green-500 animate-pulse"></div>
-                      )}
-                    </div>
+                        {isSpeaking && (
+                          <div className="absolute -inset-3 rounded-full border-4 border-green-500 animate-pulse"></div>
+                        )}
+                      </div>
+                    )}
 
-                    <p className="text-xl font-semibold mt-6">{episode.guest?.full_name}</p>
-                    <p className="text-sm text-slate-400 mt-1">Guest</p>
+                    {!episode.guests || episode.guests.length === 0 ? (
+                      <>
+                        <p className="text-xl font-semibold mt-6">{episode.guest?.full_name}</p>
+                        <p className="text-sm text-slate-400 mt-1">Guest</p>
+                      </>
+                    ) : null}
 
                     <button
                       onClick={() => setShowVideo(true)}
@@ -363,28 +440,68 @@ export function PodcastRecordingPage() {
               </div>
             ) : (
               <div className="w-full aspect-video bg-slate-800 rounded-lg flex flex-col items-center justify-center">
-                <div className="relative mb-6">
-                  {episode.guest?.avatar_url ? (
-                    <img
-                      src={episode.guest.avatar_url}
-                      alt={episode.guest.full_name}
-                      className="w-32 h-32 rounded-full object-cover"
-                    />
-                  ) : (
-                    <div className="w-32 h-32 rounded-full bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center">
-                      <span className="text-4xl font-bold text-white">
-                        {getInitials(episode.guest?.full_name || 'G')}
-                      </span>
-                    </div>
-                  )}
+                {episode.guests && episode.guests.length > 0 ? (
+                  <div className="flex items-center justify-center space-x-8 flex-wrap mb-8">
+                    {episode.guests.map((guest) => (
+                      <div key={guest.guest_id} className="flex flex-col items-center">
+                        <div className="relative mb-3">
+                          {guest.avatar_url ? (
+                            <img
+                              src={guest.avatar_url}
+                              alt={guest.full_name}
+                              className="w-24 h-24 rounded-full object-cover"
+                            />
+                          ) : (
+                            <div className="w-24 h-24 rounded-full bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center">
+                              <span className="text-2xl font-bold text-white">
+                                {getInitials(guest.full_name)}
+                              </span>
+                            </div>
+                          )}
+                          {isSpeaking && (
+                            <div className="absolute -inset-2 rounded-full border-4 border-green-500 animate-pulse"></div>
+                          )}
+                          {guest.is_primary && (
+                            <div className="absolute -top-1 -right-1 bg-green-500 text-white text-xs px-2 py-0.5 rounded-full font-semibold">
+                              Primary
+                            </div>
+                          )}
+                        </div>
+                        <p className="text-sm font-semibold">{guest.full_name}</p>
+                        <p className="text-xs text-slate-400">Guest</p>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="relative mb-6">
+                    {episode.guest?.avatar_url ? (
+                      <img
+                        src={episode.guest.avatar_url}
+                        alt={episode.guest.full_name}
+                        className="w-32 h-32 rounded-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-32 h-32 rounded-full bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center">
+                        <span className="text-4xl font-bold text-white">
+                          {getInitials(episode.guest?.full_name || 'G')}
+                        </span>
+                      </div>
+                    )}
 
-                  {isSpeaking && (
-                    <div className="absolute -inset-3 rounded-full border-4 border-green-500 animate-pulse"></div>
-                  )}
-                </div>
+                    {isSpeaking && (
+                      <div className="absolute -inset-3 rounded-full border-4 border-green-500 animate-pulse"></div>
+                    )}
+                  </div>
+                )}
 
-                <p className="text-xl font-semibold">{episode.guest?.full_name}</p>
-                <p className="text-sm text-slate-400 mt-1">Guest - Audio Only</p>
+                {!episode.guests || episode.guests.length === 0 ? (
+                  <>
+                    <p className="text-xl font-semibold">{episode.guest?.full_name}</p>
+                    <p className="text-sm text-slate-400 mt-1">Guest - Audio Only</p>
+                  </>
+                ) : (
+                  <p className="text-sm text-slate-400">Audio Only</p>
+                )}
 
                 <div className="flex space-x-2 mt-8">
                   {[...Array(20)].map((_, i) => (
