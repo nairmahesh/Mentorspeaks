@@ -22,6 +22,17 @@ interface Guest {
   invitation_token?: string;
 }
 
+interface Moderator {
+  type: 'registered' | 'external' | 'self';
+  id: string;
+  full_name: string;
+  email?: string;
+  phone?: string;
+  professional_title?: string;
+  invitation_method?: 'link' | 'email' | 'whatsapp';
+  invitation_token?: string;
+}
+
 export function CreatePodcastPage() {
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -34,7 +45,10 @@ export function CreatePodcastPage() {
 
   const [episodeName, setEpisodeName] = useState('');
   const [episodeDescription, setEpisodeDescription] = useState('');
-  const [moderatorId, setModeratorId] = useState('');
+  const [selectedModerator, setSelectedModerator] = useState<Moderator | null>(null);
+  const [showModeratorModal, setShowModeratorModal] = useState(false);
+  const [addModeratorType, setAddModeratorType] = useState<'registered' | 'external'>('registered');
+  const [selectedModeratorId, setSelectedModeratorId] = useState('');
 
   const [guestMode, setGuestMode] = useState<'single' | 'multiple' | null>(null);
   const [guests, setGuests] = useState<Guest[]>([]);
@@ -43,6 +57,14 @@ export function CreatePodcastPage() {
   const [selectedMentorId, setSelectedMentorId] = useState('');
 
   const [externalGuestForm, setExternalGuestForm] = useState({
+    full_name: '',
+    email: '',
+    phone: '',
+    professional_title: '',
+    invitation_method: 'link' as 'link' | 'email' | 'whatsapp'
+  });
+
+  const [externalModeratorForm, setExternalModeratorForm] = useState({
     full_name: '',
     email: '',
     phone: '',
@@ -80,6 +102,47 @@ export function CreatePodcastPage() {
         .filter(Boolean);
       setModerators(mods);
     }
+  };
+
+  const handleAddRegisteredModerator = () => {
+    const moderator = moderators.find(m => m.id === selectedModeratorId);
+    if (!moderator) return;
+
+    setSelectedModerator({
+      type: 'registered',
+      id: moderator.id,
+      full_name: moderator.full_name,
+      professional_title: moderator.professional_title
+    });
+
+    setSelectedModeratorId('');
+    setShowModeratorModal(false);
+    setError('');
+  };
+
+  const handleAddExternalModerator = () => {
+    const token = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+
+    setSelectedModerator({
+      type: 'external',
+      id: token,
+      full_name: externalModeratorForm.full_name || 'Moderator',
+      email: externalModeratorForm.email,
+      phone: externalModeratorForm.phone,
+      professional_title: externalModeratorForm.professional_title,
+      invitation_method: externalModeratorForm.invitation_method,
+      invitation_token: token
+    });
+
+    setExternalModeratorForm({
+      full_name: '',
+      email: '',
+      phone: '',
+      professional_title: '',
+      invitation_method: 'link'
+    });
+    setShowModeratorModal(false);
+    setError('');
   };
 
   const handleAddRegisteredGuest = () => {
@@ -163,7 +226,8 @@ export function CreatePodcastPage() {
         seriesId = series.id;
       }
 
-      const primaryGuestId = guests.length > 0 ? guests[0].id : null;
+      const primaryGuestId = guests.length > 0 && guests[0].type === 'registered' ? guests[0].id : null;
+      const moderatorIdToUse = selectedModerator?.type === 'registered' ? selectedModerator.id : user!.id;
 
       const { data: episode, error: episodeError } = await supabase
         .from('podcast_episodes')
@@ -173,7 +237,7 @@ export function CreatePodcastPage() {
           description: episodeDescription,
           episode_number: 1,
           guest_id: primaryGuestId,
-          moderator_id: moderatorId || user!.id,
+          moderator_id: moderatorIdToUse,
           status: 'draft',
           recording_type: 'video'
         })
@@ -388,18 +452,52 @@ export function CreatePodcastPage() {
                 <label className="block text-sm font-medium text-slate-700 mb-2">
                   Moderator
                 </label>
-                <select
-                  value={moderatorId}
-                  onChange={(e) => setModeratorId(e.target.value)}
-                  className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                >
-                  <option value="">Me (Current User)</option>
-                  {moderators.map((m) => (
-                    <option key={m.id} value={m.id}>
-                      {m.full_name}
-                    </option>
-                  ))}
-                </select>
+                {selectedModerator ? (
+                  <div className="flex items-start justify-between p-4 border border-slate-200 rounded-lg bg-slate-50">
+                    <div className="flex-1">
+                      <div className="flex items-center space-x-2 mb-1">
+                        <h3 className="font-semibold text-slate-900">{selectedModerator.full_name}</h3>
+                        {selectedModerator.type === 'external' && (
+                          <span className="text-xs px-2 py-0.5 bg-yellow-100 text-yellow-700 rounded-full">
+                            External
+                          </span>
+                        )}
+                      </div>
+                      {selectedModerator.professional_title && (
+                        <p className="text-sm text-slate-600">{selectedModerator.professional_title}</p>
+                      )}
+                      {selectedModerator.email && (
+                        <p className="text-sm text-slate-500 mt-1">{selectedModerator.email}</p>
+                      )}
+                      {selectedModerator.type === 'external' && selectedModerator.invitation_token && (
+                        <button
+                          onClick={() => {
+                            setSelectedInviteGuest(selectedModerator as any);
+                            setShowInviteModal(true);
+                          }}
+                          className="text-sm text-blue-600 hover:text-blue-700 mt-2 flex items-center space-x-1"
+                        >
+                          <LinkIcon className="w-4 h-4" />
+                          <span>View Invitation</span>
+                        </button>
+                      )}
+                    </div>
+                    <button
+                      onClick={() => setSelectedModerator(null)}
+                      className="text-red-600 hover:text-red-700 p-2"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                ) : (
+                  <button
+                    onClick={() => setShowModeratorModal(true)}
+                    className="w-full p-4 border-2 border-dashed border-slate-300 rounded-lg text-slate-600 hover:border-slate-400 hover:text-slate-900 transition flex items-center justify-center space-x-2"
+                  >
+                    <Plus className="w-5 h-5" />
+                    <span>Select or Invite Moderator (Default: You)</span>
+                  </button>
+                )}
               </div>
             </div>
           )}
@@ -739,11 +837,183 @@ export function CreatePodcastPage() {
           </div>
         )}
 
+        {showModeratorModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+            <div className="bg-white rounded-lg p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-xl font-bold text-slate-900">Select Moderator</h2>
+                <button
+                  onClick={() => {
+                    setShowModeratorModal(false);
+                    setError('');
+                  }}
+                  className="text-slate-400 hover:text-slate-600"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+
+              <div className="flex space-x-2 mb-6 border-b border-slate-200">
+                <button
+                  onClick={() => setAddModeratorType('registered')}
+                  className={`px-4 py-2 font-medium transition ${
+                    addModeratorType === 'registered'
+                      ? 'text-blue-600 border-b-2 border-blue-600'
+                      : 'text-slate-600 hover:text-slate-900'
+                  }`}
+                >
+                  From List
+                </button>
+                <button
+                  onClick={() => setAddModeratorType('external')}
+                  className={`px-4 py-2 font-medium transition ${
+                    addModeratorType === 'external'
+                      ? 'text-blue-600 border-b-2 border-blue-600'
+                      : 'text-slate-600 hover:text-slate-900'
+                  }`}
+                >
+                  External Moderator
+                </button>
+              </div>
+
+              {addModeratorType === 'registered' ? (
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-2">
+                      Select Moderator
+                    </label>
+                    <select
+                      value={selectedModeratorId}
+                      onChange={(e) => setSelectedModeratorId(e.target.value)}
+                      className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    >
+                      <option value="">Choose a moderator...</option>
+                      {moderators.map((m) => (
+                        <option key={m.id} value={m.id}>
+                          {m.full_name} - {m.professional_title}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <button
+                    onClick={handleAddRegisteredModerator}
+                    disabled={!selectedModeratorId}
+                    className="w-full bg-blue-600 text-white px-4 py-3 rounded-lg hover:bg-blue-700 transition disabled:opacity-50"
+                  >
+                    Select Moderator
+                  </button>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-2">
+                      Full Name (Optional - for personalized invite)
+                    </label>
+                    <input
+                      type="text"
+                      value={externalModeratorForm.full_name}
+                      onChange={(e) => setExternalModeratorForm({ ...externalModeratorForm, full_name: e.target.value })}
+                      className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      placeholder="e.g., Jane Smith"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-2">
+                      Email (Optional)
+                    </label>
+                    <input
+                      type="email"
+                      value={externalModeratorForm.email}
+                      onChange={(e) => setExternalModeratorForm({ ...externalModeratorForm, email: e.target.value })}
+                      className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      placeholder="e.g., jane@example.com"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-2">
+                      Phone (Optional)
+                    </label>
+                    <input
+                      type="tel"
+                      value={externalModeratorForm.phone}
+                      onChange={(e) => setExternalModeratorForm({ ...externalModeratorForm, phone: e.target.value })}
+                      className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-2">
+                      Professional Title (Optional)
+                    </label>
+                    <input
+                      type="text"
+                      value={externalModeratorForm.professional_title}
+                      onChange={(e) => setExternalModeratorForm({ ...externalModeratorForm, professional_title: e.target.value })}
+                      className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-2">
+                      Send Invitation Via
+                    </label>
+                    <div className="grid grid-cols-3 gap-3">
+                      <button
+                        onClick={() => setExternalModeratorForm({ ...externalModeratorForm, invitation_method: 'link' })}
+                        className={`p-3 border-2 rounded-lg text-center transition ${
+                          externalModeratorForm.invitation_method === 'link'
+                            ? 'border-blue-600 bg-blue-50'
+                            : 'border-slate-200 hover:border-slate-300'
+                        }`}
+                      >
+                        <LinkIcon className="w-6 h-6 mx-auto mb-1 text-blue-600" />
+                        <p className="text-sm font-medium">Link</p>
+                      </button>
+                      <button
+                        onClick={() => setExternalModeratorForm({ ...externalModeratorForm, invitation_method: 'email' })}
+                        className={`p-3 border-2 rounded-lg text-center transition ${
+                          externalModeratorForm.invitation_method === 'email'
+                            ? 'border-blue-600 bg-blue-50'
+                            : 'border-slate-200 hover:border-slate-300'
+                        }`}
+                      >
+                        <Mail className="w-6 h-6 mx-auto mb-1 text-blue-600" />
+                        <p className="text-sm font-medium">Email</p>
+                      </button>
+                      <button
+                        onClick={() => setExternalModeratorForm({ ...externalModeratorForm, invitation_method: 'whatsapp' })}
+                        className={`p-3 border-2 rounded-lg text-center transition ${
+                          externalModeratorForm.invitation_method === 'whatsapp'
+                            ? 'border-blue-600 bg-blue-50'
+                            : 'border-slate-200 hover:border-slate-300'
+                        }`}
+                      >
+                        <MessageCircle className="w-6 h-6 mx-auto mb-1 text-blue-600" />
+                        <p className="text-sm font-medium">WhatsApp</p>
+                      </button>
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={handleAddExternalModerator}
+                    className="w-full bg-blue-600 text-white px-4 py-3 rounded-lg hover:bg-blue-700 transition"
+                  >
+                    Add External Moderator
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
         {showInviteModal && selectedInviteGuest && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
             <div className="bg-white rounded-lg p-6 max-w-lg w-full">
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-bold text-slate-900">Guest Invitation</h2>
+                <h2 className="text-xl font-bold text-slate-900">Invitation Details</h2>
                 <button
                   onClick={() => {
                     setShowInviteModal(false);
@@ -757,7 +1027,7 @@ export function CreatePodcastPage() {
 
               <div className="space-y-4">
                 <div>
-                  <p className="text-sm text-slate-600 mb-2">Guest: <span className="font-semibold text-slate-900">{selectedInviteGuest.full_name}</span></p>
+                  <p className="text-sm text-slate-600 mb-2">Name: <span className="font-semibold text-slate-900">{selectedInviteGuest.full_name}</span></p>
                   <p className="text-sm text-slate-600">Method: <span className="font-semibold text-slate-900 capitalize">{selectedInviteGuest.invitation_method}</span></p>
                 </div>
 
