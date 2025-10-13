@@ -45,7 +45,7 @@ export function CreateEpisodePage() {
     email: string;
     phone?: string;
     professional_title?: string;
-    invitation_method: 'email' | 'whatsapp' | 'both';
+    invitation_method: 'link' | 'email' | 'whatsapp' | 'both';
   }>>([]);
   const [primaryGuestId, setPrimaryGuestId] = useState('');
   const [showExternalGuestForm, setShowExternalGuestForm] = useState(false);
@@ -54,10 +54,18 @@ export function CreateEpisodePage() {
     email: '',
     phone: '',
     professional_title: '',
-    invitation_method: 'email' as 'email' | 'whatsapp' | 'both'
+    invitation_method: 'link' as 'link' | 'email' | 'whatsapp' | 'both'
   });
   const [copiedInviteId, setCopiedInviteId] = useState<string | null>(null);
   const [visibleInviteLink, setVisibleInviteLink] = useState<string | null>(null);
+  const [invitationModalGuest, setInvitationModalGuest] = useState<{
+    id: string;
+    full_name: string;
+    email: string;
+    phone?: string;
+    professional_title?: string;
+    invitation_method: 'link' | 'email' | 'whatsapp' | 'both';
+  } | null>(null);
   const [moderatorId, setModeratorId] = useState('');
   const [episodeNumber, setEpisodeNumber] = useState('1');
   const [recordingType, setRecordingType] = useState<'video' | 'audio'>('video');
@@ -179,7 +187,7 @@ export function CreateEpisodePage() {
       email: '',
       phone: '',
       professional_title: '',
-      invitation_method: 'email'
+      invitation_method: 'link'
     });
     setShowExternalGuestForm(false);
 
@@ -239,6 +247,13 @@ export function CreateEpisodePage() {
       await navigator.clipboard.writeText(message);
       setCopiedInviteId(`${guestId}-${method}`);
       setTimeout(() => setCopiedInviteId(null), 2000);
+    }
+  };
+
+  const showInvitationModal = (guestId: string) => {
+    const guest = externalGuests.find(g => g.id === guestId);
+    if (guest) {
+      setInvitationModalGuest(guest);
     }
   };
 
@@ -654,37 +669,11 @@ export function CreateEpisodePage() {
                             <div className="flex flex-wrap items-center gap-2 mt-3">
                               <button
                                 type="button"
-                                onClick={() => copyInvitationLink(externalGuests[0].id)}
-                                className="flex items-center space-x-1 text-xs bg-slate-700 text-white px-3 py-1.5 rounded hover:bg-slate-800 transition"
-                              >
-                                {copiedInviteId === `${externalGuests[0].id}-link` ? (
-                                  <>
-                                    <Check className="w-3 h-3" />
-                                    <span>Copied!</span>
-                                  </>
-                                ) : (
-                                  <>
-                                    <Copy className="w-3 h-3" />
-                                    <span>Link</span>
-                                  </>
-                                )}
-                              </button>
-                              <button
-                                type="button"
-                                onClick={() => copyInvitationMessage(externalGuests[0].id, 'email')}
+                                onClick={() => showInvitationModal(externalGuests[0].id)}
                                 className="flex items-center space-x-1 text-xs bg-blue-600 text-white px-3 py-1.5 rounded hover:bg-blue-700 transition"
                               >
-                                {copiedInviteId === `${externalGuests[0].id}-email` ? (
-                                  <>
-                                    <Check className="w-3 h-3" />
-                                    <span>Copied!</span>
-                                  </>
-                                ) : (
-                                  <>
-                                    <Mail className="w-3 h-3" />
-                                    <span>Email</span>
-                                  </>
-                                )}
+                                <Mail className="w-3 h-3" />
+                                <span>View Invitation</span>
                               </button>
                               {externalGuests[0].phone && (
                                 <button
@@ -1056,61 +1045,15 @@ export function CreateEpisodePage() {
                                   <div className="flex flex-wrap items-center gap-2 mt-3">
                                     <button
                                       type="button"
-                                      onClick={() => copyInvitationLink(guest.id)}
-                                      className="flex items-center space-x-1 text-xs bg-slate-700 text-white px-2 py-1 rounded hover:bg-slate-800 transition"
-                                    >
-                                      {copiedInviteId === `${guest.id}-link` ? (
-                                        <>
-                                          <Check className="w-3 h-3" />
-                                          <span>Copied!</span>
-                                        </>
-                                      ) : (
-                                        <>
-                                          <Copy className="w-3 h-3" />
-                                          <span>Link</span>
-                                        </>
-                                      )}
-                                    </button>
-                                    <button
-                                      type="button"
-                                      onClick={() => copyInvitationMessage(guest.id, 'email')}
+                                      onClick={() => showInvitationModal(guest.id)}
                                       className="flex items-center space-x-1 text-xs bg-blue-600 text-white px-2 py-1 rounded hover:bg-blue-700 transition"
                                     >
-                                      {copiedInviteId === `${guest.id}-email` ? (
-                                        <>
-                                          <Check className="w-3 h-3" />
-                                          <span>Copied!</span>
-                                        </>
-                                      ) : (
-                                        <>
-                                          <Mail className="w-3 h-3" />
-                                          <span>Email</span>
-                                        </>
-                                      )}
+                                      <Mail className="w-3 h-3" />
+                                      <span>View Invitation</span>
                                     </button>
-                                    {guest.phone && (
-                                      <button
-                                        type="button"
-                                        onClick={() => copyInvitationMessage(guest.id, 'whatsapp')}
-                                        className="flex items-center space-x-1 text-xs bg-green-600 text-white px-2 py-1 rounded hover:bg-green-700 transition"
-                                      >
-                                        {copiedInviteId === `${guest.id}-whatsapp` ? (
-                                          <>
-                                            <Check className="w-3 h-3" />
-                                            <span>Copied!</span>
-                                          </>
-                                        ) : (
-                                          <>
-                                            <MessageCircle className="w-3 h-3" />
-                                            <span>WhatsApp</span>
-                                          </>
-                                        )}
-                                      </button>
-                                    )}
                                   </div>
 
-                                  {/* Invitation Link and Message Boxes for each guest */}
-                                  <div className="mt-4 space-y-3">
+                                  <div className="mt-4 space-y-3 hidden">
                                     {/* Invitation Link Box */}
                                     <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
                                       <div className="flex items-center justify-between mb-2">
@@ -1511,6 +1454,157 @@ export function CreateEpisodePage() {
           </div>
         </form>
       </div>
+
+      {/* Invitation Modal */}
+      {invitationModalGuest && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="p-6">
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-xl font-bold text-slate-900">
+                  Invitation for {invitationModalGuest.full_name}
+                </h3>
+                <button
+                  onClick={() => setInvitationModalGuest(null)}
+                  className="text-slate-400 hover:text-slate-600"
+                >
+                  <span className="text-2xl">&times;</span>
+                </button>
+              </div>
+
+              <div className="space-y-4">
+                {/* Invitation Link */}
+                <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                  <div className="flex items-center justify-between mb-3">
+                    <p className="text-sm font-semibold text-blue-900">Invitation Link</p>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const url = `https://effymentor.com/podcasts/invitation/will-be-generated-${invitationModalGuest.id}`;
+                        navigator.clipboard.writeText(url);
+                        setCopiedInviteId('modal-link');
+                        setTimeout(() => setCopiedInviteId(null), 2000);
+                      }}
+                      className="flex items-center space-x-1 text-sm bg-blue-600 text-white px-3 py-1.5 rounded hover:bg-blue-700 transition"
+                    >
+                      {copiedInviteId === 'modal-link' ? (
+                        <>
+                          <Check className="w-4 h-4" />
+                          <span>Copied!</span>
+                        </>
+                      ) : (
+                        <>
+                          <Copy className="w-4 h-4" />
+                          <span>Copy Link</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
+                  <p className="text-sm text-blue-800 break-all font-mono bg-white p-2 rounded border border-blue-300">
+                    https://effymentor.com/podcasts/invitation/will-be-generated-{invitationModalGuest.id}
+                  </p>
+                </div>
+
+                {/* Email Message */}
+                <div className="p-4 bg-slate-50 border border-slate-200 rounded-lg">
+                  <div className="flex items-center justify-between mb-3">
+                    <p className="text-sm font-semibold text-slate-900">Email Message</p>
+                    <button
+                      type="button"
+                      onClick={() => copyInvitationMessage(invitationModalGuest.id, 'email')}
+                      className="flex items-center space-x-1 text-sm bg-slate-700 text-white px-3 py-1.5 rounded hover:bg-slate-800 transition"
+                    >
+                      {copiedInviteId === `${invitationModalGuest.id}-email` ? (
+                        <>
+                          <Check className="w-4 h-4" />
+                          <span>Copied!</span>
+                        </>
+                      ) : (
+                        <>
+                          <Copy className="w-4 h-4" />
+                          <span>Copy Message</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
+                  <div className="text-sm text-slate-700 bg-white p-3 rounded border border-slate-300 whitespace-pre-wrap">
+                    Hi {invitationModalGuest.full_name},
+
+We'd love to have you as a guest on our podcast "{title || 'Our Show'}"!
+
+{description && `About this episode: ${description}\n\n`}Click here to view details and confirm your participation:
+https://effymentor.com/podcasts/invitation/will-be-generated-{invitationModalGuest.id}
+
+Looking forward to hearing from you!
+                  </div>
+                </div>
+
+                {/* WhatsApp Message */}
+                {invitationModalGuest.phone && (
+                  <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
+                    <div className="flex items-center justify-between mb-3">
+                      <p className="text-sm font-semibold text-green-900">WhatsApp Message</p>
+                      <button
+                        type="button"
+                        onClick={() => copyInvitationMessage(invitationModalGuest.id, 'whatsapp')}
+                        className="flex items-center space-x-1 text-sm bg-green-600 text-white px-3 py-1.5 rounded hover:bg-green-700 transition"
+                      >
+                        {copiedInviteId === `${invitationModalGuest.id}-whatsapp` ? (
+                          <>
+                            <Check className="w-4 h-4" />
+                            <span>Copied!</span>
+                          </>
+                        ) : (
+                          <>
+                            <Copy className="w-4 h-4" />
+                            <span>Copy Message</span>
+                          </>
+                        )}
+                      </button>
+                    </div>
+                    <div className="text-sm text-green-800 bg-white p-3 rounded border border-green-300 whitespace-pre-wrap">
+                      Hi {invitationModalGuest.full_name}! We'd love to have you as a guest on our podcast "{title || 'Our Show'}"! Click here to view details: https://effymentor.com/podcasts/invitation/will-be-generated-{invitationModalGuest.id}
+                    </div>
+                  </div>
+                )}
+
+                {/* Send Buttons */}
+                <div className="flex gap-3 pt-4">
+                  {(invitationModalGuest.invitation_method === 'email' || invitationModalGuest.invitation_method === 'both') && invitationModalGuest.email && (
+                    <button
+                      type="button"
+                      onClick={() => sendInvitation(invitationModalGuest.id, 'email')}
+                      className="flex-1 flex items-center justify-center space-x-2 bg-blue-600 text-white py-2.5 px-4 rounded-lg hover:bg-blue-700 transition"
+                    >
+                      <Mail className="w-4 h-4" />
+                      <span>Send via Email</span>
+                    </button>
+                  )}
+                  {(invitationModalGuest.invitation_method === 'whatsapp' || invitationModalGuest.invitation_method === 'both') && invitationModalGuest.phone && (
+                    <button
+                      type="button"
+                      onClick={() => sendInvitation(invitationModalGuest.id, 'whatsapp')}
+                      className="flex-1 flex items-center justify-center space-x-2 bg-green-600 text-white py-2.5 px-4 rounded-lg hover:bg-green-700 transition"
+                    >
+                      <MessageCircle className="w-4 h-4" />
+                      <span>Send via WhatsApp</span>
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              <div className="mt-6 pt-4 border-t border-slate-200">
+                <button
+                  onClick={() => setInvitationModalGuest(null)}
+                  className="w-full py-2.5 border border-slate-300 rounded-lg hover:bg-slate-50 transition"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </Layout>
   );
 }
