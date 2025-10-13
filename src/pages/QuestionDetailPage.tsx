@@ -4,7 +4,7 @@ import { supabase, Question, Answer, Profile } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
 import { PublicLayout } from '../components/PublicLayout';
 import { CallBookingModal } from '../components/CallBookingModal';
-import { Eye, Share2, Video, Play, UserCircle, Calendar, ArrowBigUp, Phone, Mic, Clock, MessageCircle } from 'lucide-react';
+import { Eye, Share2, Video, Play, UserCircle, Calendar, ArrowBigUp, Phone, Mic, Clock, MessageCircle, FileText } from 'lucide-react';
 
 type AnswerWithMentor = Answer & {
   mentor: Profile;
@@ -181,6 +181,19 @@ export function QuestionDetailPage() {
                   <div className="flex items-center space-x-2">
                     <MessageCircle className="w-5 h-5 text-slate-500" />
                     <span className="font-medium">{answers.length} {answers.length === 1 ? 'answer' : 'answers'}</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    {question.response_format === 'podcast' ? (
+                      <>
+                        <Mic className="w-5 h-5 text-purple-600" />
+                        <span className="font-medium text-purple-600">Podcast</span>
+                      </>
+                    ) : (
+                      <>
+                        <FileText className="w-5 h-5 text-blue-600" />
+                        <span className="font-medium text-blue-600">Q&A</span>
+                      </>
+                    )}
                   </div>
                   <div
                     className={`px-3 py-1 rounded-full text-xs font-bold uppercase ${

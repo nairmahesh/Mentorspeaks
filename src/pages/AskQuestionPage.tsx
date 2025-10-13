@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { supabase, Industry, Profile } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
 import { Layout } from '../components/Layout';
-import { MessageCircle, Users, X } from 'lucide-react';
+import { MessageCircle, Users, X, Mic, FileText } from 'lucide-react';
 
 export function AskQuestionPage() {
   const { user } = useAuth();
@@ -12,6 +12,7 @@ export function AskQuestionPage() {
   const [description, setDescription] = useState('');
   const [industryId, setIndustryId] = useState('');
   const [tags, setTags] = useState('');
+  const [responseFormat, setResponseFormat] = useState<'qa' | 'podcast'>('qa');
   const [targetAllMentors, setTargetAllMentors] = useState(true);
   const [selectedMentorIds, setSelectedMentorIds] = useState<string[]>([]);
   const [industries, setIndustries] = useState<Industry[]>([]);
@@ -75,6 +76,7 @@ export function AskQuestionPage() {
           description: description || null,
           industry_id: industryId || null,
           tags: tagArray,
+          response_format: responseFormat,
           targeted_mentor_ids: targetAllMentors ? null : selectedMentorIds,
           is_paid: false,
           amount: 0,
@@ -99,10 +101,10 @@ export function AskQuestionPage() {
         <div className="mb-8">
           <div className="flex items-center space-x-3 mb-2">
             <MessageCircle className="w-8 h-8 text-blue-600" />
-            <h1 className="text-4xl font-bold text-slate-900">Ask a Question</h1>
+            <h1 className="text-4xl font-bold text-slate-900">Ask a Mentor</h1>
           </div>
           <p className="text-slate-600 mb-2">
-            Get expert insights from industry professionals - completely free!
+            Get expert insights from industry professionals as a text Q&A or podcast episode - completely free!
           </p>
           <p className="text-sm text-blue-600 font-medium">
             All questions are free. For paid 1-on-1 consultancy, use the "Book a Call" feature on mentor profiles.
@@ -116,6 +118,67 @@ export function AskQuestionPage() {
         )}
 
         <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-sm border border-slate-200 p-8 space-y-6">
+          <div>
+            <label className="block text-sm font-medium text-slate-700 mb-3">
+              How would you like your answer? *
+            </label>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <button
+                type="button"
+                onClick={() => setResponseFormat('qa')}
+                className={`relative p-4 rounded-lg border-2 transition ${
+                  responseFormat === 'qa'
+                    ? 'border-blue-600 bg-blue-50'
+                    : 'border-slate-200 hover:border-slate-300'
+                }`}
+              >
+                <div className="flex items-start space-x-3">
+                  <div className={`p-2 rounded-lg ${responseFormat === 'qa' ? 'bg-blue-100' : 'bg-slate-100'}`}>
+                    <FileText className={`w-5 h-5 ${responseFormat === 'qa' ? 'text-blue-600' : 'text-slate-600'}`} />
+                  </div>
+                  <div className="flex-1 text-left">
+                    <div className="font-semibold text-slate-900 mb-1">Text Q&A</div>
+                    <div className="text-sm text-slate-600">Get a written answer you can read and reference</div>
+                  </div>
+                </div>
+                {responseFormat === 'qa' && (
+                  <div className="absolute top-2 right-2 w-5 h-5 bg-blue-600 rounded-full flex items-center justify-center">
+                    <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+                )}
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setResponseFormat('podcast')}
+                className={`relative p-4 rounded-lg border-2 transition ${
+                  responseFormat === 'podcast'
+                    ? 'border-blue-600 bg-blue-50'
+                    : 'border-slate-200 hover:border-slate-300'
+                }`}
+              >
+                <div className="flex items-start space-x-3">
+                  <div className={`p-2 rounded-lg ${responseFormat === 'podcast' ? 'bg-blue-100' : 'bg-slate-100'}`}>
+                    <Mic className={`w-5 h-5 ${responseFormat === 'podcast' ? 'text-blue-600' : 'text-slate-600'}`} />
+                  </div>
+                  <div className="flex-1 text-left">
+                    <div className="font-semibold text-slate-900 mb-1">Podcast Episode</div>
+                    <div className="text-sm text-slate-600">Get an audio discussion you can listen to</div>
+                  </div>
+                </div>
+                {responseFormat === 'podcast' && (
+                  <div className="absolute top-2 right-2 w-5 h-5 bg-blue-600 rounded-full flex items-center justify-center">
+                    <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+                )}
+              </button>
+            </div>
+          </div>
+
           <div>
             <label htmlFor="title" className="block text-sm font-medium text-slate-700 mb-2">
               Question Title *
